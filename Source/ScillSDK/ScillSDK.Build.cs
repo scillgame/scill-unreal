@@ -26,6 +26,8 @@ public class ScillSDK : ModuleRules
 			new string[]
 			{
 				"Core",
+				"Http",
+				"Json"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

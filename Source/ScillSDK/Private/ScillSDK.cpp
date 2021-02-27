@@ -2,14 +2,14 @@
 
 #include "ScillSDK.h"
 
-#define LOCTEXT_NAMESPACE "FScillSDKModule"
+#define LOCTEXT_NAMESPACE "SCILLSDK_API"
 
-void FScillSDKModule::StartupModule()
+void ScillSDKModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 }
 
-void FScillSDKModule::ShutdownModule()
+void ScillSDKModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
@@ -17,4 +17,5 @@ void FScillSDKModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FScillSDKModule, ScillSDK)
+IMPLEMENT_MODULE(ScillSDKModule, ScillSDK);
+DEFINE_LOG_CATEGORY(LogScillSDK);
