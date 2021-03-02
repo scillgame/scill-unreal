@@ -6,9 +6,12 @@
 #include "ScillApiWrapper/ScillApiAuthApi.h"
 #include "ScillApiWrapper/ScillApiAuthApiOperations.h"
 #include "Misc/Guid.h"
+#include "WebSocketsModule.h"
+#include "IWebSocket.h"
 #include "ScillClientBackend.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FReceiveAccessToken, FString, Token, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FReceiveBattlePassUpdate, FBattlePass, BattlePassUpdate);
 
 /* This is the entry component for your game's server logic in regards of the SCILL API. This component uses the API Key of your App and should not be created on the client - so best place it on your GameMode class. */
 UCLASS(meta = (BlueprintSpawnableComponent))
@@ -39,13 +42,15 @@ public:
 	// Start Monitor Battlepass Updates
 
 	/* Starts to monitor Battlepass updates. */
-	/*UFUNCTION(BlueprintCallable)
-		void StartMonitorBattlePassUpdates(FString accessToken);*/
+	UFUNCTION(BlueprintCallable)
+		void StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback);
 
 private:
 	ScillSDK::ScillApiAuthApi authApi;
 
 	TMap<FGuid, FReceiveAccessToken> callbackMapReceiveAccessToken;
+
+	//TMap<FString, 
 
 	void ReceiveAccessTokenResponse(const ScillSDK::ScillApiAuthApi::GenerateAccessTokenResponse& Response, FGuid guid) const;
 };

@@ -1,12 +1,15 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ScillSDK.h"
+#include "WebSocketsModule.h"
 
 #define LOCTEXT_NAMESPACE "SCILLSDK_API"
 
 void ScillSDKModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+
+	FWebSocketsModule webSocketModule = FModuleManager::LoadModuleChecked<FWebSocketsModule>(TEXT("WebSockets"));
 }
 
 void ScillSDKModule::ShutdownModule()

@@ -27,7 +27,8 @@ public class ScillSDK : ModuleRules
 			{
 				"Core",
 				"Http",
-				"Json"
+				"Json",
+				"WebSockets"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

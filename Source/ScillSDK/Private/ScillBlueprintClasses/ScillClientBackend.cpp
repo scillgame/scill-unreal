@@ -23,6 +23,10 @@ void UScillClientBackend::GenerateAccessToken(FString userId, const FReceiveAcce
 	authApi.GenerateAccessToken(accessTokenRequest, generateAccessTokenDelegate);
 }
 
+void UScillClientBackend::StartMonitorBattlePassUpdates(FString accessToken, const FReceiveBattlePassUpdate& battlePassIFReceiveBattlePassUpdate callback)
+{
+}
+
 void UScillClientBackend::BeginPlay()
 {
 	Super::BeginPlay();
