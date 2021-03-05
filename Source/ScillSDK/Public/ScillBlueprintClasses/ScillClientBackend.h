@@ -45,7 +45,7 @@ public:
 	// Start Monitor Battlepass Updates
 
 	/* Starts to monitor Battlepass updates. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(meta=(BlueprintInternalUseOnly))
 		void StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback);
 
 private:
