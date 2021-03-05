@@ -5,6 +5,7 @@
 #include "ScillSDK.h"
 #include "ScillApiWrapper/ScillApiAuthApi.h"
 #include "ScillApiWrapper/ScillApiAuthApiOperations.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
 #include "Misc/Guid.h"
 #include "WebSocketsModule.h"
 #include "IWebSocket.h"
@@ -20,6 +21,8 @@ class SCILLSDK_API UScillClientBackend : public UActorComponent
 
 	GENERATED_BODY()
 public:
+
+	UScillClientBackend();
 
 	// SETUP
 
@@ -48,10 +51,16 @@ public:
 private:
 	ScillSDK::ScillApiAuthApi authApi;
 
-	TMap<FGuid, FReceiveAccessToken> callbackMapReceiveAccessToken;
+	mutable TMap<FGuid, FReceiveAccessToken> callbackMapReceiveAccessToken;
 
-	//TMap<FString, 
+	mutable TMap<FGuid, FReceiveBattlePassUpdate> callbackMapReceiveBattlepassTopic;
+
+	FString RealtimeUpdatesWebsocketURL;
 
 	void ReceiveAccessTokenResponse(const ScillSDK::ScillApiAuthApi::GenerateAccessTokenResponse& Response, FGuid guid) const;
+
+	void ReceiveBattlepassTopic(const ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicResponse& Response, FGuid guid) const;
+
+	void ReceiveStringMessageFromBattlepassTopic(const FString& Message, FGuid guid) const;
 };
 

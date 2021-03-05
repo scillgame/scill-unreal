@@ -28,6 +28,7 @@ public class ScillSDK : ModuleRules
 				"Core",
 				"Http",
 				"Json",
+				"JsonUtilities",
 				"WebSockets"
 				// ... add other public dependencies that you statically link with here ...
 			}
