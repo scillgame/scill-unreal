@@ -95,6 +95,36 @@ void UScillClient::ClaimBattlePassLevel(FString levelId, FHttpResponseReceived r
 	battlePassesApi.ClaimBattlePassLevelReward(request, delegate);
 }
 
+void UScillClient::GetActiveBattlePasses(FBattlePassArrayReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiBattlePassesApi::GetActiveBattlePassesRequest();
+
+	request.AppId = AppId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapBattlePassArrayReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiBattlePassesApi::FGetActiveBattlePassesDelegate::CreateUObject(this, &UScillClient::ReceiveActiveBattlePassesResponse, guid);
+
+	battlePassesApi.GetActiveBattlePasses(request, delegate);
+}
+
+void UScillClient::GetUnlockedPasses(FBattlePassArrayReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiBattlePassesApi::GetUnlockedBattlePassesRequest();
+
+	request.AppId = AppId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapBattlePassArrayReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiBattlePassesApi::FGetUnlockedBattlePassesDelegate::CreateUObject(this, &UScillClient::ReceiveUnlockedBattlePassesResponse, guid);
+
+	battlePassesApi.GetUnlockedBattlePasses(request, delegate);
+}
+
 // Called when the game starts
 void UScillClient::BeginPlay()
 {
@@ -138,6 +168,38 @@ void UScillClient::ReceiveClaimBattlePassLevelResponse(const ScillSDK::ScillApiB
 {
 	auto callback = callbackMapResponseReceived.FindRef(guid);
 	callback.ExecuteIfBound(Response.IsSuccessful());
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveActiveBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetActiveBattlePassesResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapBattlePassArrayReceived.FindRef(guid);
+
+	TArray<FBattlePass> battlePasses = TArray<FBattlePass>();
+
+	for (auto bp : Response.Content)
+	{
+		battlePasses.Add(FBattlePass::FromScillApiBattlePass(bp));
+	}
+
+	callback.ExecuteIfBound(battlePasses,Response.IsSuccessful());
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveUnlockedBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetUnlockedBattlePassesResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapBattlePassArrayReceived.FindRef(guid);
+
+	TArray<FBattlePass> battlePasses = TArray<FBattlePass>();
+
+	for (auto bp : Response.Content)
+	{
+		battlePasses.Add(FBattlePass::FromScillApiBattlePass(bp));
+	}
+
+	callback.ExecuteIfBound(battlePasses, Response.IsSuccessful());
 
 	callbackMapResponseReceived.Remove(guid);
 }

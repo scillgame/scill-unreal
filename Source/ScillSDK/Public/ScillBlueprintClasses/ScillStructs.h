@@ -6,9 +6,12 @@
 #include "ScillApiWrapper/ScillApiBattlePass.h"
 #include "ScillStructs.generated.h"
 
-/**
- * 
- */
+
+
+
+/*
+* Represents a Battle Pass Object.
+*/
 USTRUCT(BlueprintType, Category = "ScillSDK")
 struct SCILLSDK_API FBattlePass
 {
@@ -81,5 +84,5 @@ struct SCILLSDK_API FBattlePass
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool CanPurchaseWithCoins;
 
-	static FBattlePass FromScillApiBattlePass(ScillSDK::ScillApiBattlePass battlePass);
+	static FBattlePass FromScillApiBattlePass(const ScillSDK::ScillApiBattlePass battlePass);
 };

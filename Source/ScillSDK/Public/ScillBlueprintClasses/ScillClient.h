@@ -12,6 +12,7 @@
 #include "ScillClient.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FHttpResponseReceived, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassArrayReceived, const TArray<FBattlePass>&, BattlePasses, bool, Success);
 
 
 UCLASS(ClassGroup=(ScillSDK), meta=(BlueprintSpawnableComponent) )
@@ -66,6 +67,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ClaimBattlePassLevel(FString levelId, FHttpResponseReceived responseReceived);
 
+	UFUNCTION(BlueprintCallable)
+		void GetActiveBattlePasses(FBattlePassArrayReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void GetUnlockedPasses(FBattlePassArrayReceived responseReceived);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -75,11 +82,14 @@ private:
 
 	void ReceiveActivateBattlePassLevelResponse(const ScillSDK::ScillApiBattlePassesApi::ActivateBattlePassLevelResponse& Response, FGuid guid) const;
 	void ReceiveClaimBattlePassLevelResponse(const ScillSDK::ScillApiBattlePassesApi::ClaimBattlePassLevelRewardResponse& Response, FGuid guid) const;
+	void ReceiveActiveBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetActiveBattlePassesResponse& Response, FGuid guid) const;
+	void ReceiveUnlockedBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetUnlockedBattlePassesResponse& Response, FGuid guid) const;
 
 	// ----------------------------------------------------------------------------------
 	// Battle Passes Helpers
 
 	mutable TMap<FGuid, FHttpResponseReceived> callbackMapResponseReceived;
+	mutable TMap<FGuid, FBattlePassArrayReceived> callbackMapBattlePassArrayReceived;
 
 public:	
 	// Called every frame

@@ -3,7 +3,7 @@
 
 #include "ScillBlueprintClasses/ScillStructs.h"
 
-FBattlePass FBattlePass::FromScillApiBattlePass(ScillSDK::ScillApiBattlePass battlePass)
+FBattlePass FBattlePass::FromScillApiBattlePass(const ScillSDK::ScillApiBattlePass battlePass)
 {
 	auto bp = FBattlePass();
 
@@ -15,7 +15,7 @@ FBattlePass FBattlePass::FromScillApiBattlePass(ScillSDK::ScillApiBattlePass bat
 	bp.BattlePassPriority = battlePass.BattlePassPriority.Get(0);
 	bp.BattlePassShortDescription = battlePass.BattlePassDescription.Get("");
 	bp.CanPurchaseWithCoins = battlePass.CanPurchaseWithCoins.Get(false);
-	bp.CanPurchaseWithMoney = battlePass.CanPurchaseWithMoney.Get("");
+	bp.CanPurchaseWithMoney = battlePass.CanPurchaseWithMoney.Get(false);
 	bp.EndDate = battlePass.EndDate.Get("");
 	bp.ImageL = battlePass.ImageL.Get("");
 	bp.ImageM = battlePass.ImageM.Get("");
@@ -23,7 +23,7 @@ FBattlePass FBattlePass::FromScillApiBattlePass(ScillSDK::ScillApiBattlePass bat
 	bp.ImageXl = battlePass.ImageXl.Get("");
 	bp.ImageXs = battlePass.ImageXs.Get("");
 	bp.IsActive = battlePass.IsActive.Get(false);
-	bp.IsUnlockedIncrementally = battlePass.IsUnlockedIncrementally.Get("");
+	bp.IsUnlockedIncrementally = battlePass.IsUnlockedIncrementally.Get(false);
 	bp.PackageSkuAndroid = battlePass.PackageSkuAndroid.Get("");
 	bp.PackageSkuIos = battlePass.PackageSkuIos.Get("");
 	bp.ReadMoreLink = battlePass.ReadMoreLink.Get("");
