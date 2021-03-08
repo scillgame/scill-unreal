@@ -14,7 +14,9 @@
 DECLARE_DYNAMIC_DELEGATE_OneParam(FHttpResponseReceived, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassArrayReceived, const TArray<FBattlePass>&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassReceived, const FBattlePass&, BattlePasses, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassUnlockInfoReceived, const FBattlePassUnlockInfo&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassLevelArrayReceived, const TArray<FBattlePassLevel>&, BattlePasses, bool, Success);
+
 
 
 UCLASS(ClassGroup=(ScillSDK), meta=(BlueprintSpawnableComponent) )
@@ -87,6 +89,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void GetBattlePasses(FBattlePassArrayReceived responseReceived);
 
+	UFUNCTION(BlueprintCallable)
+		void UnlockBattlePass(FString battlePassId, float purchasePrice, FString purchaseCurrency, FBattlePassUnlockInfoReceived responseReceived);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -102,6 +107,8 @@ private:
 	void ReceiveBattlePassResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassResponse& Response, FGuid guid) const;
 	void ReceiveBattlePassLevelsResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassLevelsResponse& Response, FGuid guid) const;
 	void ReceiveBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassesResponse& Response, FGuid guid) const;
+	void ReceiveUnlockBattlePassResponse(const ScillSDK::ScillApiBattlePassesApi::UnlockBattlePassResponse& Response, FGuid guid) const;
+
 
 	// ----------------------------------------------------------------------------------
 	// Battle Passes Helpers
@@ -110,6 +117,7 @@ private:
 	mutable TMap<FGuid, FBattlePassArrayReceived> callbackMapBattlePassArrayReceived;
 	mutable TMap<FGuid, FBattlePassReceived> callbackMapBattlePassReceived;
 	mutable TMap<FGuid, FBattlePassLevelArrayReceived> callbackMapBattlePassLevelArrayReceived;
+	mutable TMap<FGuid, FBattlePassUnlockInfoReceived> callbackMapBattlePassUnlockInfoReceived;
 
 public:	
 	// Called every frame

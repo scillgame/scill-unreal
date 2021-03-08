@@ -186,6 +186,28 @@ void UScillClient::GetBattlePasses(FBattlePassArrayReceived responseReceived)
 	battlePassesApi.GetBattlePasses(request, delegate);
 }
 
+void UScillClient::UnlockBattlePass(FString battlePassId, float purchasePrice, FString purchaseCurrency, FBattlePassUnlockInfoReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiBattlePassesApi::UnlockBattlePassRequest();
+
+	request.AppId = AppId;
+	request.BattlePassId = battlePassId;
+
+	auto unlockPayload = ScillSDK::ScillApiBattlePassUnlockPayload();
+	unlockPayload.PurchasePrice = purchasePrice;
+	unlockPayload.PurchaseCurrency = purchaseCurrency;
+
+	request.ScillApiBattlePassUnlockPayload = unlockPayload;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapBattlePassUnlockInfoReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiBattlePassesApi::FUnlockBattlePassDelegate::CreateUObject(this, &UScillClient::ReceiveUnlockBattlePassResponse, guid);
+
+	battlePassesApi.UnlockBattlePass(request, delegate);
+}
+
 // Called when the game starts
 void UScillClient::BeginPlay()
 {
@@ -320,6 +342,15 @@ void UScillClient::ReceiveBattlePassesResponse(const ScillSDK::ScillApiBattlePas
 	callback.ExecuteIfBound(battlePasses, Response.IsSuccessful());
 
 	callbackMapBattlePassArrayReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveUnlockBattlePassResponse(const ScillSDK::ScillApiBattlePassesApi::UnlockBattlePassResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapBattlePassUnlockInfoReceived.FindRef(guid);
+
+	callback.ExecuteIfBound(FBattlePassUnlockInfo::FromScillApiBattlePassUnlockInfo(Response.Content), Response.IsSuccessful());
+
+	callbackMapBattlePassUnlockInfoReceived.Remove(guid);
 }
 
 // Called every frame

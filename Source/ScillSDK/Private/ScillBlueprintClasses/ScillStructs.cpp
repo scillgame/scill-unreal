@@ -3,6 +3,21 @@
 
 #include "ScillBlueprintClasses/ScillStructs.h"
 
+FBattlePassUnlockInfo FBattlePassUnlockInfo::FromScillApiBattlePassUnlockInfo(const ScillSDK::ScillApiBattlePassUnlockInfo o)
+{
+	auto n = FBattlePassUnlockInfo();
+
+	n.PurchaseId = o.PurchaseId.Get("");
+	n.BattlePassId = o.BattlePassId.Get("");
+	n.PurchasePrice = o.PurchasePrice.Get(0);
+	n.UserId = o.UserId.Get("");
+	n.PurchaseCurrency = o.PurchaseCurrency.Get("");
+	n.PurchasedAt = o.PurchasedAt.Get("");
+	n.BattlePassCompleted = o.BattlePassCompleted.Get(false);
+
+	return n;
+}
+
 FBattlePassLevelChallenge FBattlePassLevelChallenge::FromScillApiBattlePassLevelChallenge(const ScillSDK::ScillApiBattlePassLevelChallenge o)
 {
 	auto n = FBattlePassLevelChallenge();
