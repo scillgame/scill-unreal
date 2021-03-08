@@ -13,6 +13,7 @@
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FHttpResponseReceived, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassArrayReceived, const TArray<FBattlePass>&, BattlePasses, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassReceived, const FBattlePass&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassLevelArrayReceived, const TArray<FBattlePassLevel>&, BattlePasses, bool, Success);
 
 
@@ -75,7 +76,13 @@ public:
 		void GetUnlockedPasses(FBattlePassArrayReceived responseReceived);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly))
-		void GetAllPassLevels(FString battlePassId, FBattlePassLevelArrayReceived responseReceived);
+		void GetAllPassLevels(FBattlePassLevelArrayReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void GetBattlePass(FString battlePassId, FBattlePassReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void GetBattlePassLevels(FString battlePassId, FBattlePassLevelArrayReceived responseReceived);
 
 protected:
 	// Called when the game starts
@@ -89,12 +96,15 @@ private:
 	void ReceiveActiveBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetActiveBattlePassesResponse& Response, FGuid guid) const;
 	void ReceiveUnlockedBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetUnlockedBattlePassesResponse& Response, FGuid guid) const;
 	void ReceiveAllBattlePassLevelsResponse(const ScillSDK::ScillApiBattlePassesApi::GetAllBattlePassLevelsResponse& Response, FGuid guid) const;
+	void ReceiveBattlePassResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassResponse& Response, FGuid guid) const;
+	void ReceiveBattlePassLevelsResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassLevelsResponse& Response, FGuid guid) const;
 
 	// ----------------------------------------------------------------------------------
 	// Battle Passes Helpers
 
 	mutable TMap<FGuid, FHttpResponseReceived> callbackMapResponseReceived;
 	mutable TMap<FGuid, FBattlePassArrayReceived> callbackMapBattlePassArrayReceived;
+	mutable TMap<FGuid, FBattlePassReceived> callbackMapBattlePassReceived;
 	mutable TMap<FGuid, FBattlePassLevelArrayReceived> callbackMapBattlePassLevelArrayReceived;
 
 public:	
