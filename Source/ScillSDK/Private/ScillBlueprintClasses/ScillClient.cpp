@@ -13,7 +13,6 @@ UScillClient::UScillClient()
 	// ...
 }
 
-
 void UScillClient::SetAccessToken(FString newAccessToken)
 {
 	this->battlePassesApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
@@ -125,6 +124,21 @@ void UScillClient::GetUnlockedPasses(FBattlePassArrayReceived responseReceived)
 	battlePassesApi.GetUnlockedBattlePasses(request, delegate);
 }
 
+void UScillClient::GetAllPassLevels(FString battlePassId, FBattlePassLevelArrayReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiBattlePassesApi::GetAllBattlePassLevelsRequest();
+
+	request.AppId = AppId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapBattlePassLevelArrayReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiBattlePassesApi::FGetAllBattlePassLevelsDelegate::CreateUObject(this, &UScillClient::ReceiveAllBattlePassLevelsResponse, guid);
+
+	battlePassesApi.GetAllBattlePassLevels(request, delegate);
+}
+
 // Called when the game starts
 void UScillClient::BeginPlay()
 {
@@ -204,6 +218,21 @@ void UScillClient::ReceiveUnlockedBattlePassesResponse(const ScillSDK::ScillApiB
 	callbackMapResponseReceived.Remove(guid);
 }
 
+void UScillClient::ReceiveAllBattlePassLevelsResponse(const ScillSDK::ScillApiBattlePassesApi::GetAllBattlePassLevelsResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapBattlePassLevelArrayReceived.FindRef(guid);
+
+	TArray<FBattlePassLevel> battlePasses = TArray<FBattlePassLevel>();
+
+	for (auto bp : Response.Content)
+	{
+		battlePasses.Add(FBattlePassLevel::FromScillApiBattlePassLevel(bp));
+	}
+
+	callback.ExecuteIfBound(battlePasses, Response.IsSuccessful());
+
+	callbackMapResponseReceived.Remove(guid);
+}
 
 // Called every frame
 void UScillClient::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
