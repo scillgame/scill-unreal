@@ -92,6 +92,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void UnlockBattlePass(FString battlePassId, float purchasePrice, FString purchaseCurrency, FBattlePassUnlockInfoReceived responseReceived);
 
+	// ----------------------------------------------------
+	// Challenges
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

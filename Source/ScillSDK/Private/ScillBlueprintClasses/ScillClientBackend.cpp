@@ -53,6 +53,7 @@ void UScillClientBackend::BeginPlay()
 	Super::BeginPlay();
 
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
+	this->authApi.SetURL(TEXT("https://us.scillgame.com"));
 	//UE_LOG(LogScillSDK, Log, TEXT("API Key Created: %s"), *this->ApiKey);
 }
 

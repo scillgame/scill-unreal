@@ -234,6 +234,7 @@ void UScillClient::BeginPlay()
 	SetUserId(this->UserId);
 
 	this->battlePassesApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
+	this->battlePassesApi.SetURL(TEXT("https://es.scillgame.com"));
 
 	// ...
 	
