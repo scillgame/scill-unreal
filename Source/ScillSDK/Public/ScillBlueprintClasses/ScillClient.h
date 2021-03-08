@@ -84,6 +84,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void GetBattlePassLevels(FString battlePassId, FBattlePassLevelArrayReceived responseReceived);
 
+	UFUNCTION(BlueprintCallable)
+		void GetBattlePasses(FBattlePassArrayReceived responseReceived);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -98,6 +101,7 @@ private:
 	void ReceiveAllBattlePassLevelsResponse(const ScillSDK::ScillApiBattlePassesApi::GetAllBattlePassLevelsResponse& Response, FGuid guid) const;
 	void ReceiveBattlePassResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassResponse& Response, FGuid guid) const;
 	void ReceiveBattlePassLevelsResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassLevelsResponse& Response, FGuid guid) const;
+	void ReceiveBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassesResponse& Response, FGuid guid) const;
 
 	// ----------------------------------------------------------------------------------
 	// Battle Passes Helpers
