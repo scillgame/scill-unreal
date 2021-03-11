@@ -62,6 +62,10 @@ void UScillClient::SetUserId(FString newUserId)
 	}
 }
 
+// ----------------------------------------------------------------------------------------------------------------------------
+// Battle Passes
+// ----------------------------------------------------------------------------------------------------------------------------
+
 void UScillClient::ActivateBattlePassLevel(FString levelId, FHttpResponseReceived responseReceived)
 {
 	auto activateBattlePassRequest = ScillSDK::ScillApiBattlePassesApi::ActivateBattlePassLevelRequest();
@@ -208,6 +212,26 @@ void UScillClient::UnlockBattlePass(FString battlePassId, float purchasePrice, F
 	battlePassesApi.UnlockBattlePass(request, delegate);
 }
 
+// ----------------------------------------------------------------------------------------------------------------------------
+// Challenges
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::ActivatePersonalChallenge(FString challengeId, FChallengeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiChallengesApi::ActivatePersonalChallengeRequest();
+
+	request.AppId = AppId;
+	request.ChallengeId = challengeId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapChallengeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiChallengesApi::FActivatePersonalChallengeDelegate::CreateUObject(this, &UScillClient::ReceiveActivatePersonalChallengeResponse, guid);
+
+	challengesApi.ActivatePersonalChallenge(request, delegate);
+}
+
 // Called when the game starts
 void UScillClient::BeginPlay()
 {
@@ -236,9 +260,16 @@ void UScillClient::BeginPlay()
 	this->battlePassesApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
 	this->battlePassesApi.SetURL(TEXT("https://es.scillgame.com"));
 
+	this->challengesApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
+	this->challengesApi.SetURL(TEXT("https://pcs.scillgame.com"));
+
 	// ...
 	
 }
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// Battle Passes Handlers
+// ----------------------------------------------------------------------------------------------------------------------------
 
 void UScillClient::ReceiveActivateBattlePassLevelResponse(const ScillSDK::ScillApiBattlePassesApi::ActivateBattlePassLevelResponse& Response, FGuid guid) const
 {
@@ -352,6 +383,19 @@ void UScillClient::ReceiveUnlockBattlePassResponse(const ScillSDK::ScillApiBattl
 	callback.ExecuteIfBound(FBattlePassUnlockInfo::FromScillApiBattlePassUnlockInfo(Response.Content), Response.IsSuccessful());
 
 	callbackMapBattlePassUnlockInfoReceived.Remove(guid);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// Challenges Handlers
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::ReceiveActivatePersonalChallengeResponse(const ScillSDK::ScillApiChallengesApi::ActivatePersonalChallengeResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapChallengeReceived.FindRef(guid);
+
+	callback.ExecuteIfBound(FChallenge::FromScillApiChallenge(Response.Content.Challenge.Get(ScillSDK::ScillApiChallenge())), Response.IsSuccessful());
+
+	callbackMapChallengeReceived.Remove(guid);
 }
 
 // Called every frame

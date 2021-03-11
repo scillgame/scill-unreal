@@ -6,7 +6,82 @@
 #include "ScillApiWrapper/ScillApiBattlePass.h"
 #include "ScillApiWrapper/ScillApiBattlePassLevel.h"
 #include "ScillApiWrapper/ScillApiBattlePassUnlockInfo.h"
+#include "ScillApiWrapper/ScillApiChallenge.h"
 #include "ScillStructs.generated.h"
+
+/*
+*  Represents a Personal Challenge (non-battlepass challenge).
+*/
+
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FChallenge
+{
+	GENERATED_USTRUCT_BODY();
+
+	static FChallenge FromScillApiChallenge(const ScillSDK::ScillApiChallenge o);
+
+	/* The unique id of this challenge. Every challenge is linked to a product. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ChallengeId;
+	/* The name of the challenge in the language set by the language parameter. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ChallengeName;
+	/* The duration of the challenge in seconds. Challenges auto lock after time-out and need to be unlocked again. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 ChallengeDurationTime;
+	/* The date this challenge should start. Use that field to create challenges that start in the future. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString LiveDate;
+	/* Indicates how many “tasks” must be completed or done to complete this challenge. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 ChallengeGoal;
+	/* Indicates how many tasks the user already has completed. Use this in combination with challenge_goal to render a nice progress bar. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 UserChallengeCurrentScore;
+	/* In the admin panel you can set a string representing an image. This can be a URL, but it can also be an image or texture that you have in your games asset database. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ChallengeIcon;
+	/* This is the HD variant of the challenge icon image. If you have a game, that runs on multiple platforms that could come in handy. Otherwise just leave blank. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ChallengeIconHd;
+	/* If you purchase the challenge, you can set a price. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 ChallengePrice;
+	/* Set a reward for this challenge. This is a string value that you can map to anything in your code. Use in combination with challenge_reward_type. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ChallengeReward;
+	/* The reward type can be set to various different settings. Use it to implement different reward types on your side and use challenge_reward to set the value or amount of this reward. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ChallengeRewardType;
+	/* With this you can set the way how the SCILL system approaches the challenges state. 0 means, that the counter of the challenge must be brought above the goal. If this is 1, then the counter must be kept below the goal. This is often useful for challenges that include times, like: Manage the level in under 50 seconds. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 ChallengeGoalCondition;
+	/* If you have experience, player rankings whatever, you can use this field to set the gain in that when this challenge is rewarded. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 ChallengeXp;
+	/* If this challenge can be only activated once per user this will be false. Otherwise this challenge will always be added to list of available challenges (see personal or alliance challenges). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool Repeatable;
+	/* Indicates the status of the challenge. This can be one of the following unlock: Challenge does not track anything. in-progress: Challenge is active and tracking. overtime: User did not manage to finish the challenge in time. unclaimed: The challenge has been completed but the reward has not yet been claimed. finished: The challenge has been successfully be completed and the reward has been claimed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString Type;
+	/* If the challenge reward has been claimed this is true otherwise its false. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool IsClaimed;
+	/* This is the timestamp the challenge has been unlocked. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString UserChallengeUnlockedAt;
+	/* This is the timestamp the challenge has been activated. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString UserChallengeActivatedAt;
+	/* Indicates if this challenge has been claimed. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool UserChallengeIsClaimed;
+	/* Gives indication in what state the challenge is. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 UserChallengeStatus;
+
+};
 
 /*
 *  Gives information about an unlocking process on a battle pass.

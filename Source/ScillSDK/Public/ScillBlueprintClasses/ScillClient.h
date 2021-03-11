@@ -8,6 +8,8 @@
 #include "ScillApiWrapper/ScillApiBattlePassesApiOperations.h"
 #include "ScillBlueprintClasses/ScillStructs.h"
 #include "ScillBlueprintClasses/ScillLevelPersistenceInterface.h"
+#include "ScillApiWrapper/ScillApiChallengesApi.h"
+#include "ScillApiWrapper/ScillApiChallengesApiOperations.h"
 #include "Kismet/GameplayStatics.h"
 #include "ScillClient.generated.h"
 
@@ -16,6 +18,7 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassArrayReceived, const TArray<FBattl
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassReceived, const FBattlePass&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassUnlockInfoReceived, const FBattlePassUnlockInfo&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassLevelArrayReceived, const TArray<FBattlePassLevel>&, BattlePasses, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeReceived, const FChallenge&, Challenge, bool, Success);
 
 
 
@@ -95,12 +98,25 @@ public:
 	// ----------------------------------------------------
 	// Challenges
 
+	UFUNCTION(BlueprintCallable)
+		void ActivatePersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
 	ScillSDK::ScillApiBattlePassesApi battlePassesApi;
+	ScillSDK::ScillApiChallengesApi challengesApi;
+
+	// ----------------------------------------------------------------------------------
+	// General Helpers
+
+	mutable TMap<FGuid, FHttpResponseReceived> callbackMapResponseReceived;
+
+
+	// ----------------------------------------------------------------------------------
+	// Battle Passes Handlers
 
 	void ReceiveActivateBattlePassLevelResponse(const ScillSDK::ScillApiBattlePassesApi::ActivateBattlePassLevelResponse& Response, FGuid guid) const;
 	void ReceiveClaimBattlePassLevelResponse(const ScillSDK::ScillApiBattlePassesApi::ClaimBattlePassLevelRewardResponse& Response, FGuid guid) const;
@@ -112,15 +128,23 @@ private:
 	void ReceiveBattlePassesResponse(const ScillSDK::ScillApiBattlePassesApi::GetBattlePassesResponse& Response, FGuid guid) const;
 	void ReceiveUnlockBattlePassResponse(const ScillSDK::ScillApiBattlePassesApi::UnlockBattlePassResponse& Response, FGuid guid) const;
 
-
 	// ----------------------------------------------------------------------------------
 	// Battle Passes Helpers
 
-	mutable TMap<FGuid, FHttpResponseReceived> callbackMapResponseReceived;
 	mutable TMap<FGuid, FBattlePassArrayReceived> callbackMapBattlePassArrayReceived;
 	mutable TMap<FGuid, FBattlePassReceived> callbackMapBattlePassReceived;
 	mutable TMap<FGuid, FBattlePassLevelArrayReceived> callbackMapBattlePassLevelArrayReceived;
 	mutable TMap<FGuid, FBattlePassUnlockInfoReceived> callbackMapBattlePassUnlockInfoReceived;
+
+	// ----------------------------------------------------------------------------------
+	// Challenges Handlers
+
+	void ReceiveActivatePersonalChallengeResponse(const ScillSDK::ScillApiChallengesApi::ActivatePersonalChallengeResponse& Response, FGuid guid) const;
+	
+	// ----------------------------------------------------------------------------------
+	// Challenges Helpers
+
+	mutable TMap<FGuid, FChallengeReceived> callbackMapChallengeReceived;
 
 public:	
 	// Called every frame
