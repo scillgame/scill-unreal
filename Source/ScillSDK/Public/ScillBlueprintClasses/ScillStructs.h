@@ -7,6 +7,7 @@
 #include "ScillApiWrapper/ScillApiBattlePassLevel.h"
 #include "ScillApiWrapper/ScillApiBattlePassUnlockInfo.h"
 #include "ScillApiWrapper/ScillApiChallenge.h"
+#include "ScillApiWrapper/ScillApiChallengeCategory.h"
 #include "ScillStructs.generated.h"
 
 /*
@@ -80,6 +81,38 @@ struct SCILLSDK_API FChallenge
 	/* Gives indication in what state the challenge is. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 UserChallengeStatus;
+
+};
+
+/*
+*  Represents a Personal Challenge Request. This is usually the result of any Challenge Request.
+*/
+
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FChallengeCategory
+{
+	GENERATED_USTRUCT_BODY();
+
+	static FChallengeCategory FromScillApiChallengeCategory(const ScillSDK::ScillApiChallengeCategory o);
+
+	/* Indicates if this is the daily category, bringing up new challenges every day for the user to tackle. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool IsDailyCategory;
+	/* In the admin panel you set the order of the categories. This is the position index and indicates the position within the categories array. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 CategoryPosition;
+	/* A short name without special chars to make it easier to refer to a specific category (in code) that is language and id agnostic. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString CategorySlug;
+	/* The name of the category in the local language set as the query parameter. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString CategoryName;
+	/* Indicates how many “tasks” must be completed or done to complete this challenge. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString CategoryId;
+	/* An array of Challenge objects. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FChallenge> Challenges;
 
 };
 

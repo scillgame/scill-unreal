@@ -43,6 +43,10 @@ void ScillApiBattlePassLevelChallenge::WriteJson(JsonWriter& Writer) const
 	{
 		Writer->WriteIdentifierPrefix(TEXT("user_challenge_current_score")); WriteJsonValue(Writer, UserChallengeCurrentScore.GetValue());	
 	}
+	if (ChallengeXp.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("challenge_xp")); WriteJsonValue(Writer, ChallengeXp.GetValue());	
+	}
 	if (ChallengeIcon.IsSet())
 	{
 		Writer->WriteIdentifierPrefix(TEXT("challenge_icon")); WriteJsonValue(Writer, ChallengeIcon.GetValue());	
@@ -71,6 +75,7 @@ bool ScillApiBattlePassLevelChallenge::FromJson(const TSharedPtr<FJsonValue>& Js
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_goal"), ChallengeGoal);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_goal_condition"), ChallengeGoalCondition);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("user_challenge_current_score"), UserChallengeCurrentScore);
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_xp"), ChallengeXp);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_icon"), ChallengeIcon);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_icon_hd"), ChallengeIconHd);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("type"), Type);

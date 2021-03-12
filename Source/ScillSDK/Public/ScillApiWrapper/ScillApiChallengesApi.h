@@ -38,10 +38,14 @@ public:
 	class GenerateWebsocketAccessTokenResponse;
 	class GetActivePersonalChallengesRequest;
 	class GetActivePersonalChallengesResponse;
+	class GetAllPersonalChallengesRequest;
+	class GetAllPersonalChallengesResponse;
 	class GetPersonalChallengeByIdRequest;
 	class GetPersonalChallengeByIdResponse;
 	class GetPersonalChallengesRequest;
 	class GetPersonalChallengesResponse;
+	class GetUnresolvedPersonalChallengesRequest;
+	class GetUnresolvedPersonalChallengesResponse;
 	class UnlockPersonalChallengeRequest;
 	class UnlockPersonalChallengeResponse;
 	
@@ -50,8 +54,10 @@ public:
     DECLARE_DELEGATE_OneParam(FClaimPersonalChallengeRewardDelegate, const ClaimPersonalChallengeRewardResponse&);
     DECLARE_DELEGATE_OneParam(FGenerateWebsocketAccessTokenDelegate, const GenerateWebsocketAccessTokenResponse&);
     DECLARE_DELEGATE_OneParam(FGetActivePersonalChallengesDelegate, const GetActivePersonalChallengesResponse&);
+    DECLARE_DELEGATE_OneParam(FGetAllPersonalChallengesDelegate, const GetAllPersonalChallengesResponse&);
     DECLARE_DELEGATE_OneParam(FGetPersonalChallengeByIdDelegate, const GetPersonalChallengeByIdResponse&);
     DECLARE_DELEGATE_OneParam(FGetPersonalChallengesDelegate, const GetPersonalChallengesResponse&);
+    DECLARE_DELEGATE_OneParam(FGetUnresolvedPersonalChallengesDelegate, const GetUnresolvedPersonalChallengesResponse&);
     DECLARE_DELEGATE_OneParam(FUnlockPersonalChallengeDelegate, const UnlockPersonalChallengeResponse&);
     
     bool ActivatePersonalChallenge(const ActivatePersonalChallengeRequest& Request, const FActivatePersonalChallengeDelegate& Delegate = FActivatePersonalChallengeDelegate()) const;
@@ -59,8 +65,10 @@ public:
     bool ClaimPersonalChallengeReward(const ClaimPersonalChallengeRewardRequest& Request, const FClaimPersonalChallengeRewardDelegate& Delegate = FClaimPersonalChallengeRewardDelegate()) const;
     bool GenerateWebsocketAccessToken(const GenerateWebsocketAccessTokenRequest& Request, const FGenerateWebsocketAccessTokenDelegate& Delegate = FGenerateWebsocketAccessTokenDelegate()) const;
     bool GetActivePersonalChallenges(const GetActivePersonalChallengesRequest& Request, const FGetActivePersonalChallengesDelegate& Delegate = FGetActivePersonalChallengesDelegate()) const;
+    bool GetAllPersonalChallenges(const GetAllPersonalChallengesRequest& Request, const FGetAllPersonalChallengesDelegate& Delegate = FGetAllPersonalChallengesDelegate()) const;
     bool GetPersonalChallengeById(const GetPersonalChallengeByIdRequest& Request, const FGetPersonalChallengeByIdDelegate& Delegate = FGetPersonalChallengeByIdDelegate()) const;
     bool GetPersonalChallenges(const GetPersonalChallengesRequest& Request, const FGetPersonalChallengesDelegate& Delegate = FGetPersonalChallengesDelegate()) const;
+    bool GetUnresolvedPersonalChallenges(const GetUnresolvedPersonalChallengesRequest& Request, const FGetUnresolvedPersonalChallengesDelegate& Delegate = FGetUnresolvedPersonalChallengesDelegate()) const;
     bool UnlockPersonalChallenge(const UnlockPersonalChallengeRequest& Request, const FUnlockPersonalChallengeDelegate& Delegate = FUnlockPersonalChallengeDelegate()) const;
     
 private:
@@ -69,8 +77,10 @@ private:
     void OnClaimPersonalChallengeRewardResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FClaimPersonalChallengeRewardDelegate Delegate) const;
     void OnGenerateWebsocketAccessTokenResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGenerateWebsocketAccessTokenDelegate Delegate) const;
     void OnGetActivePersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetActivePersonalChallengesDelegate Delegate) const;
+    void OnGetAllPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetAllPersonalChallengesDelegate Delegate) const;
     void OnGetPersonalChallengeByIdResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetPersonalChallengeByIdDelegate Delegate) const;
     void OnGetPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetPersonalChallengesDelegate Delegate) const;
+    void OnGetUnresolvedPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUnresolvedPersonalChallengesDelegate Delegate) const;
     void OnUnlockPersonalChallengeResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FUnlockPersonalChallengeDelegate Delegate) const;
     
 	bool IsValid() const;

@@ -23,6 +23,18 @@ namespace ScillSDK
 void ScillApiChallengeWebhookPayload::WriteJson(JsonWriter& Writer) const
 {
 	Writer->WriteObjectStart();
+	if (WebhookType.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());	
+	}
+	if (CategoryPosition.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("category_position")); WriteJsonValue(Writer, CategoryPosition.GetValue());	
+	}
+	if (UserToken.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("user_token")); WriteJsonValue(Writer, UserToken.GetValue());	
+	}
 	if (NewChallenge.IsSet())
 	{
 		Writer->WriteIdentifierPrefix(TEXT("new_challenge")); WriteJsonValue(Writer, NewChallenge.GetValue());	
@@ -42,6 +54,9 @@ bool ScillApiChallengeWebhookPayload::FromJson(const TSharedPtr<FJsonValue>& Jso
 
 	bool ParseSuccess = true;
 
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("webhook_type"), WebhookType);
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("category_position"), CategoryPosition);
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("user_token"), UserToken);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("new_challenge"), NewChallenge);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("old_challenge"), OldChallenge);
 

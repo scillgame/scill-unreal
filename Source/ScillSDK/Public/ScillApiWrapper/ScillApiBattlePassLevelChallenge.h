@@ -39,6 +39,8 @@ public:
 	TOptional<int32> ChallengeGoalCondition;
 	/* Indicates how many tasks the user already has completed. Use this in combination with challenge_goal to render a nice progress bar. */
 	TOptional<int32> UserChallengeCurrentScore;
+	/* If you have experience, player rankings whatever, you can use this field to set the gain in that when this challenge is rewarded. */
+	TOptional<int32> ChallengeXp;
 	/* In the admin panel you can set a string representing an image. This can be a URL, but it can also be an image or texture that you have in your games asset database. */
 	TOptional<FString> ChallengeIcon;
 	/* This is the HD variant of the challenge icon image. If you have a game, that runs on multiple platforms that could come in handy. Otherwise just leave blank. */

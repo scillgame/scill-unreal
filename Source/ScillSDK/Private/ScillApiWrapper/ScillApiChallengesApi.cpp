@@ -228,6 +228,32 @@ void ScillApiChallengesApi::OnGetActivePersonalChallengesResponse(FHttpRequestPt
 	Delegate.ExecuteIfBound(Response);
 }
 
+bool ScillApiChallengesApi::GetAllPersonalChallenges(const GetAllPersonalChallengesRequest& Request, const FGetAllPersonalChallengesDelegate& Delegate /*= FGetAllPersonalChallengesDelegate()*/) const
+{
+	if (!IsValid())
+		return false;
+
+	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	HttpRequest->SetURL(*(Url + Request.ComputePath()));
+
+	for(const auto& It : AdditionalHeaderParams)
+	{
+		HttpRequest->SetHeader(It.Key, It.Value);
+	}
+
+	Request.SetupHttpRequest(HttpRequest);
+	
+	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnGetAllPersonalChallengesResponse, Delegate);
+	return HttpRequest->ProcessRequest();
+}
+
+void ScillApiChallengesApi::OnGetAllPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetAllPersonalChallengesDelegate Delegate) const
+{
+	GetAllPersonalChallengesResponse Response;
+	HandleResponse(HttpResponse, bSucceeded, Response);
+	Delegate.ExecuteIfBound(Response);
+}
+
 bool ScillApiChallengesApi::GetPersonalChallengeById(const GetPersonalChallengeByIdRequest& Request, const FGetPersonalChallengeByIdDelegate& Delegate /*= FGetPersonalChallengeByIdDelegate()*/) const
 {
 	if (!IsValid())
@@ -276,6 +302,32 @@ bool ScillApiChallengesApi::GetPersonalChallenges(const GetPersonalChallengesReq
 void ScillApiChallengesApi::OnGetPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetPersonalChallengesDelegate Delegate) const
 {
 	GetPersonalChallengesResponse Response;
+	HandleResponse(HttpResponse, bSucceeded, Response);
+	Delegate.ExecuteIfBound(Response);
+}
+
+bool ScillApiChallengesApi::GetUnresolvedPersonalChallenges(const GetUnresolvedPersonalChallengesRequest& Request, const FGetUnresolvedPersonalChallengesDelegate& Delegate /*= FGetUnresolvedPersonalChallengesDelegate()*/) const
+{
+	if (!IsValid())
+		return false;
+
+	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	HttpRequest->SetURL(*(Url + Request.ComputePath()));
+
+	for(const auto& It : AdditionalHeaderParams)
+	{
+		HttpRequest->SetHeader(It.Key, It.Value);
+	}
+
+	Request.SetupHttpRequest(HttpRequest);
+	
+	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnGetUnresolvedPersonalChallengesResponse, Delegate);
+	return HttpRequest->ProcessRequest();
+}
+
+void ScillApiChallengesApi::OnGetUnresolvedPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUnresolvedPersonalChallengesDelegate Delegate) const
+{
+	GetUnresolvedPersonalChallengesResponse Response;
 	HandleResponse(HttpResponse, bSucceeded, Response);
 	Delegate.ExecuteIfBound(Response);
 }

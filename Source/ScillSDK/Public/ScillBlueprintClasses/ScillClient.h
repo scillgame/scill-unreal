@@ -19,6 +19,7 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassReceived, const FBattlePass&, Batt
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassUnlockInfoReceived, const FBattlePassUnlockInfo&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassLevelArrayReceived, const TArray<FBattlePassLevel>&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeReceived, const FChallenge&, Challenge, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeCategoryArrayReceived, const TArray<FChallengeCategory>&, ChallengeCategories, bool, Success);
 
 
 
@@ -101,6 +102,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ActivatePersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
+	UFUNCTION(BlueprintCallable)
+		void CancelPersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void ClaimPersonalChallengeReward(FString challengeId, FChallengeReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void GetActivePersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void GetAllPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -140,11 +154,16 @@ private:
 	// Challenges Handlers
 
 	void ReceiveActivatePersonalChallengeResponse(const ScillSDK::ScillApiChallengesApi::ActivatePersonalChallengeResponse& Response, FGuid guid) const;
+	void ReceiveCancelPersonalChallengeResponse(const ScillSDK::ScillApiChallengesApi::CancelPersonalChallengeResponse& Response, FGuid guid) const;
+	void ReceiveClaimPersonalChallengeRewardResponse(const ScillSDK::ScillApiChallengesApi::ClaimPersonalChallengeRewardResponse& Response, FGuid guid) const;
+	void ReceiveGetActivePersonalChallengesResponse(const ScillSDK::ScillApiChallengesApi::GetActivePersonalChallengesResponse& Response, FGuid guid) const;
+	void ReceiveGetAllPersonalChallengesResponse(const ScillSDK::ScillApiChallengesApi::GetAllPersonalChallengesResponse& Response, FGuid guid) const;
 	
 	// ----------------------------------------------------------------------------------
 	// Challenges Helpers
 
 	mutable TMap<FGuid, FChallengeReceived> callbackMapChallengeReceived;
+	mutable TMap<FGuid, FChallengeCategoryArrayReceived> callbackMapChallengeCategoryArrayReceived;
 
 public:	
 	// Called every frame

@@ -33,8 +33,10 @@ public:
 	TOptional<FString> ChallengeId;
 	/* The name of the challenge in the language set by the language parameter. */
 	TOptional<FString> ChallengeName;
+	/* An optional multi-language description that can be set in the Admin Panel. Used to describe exactly what the user has to do. */
+	TOptional<FString> ChallengeDescription;
 	/* The duration of the challenge in seconds. Challenges auto lock after time-out and need to be unlocked again. */
-	TOptional<int32> ChallengeDurationTime;
+	TOptional<double> ChallengeDurationTime;
 	/* The date this challenge should start. Use that field to create challenges that start in the future. */
 	TOptional<FString> LiveDate;
 	/* Indicates how many “tasks” must be completed or done to complete this challenge. */
@@ -59,6 +61,8 @@ public:
 	TOptional<bool> Repeatable;
 	/* Indicates the status of the challenge. This can be one of the following unlock: Challenge does not track anything. in-progress: Challenge is active and tracking. overtime: User did not manage to finish the challenge in time. unclaimed: The challenge has been completed but the reward has not yet been claimed. finished: The challenge has been successfully be completed and the reward has been claimed */
 	TOptional<FString> Type;
+	/* Indicates if the challenges lifecycle is handled automatically by the SCILL backend. Use this flag to decide when to show action buttons for unlocking, activating, claiming or canceling challenges. Hide the buttons if this flag is true, and let the user manage challenges manually if this flag is false. */
+	TOptional<bool> ChallengeAutoActivated;
 	/* If the challenge reward has been claimed this is true otherwise its false. */
 	TOptional<bool> IsClaimed;
 	/* This is the timestamp the challenge has been unlocked. */

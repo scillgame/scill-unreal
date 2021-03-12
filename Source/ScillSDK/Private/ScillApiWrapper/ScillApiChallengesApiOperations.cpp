@@ -297,6 +297,61 @@ bool ScillApiChallengesApi::GetActivePersonalChallengesResponse::FromJson(const 
 	return TryGetJsonValue(JsonValue, Content);
 }
 
+FString ScillApiChallengesApi::GetAllPersonalChallengesRequest::ComputePath() const
+{
+	TMap<FString, FStringFormatArg> PathParams = { 
+	{ TEXT("appId"), ToStringFormatArg(AppId) } };
+
+	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/all/{appId}"), PathParams);
+	
+	return Path;
+}
+
+void ScillApiChallengesApi::GetAllPersonalChallengesRequest::SetupHttpRequest(const FHttpRequestRef& HttpRequest) const
+{
+	static const TArray<FString> Consumes = {  };
+	//static const TArray<FString> Produces = { TEXT("application/json") };
+
+	HttpRequest->SetVerb(TEXT("GET"));
+
+	// Default to Json Body request
+	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
+	{
+	}
+	else if (Consumes.Contains(TEXT("multipart/form-data")))
+	{
+	}
+	else if (Consumes.Contains(TEXT("application/x-www-form-urlencoded")))
+	{
+	}
+	else
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Request ContentType not supported (%s)"), *FString::Join(Consumes, TEXT(",")));
+	}
+}
+
+void ScillApiChallengesApi::GetAllPersonalChallengesResponse::SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode)
+{
+	Response::SetHttpResponseCode(InHttpResponseCode);
+	switch ((int)InHttpResponseCode)
+	{
+	case 200:
+		SetResponseString(TEXT("An array of ChallengeCategory objects"));
+		break;
+	case 403:
+		SetResponseString(TEXT("Unauthorized"));
+		break;
+	case 404:
+		SetResponseString(TEXT("The specified resource was not found"));
+		break;
+	}
+}
+
+bool ScillApiChallengesApi::GetAllPersonalChallengesResponse::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
+{
+	return TryGetJsonValue(JsonValue, Content);
+}
+
 FString ScillApiChallengesApi::GetPersonalChallengeByIdRequest::ComputePath() const
 {
 	TMap<FString, FStringFormatArg> PathParams = { 
@@ -404,6 +459,61 @@ void ScillApiChallengesApi::GetPersonalChallengesResponse::SetHttpResponseCode(E
 }
 
 bool ScillApiChallengesApi::GetPersonalChallengesResponse::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
+{
+	return TryGetJsonValue(JsonValue, Content);
+}
+
+FString ScillApiChallengesApi::GetUnresolvedPersonalChallengesRequest::ComputePath() const
+{
+	TMap<FString, FStringFormatArg> PathParams = { 
+	{ TEXT("appId"), ToStringFormatArg(AppId) } };
+
+	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/unresolved/{appId}"), PathParams);
+	
+	return Path;
+}
+
+void ScillApiChallengesApi::GetUnresolvedPersonalChallengesRequest::SetupHttpRequest(const FHttpRequestRef& HttpRequest) const
+{
+	static const TArray<FString> Consumes = {  };
+	//static const TArray<FString> Produces = { TEXT("application/json") };
+
+	HttpRequest->SetVerb(TEXT("GET"));
+
+	// Default to Json Body request
+	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
+	{
+	}
+	else if (Consumes.Contains(TEXT("multipart/form-data")))
+	{
+	}
+	else if (Consumes.Contains(TEXT("application/x-www-form-urlencoded")))
+	{
+	}
+	else
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Request ContentType not supported (%s)"), *FString::Join(Consumes, TEXT(",")));
+	}
+}
+
+void ScillApiChallengesApi::GetUnresolvedPersonalChallengesResponse::SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode)
+{
+	Response::SetHttpResponseCode(InHttpResponseCode);
+	switch ((int)InHttpResponseCode)
+	{
+	case 200:
+		SetResponseString(TEXT("An array of ChallengeCategory objects"));
+		break;
+	case 403:
+		SetResponseString(TEXT("Unauthorized"));
+		break;
+	case 404:
+		SetResponseString(TEXT("The specified resource was not found"));
+		break;
+	}
+}
+
+bool ScillApiChallengesApi::GetUnresolvedPersonalChallengesResponse::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
 {
 	return TryGetJsonValue(JsonValue, Content);
 }

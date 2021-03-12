@@ -153,6 +153,31 @@ public:
     TArray<ScillApiChallengeCategory> Content;
 };
 
+/* Get all personal challenges available for your app. Also includes completed challenges.
+ *
+ * Get personal challenges organized in categories that are not yet finished
+*/
+class SCILLSDK_API ScillApiChallengesApi::GetAllPersonalChallengesRequest : public Request
+{
+public:
+    virtual ~GetAllPersonalChallengesRequest() {}
+	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
+	FString ComputePath() const final;
+    
+	/* The app id */
+	FString AppId;
+};
+
+class SCILLSDK_API ScillApiChallengesApi::GetAllPersonalChallengesResponse : public Response
+{
+public:
+    virtual ~GetAllPersonalChallengesResponse() {}
+	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
+	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
+    
+    TArray<ScillApiChallengeCategory> Content;
+};
+
 /* Get personal challenge by id
  *
  * Get personal challenges organized in categories
@@ -180,7 +205,7 @@ public:
     ScillApiChallenge Content;
 };
 
-/* Get personal challenges
+/* Get personal challenges that are not yet completed.
  *
  * Get personal challenges organized in categories
 */
@@ -199,6 +224,31 @@ class SCILLSDK_API ScillApiChallengesApi::GetPersonalChallengesResponse : public
 {
 public:
     virtual ~GetPersonalChallengesResponse() {}
+	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
+	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
+    
+    TArray<ScillApiChallengeCategory> Content;
+};
+
+/* Get personal challenges that are not yet completed.
+ *
+ * Get personal challenges organized in categories that are not yet finished
+*/
+class SCILLSDK_API ScillApiChallengesApi::GetUnresolvedPersonalChallengesRequest : public Request
+{
+public:
+    virtual ~GetUnresolvedPersonalChallengesRequest() {}
+	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
+	FString ComputePath() const final;
+    
+	/* The app id */
+	FString AppId;
+};
+
+class SCILLSDK_API ScillApiChallengesApi::GetUnresolvedPersonalChallengesResponse : public Response
+{
+public:
+    virtual ~GetUnresolvedPersonalChallengesResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
     

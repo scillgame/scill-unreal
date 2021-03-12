@@ -3,6 +3,31 @@
 
 #include "ScillBlueprintClasses/ScillStructs.h"
 
+FChallengeCategory FChallengeCategory::FromScillApiChallengeCategory(const ScillSDK::ScillApiChallengeCategory o)
+{
+	auto n = FChallengeCategory();
+
+	n.IsDailyCategory = o.IsDailyCategory.Get(false);
+	n.CategoryPosition = o.CategoryPosition.Get(0);
+	n.CategorySlug = o.CategorySlug.Get("");
+	n.CategoryName = o.CategoryName.Get("");
+	n.CategoryId = o.CategoryId.Get("");
+
+	TArray<FChallenge> challenges = TArray<FChallenge>();
+
+	if(o.Challenges.IsSet())
+		for (auto & c : o.Challenges.GetValue())
+		{
+			challenges.Add(FChallenge::FromScillApiChallenge(c));
+		}
+
+	n.Challenges = challenges;
+
+	n.IsDailyCategory = o.IsDailyCategory.Get(false);
+
+	return n;
+}
+
 FChallenge FChallenge::FromScillApiChallenge(const ScillSDK::ScillApiChallenge o)
 {
 	auto n = FChallenge();

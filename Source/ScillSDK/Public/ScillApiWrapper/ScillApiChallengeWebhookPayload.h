@@ -30,6 +30,12 @@ public:
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
 	void WriteJson(JsonWriter& Writer) const final;
 
+	/* The type of the webhook. Depending on the module, there are different webhook types indicating different events. Check the reference documentation to see all types. */
+	TOptional<FString> WebhookType;
+	/* The index of the category this challenge is linked to. When you request personal challenges, you get an array of categories which contain an array of challenges in their challenges property. This value indicates in which category this challenge can be found. Speeds up updating UI as you don't need to iterate through all catagories and challenges to find the challenge. */
+	TOptional<double> CategoryPosition;
+	/* The access token for the user of that challenge. You can use that user_token to directly send another event and therefore to chain different SCILL pieces together. For example you can send another event driving another challenge or battle pass whenever a user has completed a challenge. */
+	TOptional<FString> UserToken;
 	TOptional<ScillApiChallenge> NewChallenge;
 	TOptional<ScillApiChallenge> OldChallenge;
 };

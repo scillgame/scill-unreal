@@ -31,6 +31,10 @@ void ScillApiChallenge::WriteJson(JsonWriter& Writer) const
 	{
 		Writer->WriteIdentifierPrefix(TEXT("challenge_name")); WriteJsonValue(Writer, ChallengeName.GetValue());	
 	}
+	if (ChallengeDescription.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("challenge_description")); WriteJsonValue(Writer, ChallengeDescription.GetValue());	
+	}
 	if (ChallengeDurationTime.IsSet())
 	{
 		Writer->WriteIdentifierPrefix(TEXT("challenge_duration_time")); WriteJsonValue(Writer, ChallengeDurationTime.GetValue());	
@@ -83,6 +87,10 @@ void ScillApiChallenge::WriteJson(JsonWriter& Writer) const
 	{
 		Writer->WriteIdentifierPrefix(TEXT("type")); WriteJsonValue(Writer, Type.GetValue());	
 	}
+	if (ChallengeAutoActivated.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("challenge_auto_activated")); WriteJsonValue(Writer, ChallengeAutoActivated.GetValue());	
+	}
 	if (IsClaimed.IsSet())
 	{
 		Writer->WriteIdentifierPrefix(TEXT("is_claimed")); WriteJsonValue(Writer, IsClaimed.GetValue());	
@@ -116,6 +124,7 @@ bool ScillApiChallenge::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
 
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_id"), ChallengeId);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_name"), ChallengeName);
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_description"), ChallengeDescription);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_duration_time"), ChallengeDurationTime);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("live_date"), LiveDate);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_goal"), ChallengeGoal);
@@ -129,6 +138,7 @@ bool ScillApiChallenge::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_xp"), ChallengeXp);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("repeatable"), Repeatable);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("type"), Type);
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("challenge_auto_activated"), ChallengeAutoActivated);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("is_claimed"), IsClaimed);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("user_challenge_unlocked_at"), UserChallengeUnlockedAt);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("user_challenge_activated_at"), UserChallengeActivatedAt);
