@@ -8,7 +8,285 @@
 #include "ScillApiWrapper/ScillApiBattlePassUnlockInfo.h"
 #include "ScillApiWrapper/ScillApiChallenge.h"
 #include "ScillApiWrapper/ScillApiChallengeCategory.h"
+#include "ScillApiWrapper/ScillApiEventMetaData.h"
+#include "ScillApiWrapper/ScillApiEventPayload.h"
 #include "ScillStructs.generated.h"
+
+/*
+*  This is the metadata of an event. Make sure to send the correct metadata for the correct event name.
+*/
+
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FEventMetaData
+{
+	GENERATED_USTRUCT_BODY();
+
+	static ScillSDK::ScillApiEventMetaData ToScillApiEventMetaData(const FEventMetaData o);
+
+	/* The object that is the source of the action */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ActionObject;
+	/* The object that is the target of the action */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ActionSubject;
+	/* The name of the action */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ActionType;
+	/* Number of ammonition used */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendAmmoUsed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 AmmoUsed;
+	/* A general indicator for number of items (i.e. number of kills in kill-enemy event) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendAmount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Amount;
+	/* The number of ammonition gained */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendAmountGained;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 AmountGained;
+	/* The number of amminition given */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendAmountGiven;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 AmountGiven;
+	/* The name of an animal */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString AnimalName;
+	/* The \"health\" state of the armor */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendArmor;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Armor;
+	/* The id of the opponent team */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString AwayTeamId;
+	/* The score of the opponent team */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendAwayScore;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 AwayScore;
+	/* An integer value indicating the battle status (map it to an enum for example in your code) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendBattleStatus;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 BattleStatus;
+	/* The name of the bounty */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString BountyName;
+	/* The id or name of a building */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString BuildingId;
+	/* The level of the building */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendBuildingLevel;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 BuildingLevel;
+	/* The name of the card */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString CardType;
+	/* The name of a character */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString CharacterName;
+	/* The id/name of a checkpint */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString CheckpointId;
+	/* The x coordinate in your coordinate system, used for example to store position on a map */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendCoordinateX;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 CoordinateX;
+	/* The y coordinate in your coordinate system, used for example to store position on a map */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendCoordinateY;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 CoordinateY;
+	/* The name of a crew */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString CrewName;
+	/* The amount of damage */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendDamageAmount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 DamageAmount;
+	/* The distance measured in any coordinate system of your choice. Please note: This is an integer field. If you need more precision multiple your floating point value with 1000 or so to keep the precision but storing it as an integer value */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendDistance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Distance;
+	/* The duration in any unit you like */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendDuration;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Duration;
+	/* The effect id or name */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString EffectId;
+	/* The character type or name of an enemy */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString EnemyCharacter;
+	/* The type of an enemy */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString EnemyType;
+	/* The event type */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString EventType;
+	/* The number of fuel consumed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendFuelConsumed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 FuelConsumed;
+	/* The health */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendHealth;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Health;
+	/* The type of a hit (i.e. head, torso, leg) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString HitType;
+	/* The id or name of your or the home team */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString HomeTeamId;
+	/* The score of your or the home team */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendHomeScore;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 HomeScore;
+	/* The id of an item */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ItemId;
+	/* The name of an item */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ItemName;
+	/* The type of an item */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ItemType;
+	/* The type of a kill */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString KillType;
+	/* The position in a lap */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendLapPosition;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 LapPosition;
+	/* The id of the level */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString LevelId;
+	/* The name of a map */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString MapName;
+	/* The name of a section of a map */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString MapSectionName;
+	/* The mission id */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString MissionId;
+	/* The name of the player character */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString PlayerCharacter;
+	/* The id of a puzzle */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendPuzzleId;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 PuzzleId;
+	/* The position within a race */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendRacePosition;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 RacePosition;
+	/* The realm */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString Realm;
+	/* The time required involed in this event. I.e. in a reach-checkpoint event this could be the time in seconds required to reach that checkpoint from the last checkpoint. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendRequiredTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 RequiredTime;
+	/* The name/id of the resource gained */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ResourceGained;
+	/* The name/id of the resource given (to someone else) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ResourceGiven;
+	/* The name of the resource */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ResourceName;
+	/* The id of the round */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendRoundId;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 RoundId;
+	/* The type of the round */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString RoundType;
+	/* The score */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SendScore;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Score;
+	/* The type of the stats item */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString StatType;
+	/* The timing condition */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString TimeCondition;
+	/* The id of the transport */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString TransportId;
+	/* The name/id of a type */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString Type;
+	/* The name/id of a unit type */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString UnitType;
+	/* The name of the upgrade */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString UpgradeType;
+	/* The action taken on a weapon (i.e. infrared-activated) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WeaponAction;
+	/* The id of the weapon */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WeaponId;
+	/* The type of the weapon */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WeaponType;
+	/* The name/id of a weapon used in a kill or similar event */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WeaponUsed;
+	/* The name of the zone */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ZoneName;
+};
+
+/*
+*  This represents the payload that you can send with a "Send Event" request. Make sure to send the correct metadata with it. 
+*/
+
+USTRUCT(BlueprintType, Category = "ScillSDK")
+	struct SCILLSDK_API FScillEventPayload
+{
+	GENERATED_USTRUCT_BODY();
+
+	static ScillSDK::ScillApiEventPayload ToScillApiEventPayload(FScillEventPayload o);
+
+	/* This is your user id. You can set this to whatever you like, either your real user id or an obfuscated user id. However you need to be consistent here. Events linked to this user id only track if challenges or battle passes are unlocked with the same user id. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString UserId;
+	/* This is required if event_type is single and identifies a session. This can be anything used to group events together. For example this can be a level or a match id. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString SessionId;
+	/* This is the event type as a string. These have predefined event names for many games and applications. It’s wise to use those as this allows us to analyse data and help you balancing your application or game. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString EventName;
+	/* This is either single or group. You can send multiple events in one request (group) or send events in sequence. Please note, that depending on your tier you might run into rate limits. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString EventType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FEventMetaData MetaData;
+};
 
 /*
 *  Represents a Personal Challenge (non-battlepass challenge).

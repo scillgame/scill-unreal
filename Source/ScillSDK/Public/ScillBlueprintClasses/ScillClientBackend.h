@@ -13,6 +13,7 @@
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FReceiveAccessToken, FString, Token, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FReceiveBattlePassUpdate, FBattlePass, BattlePassUpdate);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FResponseReceived, bool, Success);
 
 /* This is the entry component for your game's server logic in regards of the SCILL API. This component uses the API Key of your App and should not be created on the client - so best place it on your GameMode class. */
 UCLASS(meta = (BlueprintSpawnableComponent))
@@ -48,12 +49,18 @@ public:
 	UFUNCTION(meta=(BlueprintInternalUseOnly))
 		void StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback);
 
+	UFUNCTION(BlueprintCallable)
+		void SendEvent(FScillEventPayload payload, FResponseReceived responseReceived);
+
 private:
 	ScillSDK::ScillApiAuthApi authApi;
+	ScillSDK::ScillApiEventsApi eventsApi;
 
 	mutable TMap<FGuid, FReceiveAccessToken> callbackMapReceiveAccessToken;
 
 	mutable TMap<FGuid, FReceiveBattlePassUpdate> callbackMapReceiveBattlepassTopic;
+
+	mutable TMap<FGuid, FResponseReceived> callbackMapResponseReceived;
 
 	FString RealtimeUpdatesWebsocketURL;
 
@@ -62,5 +69,7 @@ private:
 	void ReceiveBattlepassTopic(const ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicResponse& Response, FGuid guid) const;
 
 	void ReceiveStringMessageFromBattlepassTopic(const FString& Message, FGuid guid) const;
+
+	void ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::SendEventResponse& Response, FGuid guid) const;
 };
 

@@ -17,6 +17,7 @@ void UScillClient::SetAccessToken(FString newAccessToken)
 {
 	this->battlePassesApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->challengesApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
+	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->AccessToken = newAccessToken;
 	
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
@@ -358,6 +359,26 @@ void UScillClient::UnlockPersonalChallenge(FString challengeId, FChallengeReceiv
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------
+// Events
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::SendEvent(FScillEventPayload payload, FHttpResponseReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiEventsApi::SendEventRequest();
+
+	request.ScillApiEventPayload = FScillEventPayload::ToScillApiEventPayload(payload);
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapResponseReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiEventsApi::FSendEventDelegate::CreateUObject(this, &UScillClient::ReceiveSendEventResponse, guid);
+
+	eventsApi.SendEvent(request, delegate);
+}
+
+
+// ----------------------------------------------------------------------------------------------------------------------------
 // UActor Event Implementations
 // ----------------------------------------------------------------------------------------------------------------------------
 
@@ -391,6 +412,9 @@ void UScillClient::BeginPlay()
 
 	this->challengesApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
 	this->challengesApi.SetURL(TEXT("https://pcs.scillgame.com"));
+
+	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
+	this->eventsApi.SetURL(TEXT("https://ep.scillgame.com"));
 
 	// ...
 	
@@ -625,6 +649,18 @@ void UScillClient::ReceiveUnlockPersonalChallengeResponse(const ScillSDK::ScillA
 	callback.ExecuteIfBound(FChallenge::FromScillApiChallenge(Response.Content.Challenge.Get(ScillSDK::ScillApiChallenge())), Response.IsSuccessful());
 
 	callbackMapChallengeReceived.Remove(guid);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// Events Handlers
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::SendEventResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapResponseReceived.FindRef(guid);
+	callback.ExecuteIfBound(Response.IsSuccessful());
+
+	callbackMapResponseReceived.Remove(guid);
 }
 
 // Called every frame

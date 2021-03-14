@@ -11,6 +11,7 @@ void UScillClientBackend::SetApiKey(FString apiKey)
 {
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + apiKey);
 	this->ApiKey = apiKey;
+	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
 	//UE_LOG(LogScillSDK, Log, TEXT("API Key Created: %s"), *apiKey);
 }
 
@@ -54,6 +55,10 @@ void UScillClientBackend::BeginPlay()
 
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
 	this->authApi.SetURL(TEXT("https://us.scillgame.com"));
+
+	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
+	this->eventsApi.SetURL(TEXT("https://ep.scillgame.com"));
+
 	//UE_LOG(LogScillSDK, Log, TEXT("API Key Created: %s"), *this->ApiKey);
 }
 
@@ -106,4 +111,27 @@ void UScillClientBackend::ReceiveStringMessageFromBattlepassTopic(const FString&
 
 		callback.ExecuteIfBound(FBattlePass::FromScillApiBattlePass(battlePass));
 	}
+}
+
+void UScillClientBackend::SendEvent(FScillEventPayload payload, FResponseReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiEventsApi::SendEventRequest();
+
+	request.ScillApiEventPayload = FScillEventPayload::ToScillApiEventPayload(payload);
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapResponseReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiEventsApi::FSendEventDelegate::CreateUObject(this, &UScillClientBackend::ReceiveSendEventResponse, guid);
+
+	eventsApi.SendEvent(request, delegate);
+}
+
+void UScillClientBackend::ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::SendEventResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapResponseReceived.FindRef(guid);
+	callback.ExecuteIfBound(Response.IsSuccessful());
+
+	callbackMapResponseReceived.Remove(guid);
 }

@@ -130,8 +130,8 @@ public:
 	// ----------------------------------------------------
 	// Events
 
-	UFUNCTION(BlueprintCallable)
-		void SendEvent(FString challengeId, FChallengeReceived responseReceived);
+	UFUNCTION(meta = (BlueprintInternalUseOnly))
+		void SendEvent(FScillEventPayload payload, FHttpResponseReceived responseReceived);
 
 protected:
 	// Called when the game starts
@@ -187,6 +187,11 @@ private:
 
 	mutable TMap<FGuid, FChallengeReceived> callbackMapChallengeReceived;
 	mutable TMap<FGuid, FChallengeCategoryArrayReceived> callbackMapChallengeCategoryArrayReceived;
+
+	// ----------------------------------------------------------------------------------
+	// Events Handlers
+
+	void ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::SendEventResponse& Response, FGuid guid) const;
 
 public:	
 	// Called every frame
