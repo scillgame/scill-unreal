@@ -50,7 +50,7 @@ public:
 	// ----------------------------------------------------
 	// User Id
 
-	/* You can set a user id for testing purposes here. If set during runtime use the SetUserId function. */
+	/* Use the User Id for identification on the Scill API. The User ID does not have to related to your own user management - you can for example build global challenges by assigning the same ID to every player. */
 	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetUserId, BlueprintSetter = SetUserId)
 		FString UserId;
 
@@ -70,60 +70,122 @@ public:
 	// ----------------------------------------------------
 	// Battle Passes
 
+
+	/* Activate a given battle pass level by id
+	*/
 	UFUNCTION(BlueprintCallable)
 		void ActivateBattlePassLevel(FString levelId, FHttpResponseReceived responseReceived);
 
+	/* Claim the battle pass level reward. This will trigger a Webhook that you can use to unlock the reward on server side. If you don't have a server you can also unlock in the client application after receiving a positive response.
+	 *
+	*/
 	UFUNCTION(BlueprintCallable)
 		void ClaimBattlePassLevel(FString levelId, FHttpResponseReceived responseReceived);
 
+	/*
+	* Using this endpoint you can query all active available Battle Passes for the given app id. Typically this query is used to show Battle Passes the user can purchase. You can use the package_sku field to trigger the corresponding in-app purchase.
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetActiveBattlePasses(FBattlePassArrayReceived responseReceived);
 
+	/*
+	* Get unlocked battle passes for the user
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetUnlockedPasses(FBattlePassArrayReceived responseReceived);
-
+	
+	/*
+	*Get all battle pass levels for an app
+	*/
 	UFUNCTION(meta = (BlueprintInternalUseOnly))
 		void GetAllPassLevels(FBattlePassLevelArrayReceived responseReceived);
-
+	/*
+	* Get battle pass for the product with id
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetBattlePass(FString battlePassId, FBattlePassReceived responseReceived);
 
+	/* 
+	* Get battle pass levels for a battle pass
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetBattlePassLevels(FString battlePassId, FBattlePassLevelArrayReceived responseReceived);
 
+	/*
+	* Get battle passes for the product
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetBattlePasses(FBattlePassArrayReceived responseReceived);
 
+	/* Unlock the battle pass for the user
+	*
+	*/
 	UFUNCTION(BlueprintCallable)
 		void UnlockBattlePass(FString battlePassId, float purchasePrice, FString purchaseCurrency, FBattlePassUnlockInfoReceived responseReceived);
 
 	// ----------------------------------------------------
 	// Challenges
 
+	/*
+	 *
+	 * Activate a personal challenge by product id and user challenge id
+	*/
 	UFUNCTION(BlueprintCallable)
 		void ActivatePersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
+	/* 
+	 *
+	 * Cancel an active personal challenge by product id and user challenge id
+	*/
 	UFUNCTION(BlueprintCallable)
 		void CancelPersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
+	/* Claim the reward of a finished personal challenge
+	 *
+	 * Claim the reward of a finished personal challenge by product id and user challenge id
+	*/
 	UFUNCTION(BlueprintCallable)
 		void ClaimPersonalChallengeReward(FString challengeId, FChallengeReceived responseReceived);
-
+	
+	/*
+	 *
+	 * Get active personal challenges organized in categories
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetActivePersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
+	/* 
+	 *
+	 * Get personal challenges organized in categories that are not yet finished
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetAllPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
+	/* Get personal challenges that are not yet completed.
+	 *
+	 * Get personal challenges organized in categories
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
+	/* 
+	 *
+	 * Get personal challenges organized in categories that are not yet finished
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetUnresolvedPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
+	/* Get personal challenge by id
+	 *
+	 * 
+	*/
 	UFUNCTION(BlueprintCallable)
 		void GetPersonalChallengeById(FString challengeId, FChallengeReceived responseReceived);
 
+	/*
+	 *
+	 * Unlock a personal challenge by product id and challenge id
+	*/
 	UFUNCTION(BlueprintCallable)
 		void UnlockPersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
