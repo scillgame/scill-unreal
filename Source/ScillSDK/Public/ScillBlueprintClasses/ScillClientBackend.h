@@ -16,7 +16,7 @@ DECLARE_DYNAMIC_DELEGATE_OneParam(FReceiveBattlePassUpdate, FBattlePass, BattleP
 DECLARE_DYNAMIC_DELEGATE_OneParam(FResponseReceived, bool, Success);
 
 /* This is the entry component for your game's server logic in regards of the SCILL API. This component uses the API Key of your App and should not be created on the client - so best place it on your GameMode class. */
-UCLASS(meta = (BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (ScillSDK), meta = (BlueprintSpawnableComponent), Category = "ScillSDK")
 class SCILLSDK_API UScillClientBackend : public UActorComponent
 {
 
@@ -28,7 +28,7 @@ public:
 	// SETUP
 
 	/* This changes the set API Key for your app. A good practice is to read the API Key from a configuration file that is not accessible to your Client. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void SetApiKey(FString apiKey);
 
 	/* This is best set by reading it from a configuration file unaccessible to your Clients. So normally you should not set it from Editor. Only use this property for testing purposes. */
@@ -40,16 +40,16 @@ public:
 	// Generate Access Token
 
 	/* Requests an access token that you can then pass to your client. The client can the authenticate itself to your SCILL APP as the user with the passed user id. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GenerateAccessToken(FString userId, const FReceiveAccessToken& OnAccessTokenGenerated);
 
 	// Start Monitor Battlepass Updates
 
 	/* Starts to monitor Battlepass updates. */
-	UFUNCTION(meta=(BlueprintInternalUseOnly))
+	UFUNCTION(meta=(BlueprintInternalUseOnly), Category = "ScillSDK")
 		void StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void SendEvent(FScillEventPayload payload, FResponseReceived responseReceived);
 
 private:

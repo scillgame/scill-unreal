@@ -24,7 +24,7 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeCategoryArrayReceived, const TArray
 
 
 
-UCLASS(ClassGroup=(ScillSDK), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(ScillSDK), meta=(BlueprintSpawnableComponent), Category = "ScillSDK")
 class SCILLSDK_API UScillClient : public UActorComponent
 {
 	GENERATED_BODY()
@@ -41,7 +41,7 @@ public:
 		void SetAccessToken(FString newAccessToken);
 
 	/* You can set an access token for testing purposes here, although it is better received by the GenerateAccessToken function of the ScilLClientBackend-Component at runtime. */
-	UPROPERTY(EditDefaultsOnly, BlueprintGetter=GetAccessToken, BlueprintSetter=SetAccessToken)
+	UPROPERTY(EditDefaultsOnly, BlueprintGetter=GetAccessToken, BlueprintSetter=SetAccessToken, Category = "ScillSDK")
 		FString AccessToken;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly))
@@ -51,7 +51,7 @@ public:
 	// User Id
 
 	/* Use the User Id for identification on the Scill API. The User ID does not have to related to your own user management - you can for example build global challenges by assigning the same ID to every player. */
-	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetUserId, BlueprintSetter = SetUserId)
+	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetUserId, BlueprintSetter = SetUserId, Category = "ScillSDK")
 		FString UserId;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly))
@@ -64,7 +64,7 @@ public:
 	// App Id
 
 	/* The Id of your App. This can be publicly shared, so you can safely put it in this field and deploy it within your client application. */
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "ScillSDK")
 		FString AppId;
 
 	// ----------------------------------------------------
@@ -73,126 +73,100 @@ public:
 
 	/* Activate a given battle pass level by id
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void ActivateBattlePassLevel(FString levelId, FHttpResponseReceived responseReceived);
 
 	/* Claim the battle pass level reward. This will trigger a Webhook that you can use to unlock the reward on server side. If you don't have a server you can also unlock in the client application after receiving a positive response.
-	 *
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void ClaimBattlePassLevel(FString levelId, FHttpResponseReceived responseReceived);
 
-	/*
-	* Using this endpoint you can query all active available Battle Passes for the given app id. Typically this query is used to show Battle Passes the user can purchase. You can use the package_sku field to trigger the corresponding in-app purchase.
+	/*Using this endpoint you can query all active available Battle Passes for the given app id. Typically this query is used to show Battle Passes the user can purchase. You can use the package_sku field to trigger the corresponding in-app purchase.
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetActiveBattlePasses(FBattlePassArrayReceived responseReceived);
 
-	/*
-	* Get unlocked battle passes for the user
+	/*Get unlocked battle passes for the user
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetUnlockedPasses(FBattlePassArrayReceived responseReceived);
 	
-	/*
-	*Get all battle pass levels for an app
+	/*Get all battle pass levels for an app
 	*/
-	UFUNCTION(meta = (BlueprintInternalUseOnly))
+	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
 		void GetAllPassLevels(FBattlePassLevelArrayReceived responseReceived);
-	/*
-	* Get battle pass for the product with id
+	/*Get battle pass for the product with id
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetBattlePass(FString battlePassId, FBattlePassReceived responseReceived);
 
-	/* 
-	* Get battle pass levels for a battle pass
+	/* Get battle pass levels for a battle pass
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetBattlePassLevels(FString battlePassId, FBattlePassLevelArrayReceived responseReceived);
 
-	/*
-	* Get battle passes for the product
+	/*Get battle passes for the product
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetBattlePasses(FBattlePassArrayReceived responseReceived);
 
 	/* Unlock the battle pass for the user
-	*
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void UnlockBattlePass(FString battlePassId, float purchasePrice, FString purchaseCurrency, FBattlePassUnlockInfoReceived responseReceived);
 
 	// ----------------------------------------------------
 	// Challenges
 
-	/*
-	 *
-	 * Activate a personal challenge by product id and user challenge id
+	/*Activate a personal challenge by product id and user challenge id
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void ActivatePersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
-	/* 
-	 *
-	 * Cancel an active personal challenge by product id and user challenge id
+	/* Cancel an active personal challenge by product id and user challenge id
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void CancelPersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
-	/* Claim the reward of a finished personal challenge
-	 *
-	 * Claim the reward of a finished personal challenge by product id and user challenge id
+	/* Claim the reward of a finished personal challenge by product id and user challenge id
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void ClaimPersonalChallengeReward(FString challengeId, FChallengeReceived responseReceived);
 	
-	/*
-	 *
-	 * Get active personal challenges organized in categories
+	/* Get active personal challenges organized in categories
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetActivePersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
-	/* 
-	 *
-	 * Get personal challenges organized in categories that are not yet finished
+	/* Get personal challenges organized in categories that are not yet finished
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetAllPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
-	/* Get personal challenges that are not yet completed.
-	 *
-	 * Get personal challenges organized in categories
+	/* Get personal challenges that are not yet completed organized in categories
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
-	/* 
-	 *
-	 * Get personal challenges organized in categories that are not yet finished
+	/*  Get personal challenges organized in categories that are not yet finished
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetUnresolvedPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
 	/* Get personal challenge by id
-	 *
-	 * 
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetPersonalChallengeById(FString challengeId, FChallengeReceived responseReceived);
 
-	/*
-	 *
-	 * Unlock a personal challenge by product id and challenge id
+	/*Unlock a personal challenge by product id and challenge id
 	*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void UnlockPersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
 	// ----------------------------------------------------
 	// Events
 
-	UFUNCTION(meta = (BlueprintInternalUseOnly))
+	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
 		void SendEvent(FScillEventPayload payload, FHttpResponseReceived responseReceived);
 
 protected:
