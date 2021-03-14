@@ -10,6 +10,7 @@
 #include "ScillBlueprintClasses/ScillLevelPersistenceInterface.h"
 #include "ScillApiWrapper/ScillApiChallengesApi.h"
 #include "ScillApiWrapper/ScillApiChallengesApiOperations.h"
+#include "ScillApiWrapper/ScillApiEventsApi.h"
 #include "Kismet/GameplayStatics.h"
 #include "ScillClient.generated.h"
 
@@ -114,6 +115,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void GetAllPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
 
+	UFUNCTION(BlueprintCallable)
+		void GetPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void GetUnresolvedPersonalChallenges(FChallengeCategoryArrayReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void GetPersonalChallengeById(FString challengeId, FChallengeReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable)
+		void UnlockPersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
+
+	// ----------------------------------------------------
+	// Events
+
+	UFUNCTION(BlueprintCallable)
+		void SendEvent(FString challengeId, FChallengeReceived responseReceived);
 
 protected:
 	// Called when the game starts
@@ -122,6 +140,7 @@ protected:
 private:
 	ScillSDK::ScillApiBattlePassesApi battlePassesApi;
 	ScillSDK::ScillApiChallengesApi challengesApi;
+	ScillSDK::ScillApiEventsApi eventsApi;
 
 	// ----------------------------------------------------------------------------------
 	// General Helpers
@@ -158,6 +177,10 @@ private:
 	void ReceiveClaimPersonalChallengeRewardResponse(const ScillSDK::ScillApiChallengesApi::ClaimPersonalChallengeRewardResponse& Response, FGuid guid) const;
 	void ReceiveGetActivePersonalChallengesResponse(const ScillSDK::ScillApiChallengesApi::GetActivePersonalChallengesResponse& Response, FGuid guid) const;
 	void ReceiveGetAllPersonalChallengesResponse(const ScillSDK::ScillApiChallengesApi::GetAllPersonalChallengesResponse& Response, FGuid guid) const;
+	void ReceiveGetPersonalChallengesResponse(const ScillSDK::ScillApiChallengesApi::GetPersonalChallengesResponse& Response, FGuid guid) const;
+	void ReceiveGetUnresolvedPersonalChallengesResponse(const ScillSDK::ScillApiChallengesApi::GetUnresolvedPersonalChallengesResponse& Response, FGuid guid) const;
+	void ReceiveGetPersonalChallengeByIdResponse(const ScillSDK::ScillApiChallengesApi::GetPersonalChallengeByIdResponse& Response, FGuid guid) const;
+	void ReceiveUnlockPersonalChallengeResponse(const ScillSDK::ScillApiChallengesApi::UnlockPersonalChallengeResponse& Response, FGuid guid) const;
 	
 	// ----------------------------------------------------------------------------------
 	// Challenges Helpers

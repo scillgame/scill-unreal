@@ -295,6 +295,68 @@ void UScillClient::GetAllPersonalChallenges(FChallengeCategoryArrayReceived resp
 	challengesApi.GetAllPersonalChallenges(request, delegate);
 }
 
+void UScillClient::GetPersonalChallenges(FChallengeCategoryArrayReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiChallengesApi::GetPersonalChallengesRequest();
+
+	request.AppId = AppId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapChallengeCategoryArrayReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiChallengesApi::FGetPersonalChallengesDelegate::CreateUObject(this, &UScillClient::ReceiveGetPersonalChallengesResponse, guid);
+
+	challengesApi.GetPersonalChallenges(request, delegate);
+}
+
+void UScillClient::GetUnresolvedPersonalChallenges(FChallengeCategoryArrayReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiChallengesApi::GetUnresolvedPersonalChallengesRequest();
+
+	request.AppId = AppId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapChallengeCategoryArrayReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiChallengesApi::FGetUnresolvedPersonalChallengesDelegate::CreateUObject(this, &UScillClient::ReceiveGetUnresolvedPersonalChallengesResponse, guid);
+
+	challengesApi.GetUnresolvedPersonalChallenges(request, delegate);
+}
+
+void UScillClient::GetPersonalChallengeById(FString challengeId, FChallengeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiChallengesApi::GetPersonalChallengeByIdRequest();
+
+	request.AppId = AppId;
+	request.ChallengeId = challengeId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapChallengeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiChallengesApi::FGetPersonalChallengeByIdDelegate::CreateUObject(this, &UScillClient::ReceiveGetPersonalChallengeByIdResponse, guid);
+
+	challengesApi.GetPersonalChallengeById(request, delegate);
+}
+
+void UScillClient::UnlockPersonalChallenge(FString challengeId, FChallengeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiChallengesApi::UnlockPersonalChallengeRequest();
+
+	request.AppId = AppId;
+	request.ChallengeId = challengeId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapChallengeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiChallengesApi::FUnlockPersonalChallengeDelegate::CreateUObject(this, &UScillClient::ReceiveUnlockPersonalChallengeResponse, guid);
+
+	challengesApi.UnlockPersonalChallenge(request, delegate);
+}
+
 // ----------------------------------------------------------------------------------------------------------------------------
 // UActor Event Implementations
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -513,6 +575,56 @@ void UScillClient::ReceiveGetAllPersonalChallengesResponse(const ScillSDK::Scill
 	callback.ExecuteIfBound(challengeCategories, Response.IsSuccessful());
 
 	callbackMapChallengeCategoryArrayReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveGetPersonalChallengesResponse(const ScillSDK::ScillApiChallengesApi::GetPersonalChallengesResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapChallengeCategoryArrayReceived.FindRef(guid);
+
+	TArray<FChallengeCategory> challengeCategories = TArray<FChallengeCategory>();
+
+	for (auto c : Response.Content)
+	{
+		challengeCategories.Add(FChallengeCategory::FromScillApiChallengeCategory(c));
+	}
+
+	callback.ExecuteIfBound(challengeCategories, Response.IsSuccessful());
+
+	callbackMapChallengeCategoryArrayReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveGetUnresolvedPersonalChallengesResponse(const ScillSDK::ScillApiChallengesApi::GetUnresolvedPersonalChallengesResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapChallengeCategoryArrayReceived.FindRef(guid);
+
+	TArray<FChallengeCategory> challengeCategories = TArray<FChallengeCategory>();
+
+	for (auto c : Response.Content)
+	{
+		challengeCategories.Add(FChallengeCategory::FromScillApiChallengeCategory(c));
+	}
+
+	callback.ExecuteIfBound(challengeCategories, Response.IsSuccessful());
+
+	callbackMapChallengeCategoryArrayReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveGetPersonalChallengeByIdResponse(const ScillSDK::ScillApiChallengesApi::GetPersonalChallengeByIdResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapChallengeReceived.FindRef(guid);
+
+	callback.ExecuteIfBound(FChallenge::FromScillApiChallenge(Response.Content), Response.IsSuccessful());
+
+	callbackMapChallengeReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveUnlockPersonalChallengeResponse(const ScillSDK::ScillApiChallengesApi::UnlockPersonalChallengeResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapChallengeReceived.FindRef(guid);
+
+	callback.ExecuteIfBound(FChallenge::FromScillApiChallenge(Response.Content.Challenge.Get(ScillSDK::ScillApiChallenge())), Response.IsSuccessful());
+
+	callbackMapChallengeReceived.Remove(guid);
 }
 
 // Called every frame
