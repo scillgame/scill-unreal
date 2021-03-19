@@ -21,6 +21,12 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 
 	ScillMqttPacketBase packet = ScillMqttPacketBase::FromBuffer(receivedMessage);
 
+	if (packet.PacketType == ScillMqttPacketType::PUBLISH)
+	{
+		ScillMqttPacketPublish pubPacket = static_cast<ScillMqttPacketPublish&>(packet);
+		UE_LOG(LogTemp, Warning, TEXT("Received MQTT Publish Message: %s"), *pubPacket.Payload);
+	}
+
 	return;
 }
 
@@ -191,7 +197,7 @@ ScillMqttPacketConnack ScillMqttPacketConnack::FromBuffer(uint8* buffer)
 	// Session Present
 	pk.SessionPresent = (bool)buffer[pointer++];
 
-	// Packet Flags
+	// Connection Response Code
 	pk.Code = (ScillMqttConnackCode)buffer[pointer++];
 
 	return ScillMqttPacketConnack();
@@ -221,12 +227,12 @@ ScillMqttPacketBase ScillMqttPacketBase::FromBuffer(uint8* buffer)
 	return ScillMqttPacketBase();
 }
 
-uint32 ScillMqttPacketBase::GetRemainingLengthFromBuffer(uint8* buffer)
+uint64 ScillMqttPacketBase::GetRemainingLengthFromBuffer(uint8* buffer)
 {
 	uint8 pointer = 1;
 
 	uint32 multiplier = 1;
-	uint32 length = 0;
+	uint64 length = 0;
 	uint8 current = 0;
 
 	do
@@ -245,5 +251,49 @@ ScillMqttPacketPublish ScillMqttPacketPublish::FromBuffer(uint8* buffer)
 {
 	auto pk = ScillMqttPacketPublish();
 
+	uint64 pointer = 0;
 
+	// Packet Type
+	uint8 firstByte = buffer[pointer++];
+	pk.PacketType = (ScillMqttPacketType)((firstByte & 0xf0) >> 4);
+
+	// Packet Flags
+	pk.PacketFlags = firstByte & 0x0f;
+
+	// Set Fields according to Packet Flags
+	pk.Duplicate = (bool)(pk.PacketFlags & 0x01);
+	pk.QoS = (uint8)((pk.PacketFlags & 0x06) >> 1);
+	pk.Retain = (bool)(pk.PacketFlags & 0x08);
+
+	// Remain Length
+	pk.RemainLength = ScillMqttPacketBase::GetRemainingLengthFromBuffer(buffer);
+	pk.Length = ScillMqttPacketBase::CalculateLengthFromRemaining(pk.RemainLength);
+	pointer = ScillMqttPacketBase::FixedHeaderLengthFromRemaining(pk.RemainLength) - 1;
+
+	// Topic Name
+	uint16 tpLength = buffer[pointer++] * 128 + buffer[pointer++]; // MSB + LSB
+	pk.TopicName = StringHelper::BytesToStringFixed(&buffer[pointer], tpLength);
+	pointer += tpLength;
+
+	// Packet Identifier
+	if (pk.QoS)
+	{
+		pk.PacketIdentifier = buffer[pointer++] * 128 + buffer[pointer++];
+	}
+
+	// Payload
+	uint64 plLength = pk.Length - pointer;
+	pk.Payload = StringHelper::BytesToStringFixed(&buffer[pointer], plLength);
+
+	return pk;
+}
+
+uint64 ScillMqttPacketBase::CalculateLengthFromRemaining(uint64 remainingLength)
+{
+	return remainingLength + (remainingLength < 128 ? 2 : remainingLength < 16384 ? 3 : 4);
+}
+
+uint8 ScillMqttPacketBase::FixedHeaderLengthFromRemaining(uint64 remainingLength)
+{
+	return remainingLength < 128 ? 2 : remainingLength < 16384 ? 3 : 4;
 }

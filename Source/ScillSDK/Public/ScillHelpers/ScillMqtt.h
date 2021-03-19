@@ -67,7 +67,9 @@ public:
 	virtual uint8* ToBuffer();
 	static ScillMqttPacketBase FromBuffer(uint8* buffer);
 	static ScillMqttPacketType GetPacketTypeFromBuffer(uint8* buffer);
-	static uint32 GetRemainingLengthFromBuffer(uint8* buffer);
+	static uint64 GetRemainingLengthFromBuffer(uint8* buffer);
+	static uint64 CalculateLengthFromRemaining(uint64 remainingLength);
+	static uint8 FixedHeaderLengthFromRemaining(uint64 remainingLength);
 
 	ScillMqttPacketType PacketType;
 	uint8 PacketFlags;
