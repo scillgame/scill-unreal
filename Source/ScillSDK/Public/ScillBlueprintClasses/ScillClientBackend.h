@@ -6,6 +6,7 @@
 #include "ScillApiWrapper/ScillApiAuthApi.h"
 #include "ScillApiWrapper/ScillApiAuthApiOperations.h"
 #include "ScillBlueprintClasses/ScillStructs.h"
+#include "ScillHelpers/ScillMqtt.h"
 #include "Misc/Guid.h"
 #include "WebSocketsModule.h"
 #include "IWebSocket.h"
@@ -63,6 +64,7 @@ private:
 	mutable TMap<FGuid, FResponseReceived> callbackMapResponseReceived;
 
 	FString RealtimeUpdatesWebsocketURL;
+	UScillMqtt* mqtt;
 
 	void ReceiveAccessTokenResponse(const ScillSDK::ScillApiAuthApi::GenerateAccessTokenResponse& Response, FGuid guid) const;
 

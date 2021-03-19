@@ -2,9 +2,9 @@
 #include "JsonObjectConverter.h"
 
 UScillClientBackend::UScillClientBackend()
-	: RealtimeUpdatesWebsocketURL(TEXT("ws://mqtt.scillgame.com:8083/mqtt"))
+	: RealtimeUpdatesWebsocketURL(TEXT("wss://mqtt.scillgame.com:8083/mqtt"))
 {
-
+	mqtt = NewObject<UScillMqtt>();
 }
 
 void UScillClientBackend::SetApiKey(FString apiKey)
