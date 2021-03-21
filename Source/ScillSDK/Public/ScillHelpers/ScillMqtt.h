@@ -25,6 +25,8 @@ private:
 	void OnConnectionError(const FString& Error);
 	void OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaining);
 
+	uint16 CurrentPacketIdentifier = 0;
+
 	TSharedPtr<IWebSocket> mqttWs;
 };
 
@@ -130,6 +132,17 @@ public:
 	uint16 PacketIdentifier;
 
 	FString Payload;
+};
+
+class ScillMqttPacketSubscribe : public ScillMqttPacketBase
+{
+public:
+	uint8* ToBuffer() override;
+
+	uint16 PacketIdentifier;
+	TArray<FString> TopicFilter;
+
+	TArray<uint8> RequestedQoS;
 };
 
 namespace StringHelper
