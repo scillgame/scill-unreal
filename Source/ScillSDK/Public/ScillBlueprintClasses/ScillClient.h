@@ -11,6 +11,8 @@
 #include "ScillApiWrapper/ScillApiChallengesApi.h"
 #include "ScillApiWrapper/ScillApiChallengesApiOperations.h"
 #include "ScillApiWrapper/ScillApiEventsApi.h"
+#include "ScillApiWrapper/ScillApiAuthApi.h"
+#include "ScillHelpers/ScillMqtt.h"
 #include "Kismet/GameplayStatics.h"
 #include "ScillClient.generated.h"
 
@@ -20,7 +22,8 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassReceived, const FBattlePass&, Batt
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassUnlockInfoReceived, const FBattlePassUnlockInfo&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassLevelArrayReceived, const TArray<FBattlePassLevel>&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeReceived, const FChallenge&, Challenge, bool, Success);
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeCategoryArrayReceived, const TArray<FChallengeCategory>&, ChallengeCategories, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeCategoryArrayReceived, const TArray<FChallengeCategory>&, ChallengeCategories, bool, Success); 
+DECLARE_DYNAMIC_DELEGATE_OneParam(FBattlePassChangeReceived, FBattlePassChanged, Payload);
 
 
 
@@ -169,6 +172,13 @@ public:
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
 		void SendEvent(FScillEventPayload payload, FHttpResponseReceived responseReceived);
 
+	// ----------------------------------------------------
+	// Realtime Updates
+
+	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
+		void ReceiveBattlePassUpdates(FString battlePassId, FBattlePassChangeReceived responseReceived);
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -177,6 +187,8 @@ private:
 	ScillSDK::ScillApiBattlePassesApi battlePassesApi;
 	ScillSDK::ScillApiChallengesApi challengesApi;
 	ScillSDK::ScillApiEventsApi eventsApi;
+	ScillSDK::ScillApiAuthApi authApi;
+	UScillMqtt* mqtt;
 
 	// ----------------------------------------------------------------------------------
 	// General Helpers
@@ -228,6 +240,17 @@ private:
 	// Events Handlers
 
 	void ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::SendEventResponse& Response, FGuid guid) const;
+
+	// ----------------------------------------------------------------------------------
+	// Realtime Updates Handlers
+
+	void ReceiveBattlePassChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicResponse& Response, FGuid guid) const;
+
+
+	// ----------------------------------------------------------------------------------
+	// Realtime Updates Helpers
+
+	mutable TMap<FGuid, FBattlePassChangeReceived> callbackMapBattlePassChangeReceived;
 
 public:	
 	// Called every frame

@@ -9,6 +9,7 @@ UScillClient::UScillClient()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	mqtt = NewObject<UScillMqtt>();
 
 	// ...
 }
@@ -18,6 +19,7 @@ void UScillClient::SetAccessToken(FString newAccessToken)
 	this->battlePassesApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->challengesApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
+	this->authApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->AccessToken = newAccessToken;
 	
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
@@ -377,6 +379,25 @@ void UScillClient::SendEvent(FScillEventPayload payload, FHttpResponseReceived r
 	eventsApi.SendEvent(request, delegate);
 }
 
+// ----------------------------------------------------------------------------------------------------------------------------
+// Realtime Updates
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::ReceiveBattlePassUpdates(FString battlePassId, FBattlePassChangeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicRequest();
+
+	request.BattlePassId = battlePassId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapBattlePassChangeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiAuthApi::FGetUserBattlePassNotificationTopicDelegate::CreateUObject(this, &UScillClient::ReceiveBattlePassChangeTopic, guid);
+
+	authApi.GetUserBattlePassNotificationTopic(request, delegate);
+}
+
 
 // ----------------------------------------------------------------------------------------------------------------------------
 // UActor Event Implementations
@@ -416,7 +437,8 @@ void UScillClient::BeginPlay()
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
 	this->eventsApi.SetURL(TEXT("https://ep.scillgame.com"));
 
-	// ...
+	this->authApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
+	this->authApi.SetURL(TEXT("https://us.scillgame.com"));
 	
 }
 
@@ -659,6 +681,19 @@ void UScillClient::ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::S
 {
 	auto callback = callbackMapResponseReceived.FindRef(guid);
 	callback.ExecuteIfBound(Response.IsSuccessful());
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// Realtime Updates Handlers
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::ReceiveBattlePassChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapBattlePassChangeReceived.FindRef(guid);
+
+	mqtt->SubscribeToTopic(Response.Content.Topic);
 
 	callbackMapResponseReceived.Remove(guid);
 }
