@@ -34,33 +34,56 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 
 	if (packet->PacketType == ScillMqttPacketType::CONNACK)
 	{
-		UScillMqttPacketSubscribe* pk = NewObject<UScillMqttPacketSubscribe>();
-
-		pk->PacketIdentifier = ++(this->CurrentPacketIdentifier);
-
-		pk->TopicFilter.Add(TEXT("topic/challenges/95386b38e4feebde747d28bcccde4c2bf815bde1b3e4b9983b8172894e25b4f4fd57fe5e70623f53442874c107c0a3752126897efca5527c58ba453179702894"));
-		pk->RequestedQoS.Add(0);
-
 		
-		pk->Buffer = pk->ToBuffer();
-		uint8* pkBuffer = new uint8[pk->Buffer.Num()];
-
-		for (int i = 0; i < pk->Buffer.Num(); i++)
-		{
-			pkBuffer[i] = pk->Buffer[i];
-		}
-
-		mqttWs->Send(pkBuffer, pk->Length, true);
-
-		delete pkBuffer;
 	}
 	if (packet->PacketType == ScillMqttPacketType::PUBLISH)
 	{
+
 		UScillMqttPacketPublish* pubPacket = Cast<UScillMqttPacketPublish>(packet);
-		UE_LOG(LogTemp, Warning, TEXT("Received MQTT Publish Message: %s"), *pubPacket->Payload);
+
+		auto JsonReader = TJsonReaderFactory<TCHAR>::Create(pubPacket->Payload);
+
+		TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+
+		if (FJsonSerializer::Deserialize(JsonReader, JsonObject) && JsonObject.IsValid())
+		{
+			TSharedPtr<FJsonValueObject> ValueObject = MakeShareable(new FJsonValueObject(JsonObject));
+			if (callbacksBattlePassChanges.Contains(pubPacket->TopicName))
+			{
+				auto callback = this->callbacksBattlePassChanges.FindRef(pubPacket->TopicName);
+
+				auto battlePass = ScillSDK::ScillApiBattlePassChallengeChangedPayload();
+				battlePass.FromJson(ValueObject);
+
+				callback.ExecuteIfBound(FBattlePassChanged::FromScillApiBattlePassChallengeChangedPayload(battlePass));
+			}
+		}
 	}
 
 	return;
+}
+
+void UScillMqtt::SubscribeToTopic(const FString& Topic)
+{
+	UScillMqttPacketSubscribe* pk = NewObject<UScillMqttPacketSubscribe>();
+
+	pk->PacketIdentifier = ++(this->CurrentPacketIdentifier);
+
+	pk->TopicFilter.Add(Topic);
+	pk->RequestedQoS.Add(0);
+
+
+	pk->Buffer = pk->ToBuffer();
+	uint8* pkBuffer = new uint8[pk->Buffer.Num()];
+
+	for (int i = 0; i < pk->Buffer.Num(); i++)
+	{
+		pkBuffer[i] = pk->Buffer[i];
+	}
+
+	mqttWs->Send(pkBuffer, pk->Length, true);
+
+	delete pkBuffer;
 }
 
 void UScillMqtt::OnConnectionError(const FString& Error)

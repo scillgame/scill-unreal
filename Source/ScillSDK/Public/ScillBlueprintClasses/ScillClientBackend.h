@@ -47,8 +47,8 @@ public:
 	// Start Monitor Battlepass Updates
 
 	/* Starts to monitor Battlepass updates. */
-	UFUNCTION(meta=(BlueprintInternalUseOnly), Category = "ScillSDK")
-		void StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback);
+	/*UFUNCTION(meta=(BlueprintInternalUseOnly), Category = "ScillSDK")
+		void StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback);*/
 
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void SendEvent(FScillEventPayload payload, FResponseReceived responseReceived);

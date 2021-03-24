@@ -7,6 +7,8 @@
 #include "IWebSocket.h"
 #include "ScillMqtt.generated.h"
 
+DECLARE_DYNAMIC_DELEGATE_OneParam(FBattPassChangedReceived, FBattlePassChanged, Payload);
+
 /**
 	*
 	*/
@@ -18,12 +20,15 @@ public:
 
 	UScillMqtt();
 
-	void TestConnectPacket();
+	void SubscribeToTopic(const FString& Topic);
 
 private:
 	void OnConnect();
 	void OnConnectionError(const FString& Error);
 	void OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaining);
+
+	/*Key: Topic, Value: Callback*/
+	mutable TMap<FString, FBattPassChangedReceived> callbacksBattlePassChanges;
 
 	uint16 CurrentPacketIdentifier = 0;
 

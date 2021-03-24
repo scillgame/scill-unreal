@@ -8,6 +8,7 @@
 #include "ScillApiWrapper/ScillApiBattlePassUnlockInfo.h"
 #include "ScillApiWrapper/ScillApiChallenge.h"
 #include "ScillApiWrapper/ScillApiChallengeCategory.h"
+#include "ScillApiWrapper/ScillApiBattlePassChallengeChangedPayload.h"
 #include "ScillApiWrapper/ScillApiEventMetaData.h"
 #include "ScillApiWrapper/ScillApiEventPayload.h"
 #include "ScillStructs.generated.h"
@@ -634,6 +635,8 @@ struct SCILLSDK_API FBattlePassChallengeState
 	/* Indicates the status of the challenge. This can be one of the following unlock: Challenge does not track anything. in-progress: Challenge is active and tracking. overtime: User did not manage to finish the challenge in time. unclaimed: The challenge has been completed but the reward has not yet been claimed. finished: The challenge has been successfully be completed and the reward has been claimed */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Type;
+
+	static FBattlePassChallengeState FromScillApiBattlePassChallengeState(const ScillSDK::ScillApiBattlePassChallengeState o);
 };
 
 /*
@@ -712,4 +715,25 @@ struct SCILLSDK_API FBattlePass
 		bool CanPurchaseWithCoins;
 
 	static FBattlePass FromScillApiBattlePass(const ScillSDK::ScillApiBattlePass battlePass);
+};
+
+/*
+* Represents any update of a battle pass.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FBattlePassChanged
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the notification. If you receive this payload, it's most likely battlepass-challenge-changed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBattlePassChallengeState OldBattlePassChallenge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBattlePassChallengeState NewBattlePassChallenge;
+
+	static FBattlePassChanged FromScillApiBattlePassChallengeChangedPayload(const ScillSDK::ScillApiBattlePassChallengeChangedPayload o);
 };
