@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "WebSocketsModule.h"
 #include "IWebSocket.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
 #include "ScillMqtt.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FBattPassChangedReceived, FBattlePassChanged, Payload);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FBattlePassChangeReceived, FBattlePassChanged, Payload);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FChallengeChangeReceived, FChallengeChanged, Payload);
 
 /**
 	*
@@ -20,6 +22,8 @@ public:
 
 	UScillMqtt();
 
+	void SubscribeToTopicBP(const FString& Topic, FBattlePassChangeReceived callback);
+	void SubscribeToTopicC(const FString& Topic, FChallengeChangeReceived callback);
 	void SubscribeToTopic(const FString& Topic);
 
 private:
@@ -28,13 +32,13 @@ private:
 	void OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaining);
 
 	/*Key: Topic, Value: Callback*/
-	mutable TMap<FString, FBattPassChangedReceived> callbacksBattlePassChanges;
+	mutable TMap<FString, FBattlePassChangeReceived> callbacksBattlePassChanges;
+	mutable TMap<FString, FChallengeChangeReceived> callbacksChallengeChanges;
 
 	uint16 CurrentPacketIdentifier = 0;
 
 	TSharedPtr<IWebSocket> mqttWs;
 };
-
 
 enum ScillMqttPacketType {
 	CONNECT = 1,

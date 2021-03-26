@@ -257,8 +257,22 @@ FBattlePassChanged FBattlePassChanged::FromScillApiBattlePassChallengeChangedPay
 	auto n = FBattlePassChanged();
 
 	n.WebhookType = o.WebhookType.Get("");
-	n.OldBattlePassChallenge = FBattlePassChallengeState::FromScillApiBattlePassChallengeState(o.OldBattlePassChallenge.GetValue());
-	n.NewBattlePassChallenge = FBattlePassChallengeState::FromScillApiBattlePassChallengeState(o.NewBattlePassChallenge.GetValue());
+	n.OldBattlePassChallenge = FBattlePassChallengeState::FromScillApiBattlePassChallengeState(o.OldBattlePassChallenge.Get(ScillSDK::ScillApiBattlePassChallengeState()));
+	n.NewBattlePassChallenge = FBattlePassChallengeState::FromScillApiBattlePassChallengeState(o.NewBattlePassChallenge.Get(ScillSDK::ScillApiBattlePassChallengeState()));
+
+	return n;
+}
+
+FChallengeChanged FChallengeChanged::FromScillApiChallengeWebhookPayload(const ScillSDK::ScillApiChallengeWebhookPayload o)
+{
+	auto n = FChallengeChanged();
+
+	n.WebhookType = o.WebhookType.Get("");
+	n.CategoryPosition = o.CategoryPosition.Get(0.0);
+	n.UserToken = o.UserToken.Get("");
+
+	n.OldChallenge = FChallenge::FromScillApiChallenge(o.OldChallenge.Get(ScillSDK::ScillApiChallenge()));
+	n.NewChallenge = FChallenge::FromScillApiChallenge(o.NewChallenge.Get(ScillSDK::ScillApiChallenge()));
 
 	return n;
 }

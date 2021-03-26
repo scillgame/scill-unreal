@@ -9,6 +9,7 @@
 #include "ScillApiWrapper/ScillApiChallenge.h"
 #include "ScillApiWrapper/ScillApiChallengeCategory.h"
 #include "ScillApiWrapper/ScillApiBattlePassChallengeChangedPayload.h"
+#include "ScillApiWrapper/ScillApiChallengeWebhookPayload.h"
 #include "ScillApiWrapper/ScillApiEventMetaData.h"
 #include "ScillApiWrapper/ScillApiEventPayload.h"
 #include "ScillStructs.generated.h"
@@ -736,4 +737,33 @@ public:
 	FBattlePassChallengeState NewBattlePassChallenge;
 
 	static FBattlePassChanged FromScillApiBattlePassChallengeChangedPayload(const ScillSDK::ScillApiBattlePassChallengeChangedPayload o);
+};
+
+/*
+* Represents an update of a user challenge.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FChallengeChanged
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the notification. If you receive this payload, it's most likely battlepass-challenge-changed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WebhookType;
+
+	/* The index of the category this challenge is linked to. When you request personal challenges, you get an array of categories which contain an array of challenges in their challenges property. This value indicates in which category this challenge can be found. Speeds up updating UI as you don't need to iterate through all catagories and challenges to find the challenge. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CategoryPosition;
+
+	/* The access token for the user of that challenge. You can use that user_token to directly send another event and therefore to chain different SCILL pieces together. For example you can send another event driving another challenge or battle pass whenever a user has completed a challenge. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString UserToken;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FChallenge NewChallenge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FChallenge OldChallenge;
+
+	static FChallengeChanged FromScillApiChallengeWebhookPayload(const ScillSDK::ScillApiChallengeWebhookPayload o);
 };

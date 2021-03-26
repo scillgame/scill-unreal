@@ -23,7 +23,7 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassUnlockInfoReceived, const FBattleP
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassLevelArrayReceived, const TArray<FBattlePassLevel>&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeReceived, const FChallenge&, Challenge, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeCategoryArrayReceived, const TArray<FChallengeCategory>&, ChallengeCategories, bool, Success); 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FBattlePassChangeReceived, FBattlePassChanged, Payload);
+
 
 
 
@@ -175,8 +175,15 @@ public:
 	// ----------------------------------------------------
 	// Realtime Updates
 
-	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
+	/* Start to receive updates from all challenges of the specified battle pass.
+	*/
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void ReceiveBattlePassUpdates(FString battlePassId, FBattlePassChangeReceived responseReceived);
+
+	/* Start to receive updates from all challenges associated with the current user.
+	*/
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void ReceiveChallengeUpdates(FChallengeChangeReceived responseReceived);
 
 
 protected:
@@ -245,12 +252,14 @@ private:
 	// Realtime Updates Handlers
 
 	void ReceiveBattlePassChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicResponse& Response, FGuid guid) const;
+	void ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicResponse& Response, FGuid guid) const;
 
 
 	// ----------------------------------------------------------------------------------
 	// Realtime Updates Helpers
 
 	mutable TMap<FGuid, FBattlePassChangeReceived> callbackMapBattlePassChangeReceived;
+	mutable TMap<FGuid, FChallengeChangeReceived> callbackMapChallengeChangeReceived;
 
 public:	
 	// Called every frame

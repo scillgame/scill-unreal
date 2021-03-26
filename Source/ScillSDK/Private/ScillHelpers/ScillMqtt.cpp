@@ -48,6 +48,7 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 		if (FJsonSerializer::Deserialize(JsonReader, JsonObject) && JsonObject.IsValid())
 		{
 			TSharedPtr<FJsonValueObject> ValueObject = MakeShareable(new FJsonValueObject(JsonObject));
+
 			if (callbacksBattlePassChanges.Contains(pubPacket->TopicName))
 			{
 				auto callback = this->callbacksBattlePassChanges.FindRef(pubPacket->TopicName);
@@ -56,6 +57,15 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 				battlePass.FromJson(ValueObject);
 
 				callback.ExecuteIfBound(FBattlePassChanged::FromScillApiBattlePassChallengeChangedPayload(battlePass));
+			}
+			if (callbacksChallengeChanges.Contains(pubPacket->TopicName))
+			{
+				auto callback = this->callbacksChallengeChanges.FindRef(pubPacket->TopicName);
+
+				auto challenge = ScillSDK::ScillApiChallengeWebhookPayload();
+				challenge.FromJson(ValueObject);
+
+				callback.ExecuteIfBound(FChallengeChanged::FromScillApiChallengeWebhookPayload(challenge));
 			}
 		}
 	}
@@ -84,6 +94,20 @@ void UScillMqtt::SubscribeToTopic(const FString& Topic)
 	mqttWs->Send(pkBuffer, pk->Length, true);
 
 	delete pkBuffer;
+}
+
+void UScillMqtt::SubscribeToTopicBP(const FString& Topic, FBattlePassChangeReceived callback)
+{
+	callbacksBattlePassChanges.Add(Topic, callback);
+
+	this->SubscribeToTopic(Topic);
+}
+
+void UScillMqtt::SubscribeToTopicC(const FString& Topic, FChallengeChangeReceived callback)
+{
+	callbacksChallengeChanges.Add(Topic, callback);
+
+	this->SubscribeToTopic(Topic);
 }
 
 void UScillMqtt::OnConnectionError(const FString& Error)
@@ -342,14 +366,16 @@ UScillMqttPacketPublish* UScillMqttPacketPublish::FromBuffer(TArray<uint8> buffe
 	pointer += UScillMqttPacketBase::FixedHeaderLengthFromRemaining(pk->RemainLength) - 1;
 
 	// Topic Name
-	uint16 tpLength = buffer[pointer++] * 256 + buffer[pointer++]; // MSB + LSB
+	uint16 tpLength = buffer[pointer++] * 256;
+	tpLength += buffer[pointer++]; // MSB + LSB
 	pk->TopicName = StringHelper::TArrayToString(buffer, pointer, tpLength);
 	pointer += tpLength;
 
 	// Packet Identifier
 	if (pk->QoS)
 	{
-		pk->PacketIdentifier = buffer[pointer++] * 256 + buffer[pointer++];
+		pk->PacketIdentifier = buffer[pointer++] * 256;
+		pk->PacketIdentifier += buffer[pointer++];
 	}
 
 	// Payload

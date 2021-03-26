@@ -383,6 +383,19 @@ void UScillClient::SendEvent(FScillEventPayload payload, FHttpResponseReceived r
 // Realtime Updates
 // ----------------------------------------------------------------------------------------------------------------------------
 
+void UScillClient::ReceiveChallengeUpdates(FChallengeChangeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicRequest();
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapChallengeChangeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiAuthApi::FGetUserChallengesNotificationTopicDelegate::CreateUObject(this, &UScillClient::ReceiveChallengeChangeTopic, guid);
+
+	authApi.GetUserChallengesNotificationTopic(request, delegate);
+}
+
 void UScillClient::ReceiveBattlePassUpdates(FString battlePassId, FBattlePassChangeReceived responseReceived)
 {
 	auto request = ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicRequest();
@@ -693,7 +706,16 @@ void UScillClient::ReceiveBattlePassChangeTopic(const ScillSDK::ScillApiAuthApi:
 {
 	auto callback = callbackMapBattlePassChangeReceived.FindRef(guid);
 
-	mqtt->SubscribeToTopic(Response.Content.Topic);
+	mqtt->SubscribeToTopicBP(Response.Content.Topic, callback);
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapChallengeChangeReceived.FindRef(guid);
+
+	mqtt->SubscribeToTopicC(Response.Content.Topic, callback);
 
 	callbackMapResponseReceived.Remove(guid);
 }
