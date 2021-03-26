@@ -452,7 +452,26 @@ void UScillClient::BeginPlay()
 
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
 	this->authApi.SetURL(TEXT("https://us.scillgame.com"));
-	
+
+	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, false);
+}
+
+void UScillClient::MqttPing()
+{
+	if(mqtt && mqtt->MqttConnected)
+		mqtt->Ping();
+}
+
+void UScillClient::EndPlay(const EEndPlayReason::Type EndPlayReason) 
+{
+	if (GetWorld() && GetWorld()->GetTimerManager().IsTimerActive(PingTimer))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(PingTimer);
+	}
+	if (mqtt && !mqtt->Destroyed)
+	{
+		mqtt->Destroy();
+	}
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -709,6 +728,9 @@ void UScillClient::ReceiveBattlePassChangeTopic(const ScillSDK::ScillApiAuthApi:
 	mqtt->SubscribeToTopicBP(Response.Content.Topic, callback);
 
 	callbackMapResponseReceived.Remove(guid);
+
+
+	
 }
 
 void UScillClient::ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicResponse& Response, FGuid guid) const

@@ -19,6 +19,19 @@ UScillMqtt::UScillMqtt()
 	mqttWs->Connect();
 }
 
+void UScillMqtt::Destroy()
+{
+	Destroyed = true;
+	if (mqttWs && mqttWs->IsConnected())
+	{
+		if (MqttConnected)
+		{
+			this->Disconnect();
+		}
+		mqttWs->Close();
+	}
+}
+
 void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaining)
 {
 	uint8* buffer = (uint8*)data;
@@ -34,7 +47,7 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 
 	if (packet->PacketType == ScillMqttPacketType::CONNACK)
 	{
-		
+		this->MqttConnected = true;
 	}
 	if (packet->PacketType == ScillMqttPacketType::PUBLISH)
 	{
@@ -120,7 +133,7 @@ void UScillMqtt::OnConnect()
 {
 	UScillMqttPacketConnect* pk = NewObject<UScillMqttPacketConnect>();
 
-	pk->KeepAlive = 6000;
+	pk->KeepAlive = 300;
 	pk->WillRetain = false;
 	pk->WillQoS = 0;
 	pk->CleanSession = 1;
@@ -133,6 +146,36 @@ void UScillMqtt::OnConnect()
 	}
 
 	mqttWs->Send(buffer, pk->Length, true);
+
+	delete buffer;
+}
+
+void UScillMqtt::Ping()
+{
+	UScillMqttPacketPing* pk = NewObject<UScillMqttPacketPing>();
+	pk->Buffer = pk->ToBuffer();
+	uint8* buffer = new uint8[pk->Buffer.Num()];
+	for (int i = 0; i < pk->Buffer.Num(); i++)
+	{
+		buffer[i] = pk->Buffer[i];
+	}
+
+	this->mqttWs->Send(buffer, pk->Length, true);
+
+	delete buffer;
+}
+
+void UScillMqtt::Disconnect()
+{
+	UScillMqttPacketDisconnect* pk = NewObject<UScillMqttPacketDisconnect>();
+	pk->Buffer = pk->ToBuffer();
+	uint8* buffer = new uint8[pk->Buffer.Num()];
+	for (int i = 0; i < pk->Buffer.Num(); i++)
+	{
+		buffer[i] = pk->Buffer[i];
+	}
+
+	this->mqttWs->Send(buffer, pk->Length, true);
 
 	delete buffer;
 }
@@ -317,6 +360,10 @@ UScillMqttPacketBase* UScillMqttPacketBase::FromBuffer(TArray<uint8> buffer)
 	{
 		return UScillMqttPacketPublish::FromBuffer(buffer);
 	}
+	if (messageType == ScillMqttPacketType::PINGRESP)
+	{
+		return UScillMqttPacketPingResp::FromBuffer(buffer);
+	}
 
 	UScillMqttPacketBase* pk = NewObject<UScillMqttPacketBase>();
 	return pk;
@@ -449,6 +496,54 @@ TArray<uint8> UScillMqttPacketSubscribe::ToBuffer()
 
 		buffer[pointer++] = this->RequestedQoS[i];
 	}
+
+	return buffer;
+}
+
+TArray<uint8> UScillMqttPacketPing::ToBuffer()
+{
+	this->Length = 2;
+	this->RemainLength = 0;
+
+	TArray<uint8> buffer;
+	buffer.AddDefaulted(2);
+
+	// Packet Type and Flags
+	buffer[0] = ScillMqttPacketType::PINGREQ * 16;
+
+	// Remaining Length
+	buffer[1] = 0;
+
+	return buffer;
+}
+
+UScillMqttPacketPingResp* UScillMqttPacketPingResp::FromBuffer(TArray<uint8> buffer)
+{
+	UScillMqttPacketPingResp* pk = NewObject<UScillMqttPacketPingResp>();
+
+	// Packet Type
+	uint8 firstByte = buffer[0];
+	pk->PacketType = (ScillMqttPacketType)((firstByte & 0xf0) >> 4);
+
+	// Packet Length
+	pk->Length = 2;
+
+	return pk;
+}
+
+TArray<uint8> UScillMqttPacketDisconnect::ToBuffer()
+{
+	this->Length = 2;
+	this->RemainLength = 0;
+
+	TArray<uint8> buffer;
+	buffer.AddDefaulted(2);
+
+	// Packet Type and Flags
+	buffer[0] = ScillMqttPacketType::DISCONNECT * 16;
+
+	// Remaining Length
+	buffer[1] = 0;
 
 	return buffer;
 }

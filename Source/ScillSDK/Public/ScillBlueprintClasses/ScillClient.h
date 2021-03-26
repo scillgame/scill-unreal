@@ -189,6 +189,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
 	ScillSDK::ScillApiBattlePassesApi battlePassesApi;
@@ -196,6 +197,9 @@ private:
 	ScillSDK::ScillApiEventsApi eventsApi;
 	ScillSDK::ScillApiAuthApi authApi;
 	UScillMqtt* mqtt;
+
+	FTimerHandle PingTimer;
+	void MqttPing();
 
 	// ----------------------------------------------------------------------------------
 	// General Helpers

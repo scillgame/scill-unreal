@@ -26,10 +26,16 @@ public:
 	void SubscribeToTopicC(const FString& Topic, FChallengeChangeReceived callback);
 	void SubscribeToTopic(const FString& Topic);
 
+	bool MqttConnected;
+	bool Destroyed;
+	void Ping();
+	void Destroy();
+
 private:
 	void OnConnect();
 	void OnConnectionError(const FString& Error);
 	void OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaining);
+	void Disconnect();
 
 	/*Key: Topic, Value: Callback*/
 	mutable TMap<FString, FBattlePassChangeReceived> callbacksBattlePassChanges;
@@ -162,6 +168,30 @@ public:
 	TArray<FString> TopicFilter;
 
 	TArray<uint8> RequestedQoS;
+};
+
+UCLASS()
+class UScillMqttPacketPing : public UScillMqttPacketBase
+{
+	GENERATED_BODY()
+public:
+	TArray<uint8> ToBuffer() override;
+};
+
+UCLASS()
+class UScillMqttPacketDisconnect : public UScillMqttPacketBase
+{
+	GENERATED_BODY()
+public:
+	TArray<uint8> ToBuffer() override;
+};
+
+UCLASS()
+class UScillMqttPacketPingResp : public UScillMqttPacketBase
+{
+	GENERATED_BODY()
+public:
+	static UScillMqttPacketPingResp* FromBuffer(TArray<uint8> buffer);
 };
 
 namespace StringHelper
