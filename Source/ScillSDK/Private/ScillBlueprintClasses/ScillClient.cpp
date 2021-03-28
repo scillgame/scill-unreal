@@ -33,6 +33,8 @@ FString UScillClient::GetAccessToken() const
 {
 	auto value = FString();
 
+	value = this->AccessToken;
+
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 	if (gameInstance->Implements<UScillLevelPersistenceInterface>())
 	{
@@ -45,6 +47,8 @@ FString UScillClient::GetAccessToken() const
 FString UScillClient::GetUserId() const
 {
 	auto value = FString();
+
+	value = this->UserId;
 
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 	if (gameInstance->Implements<UScillLevelPersistenceInterface>())
