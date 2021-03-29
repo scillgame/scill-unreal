@@ -90,6 +90,7 @@ Activate a personal challenge by id. After activating the challenge tracks chang
 **Callback Signature:**
 
 - Challenge: [Challenge](#challenge). The activated challenge
+- Success: boolean. whether the Request was processed successfully
 
 ##### Cancel Personal Challenge
 
@@ -104,6 +105,7 @@ Cancels an active personal challenge by id. This stops tracking changes coming f
 **Callback Signature:**
 
 - Challenge: [Challenge](#challenge). the cancelled challenge
+- Success: boolean. whether the Request was processed successfully
 
 ##### Claim Personal Challenge Reward
 
@@ -118,6 +120,7 @@ Claims the Reward of a completed personal challenge. Once claimed the challenge 
 **Callback Signature:**
 
 - Challenge: [Challenge](#challenge). the claimed challenge.
+- Success: boolean. whether the Request was processed successfully
 
 ##### Get Active Personal Challenges
 
@@ -132,6 +135,7 @@ _none_
 **Callback Signature:**
 
 - ChallengeCategories: [ChallengeCategory[]](#challenge-category). an array of challenge categories containing all active personal challenges.
+- Success: boolean. whether the Request was processed successfully
 
 ##### Get All Personal Challenges
 
@@ -146,6 +150,7 @@ _none_
 **Callback Signature:**
 
 - ChallengeCategories: [ChallengeCategory[]](#challenge-category). an array of challenge categories containing all personal challenges.
+- Success: boolean. whether the Request was processed successfully
 
 ##### Get Personal Challenges
 
@@ -160,6 +165,7 @@ _none_
 **Callback Signature:**
 
 - ChallengeCategories: [ChallengeCategory[]](#challenge-category). an array of challenge categories containing all uncompleted personal challenges.
+- Success: boolean. whether the Request was processed successfully
 
 ##### Get Unresolved Personal Challenges
 
@@ -174,6 +180,7 @@ _none_
 **Callback Signature:**
 
 - ChallengeCategories: [ChallengeCategory[]](#challenge-category). an array of challenge categories containing all unfinished personal challenges.
+- Success: boolean. whether the Request was processed successfully
 
 ##### Get Personal Challenge By Id
 
@@ -188,10 +195,11 @@ Retrieves a specific personal challenge by id.
 **Callback Signature:**
 
 - Challenge: [Challenge](#challenge). the retrieved challenge
+- Success: boolean. whether the Request was processed successfully
 
 ##### Unlock Personal Challenge
 
-Unlocks a specific personal challenge by id.
+Unlocks a specific personal challenge by id. After that it can be activated (if not set to activate automatically).
 
 <!-- Function Image -->
 
@@ -201,11 +209,141 @@ Unlocks a specific personal challenge by id.
 
 **Callback Signature:**
 
-- Challenge: [Challenge](#challenge). the retrieved challenge
+- Challenge: [Challenge](#challenge). the unlocked challenge
+- Success: boolean. whether the Request was processed successfully
 
 #### Battle Passes
 
+The Scill Client provides several functions to access the app's battle passes and their challenges. Before calling any of these functions, make sure to generate an access token using the [ScillClientBackend Component's Generate Access Token](#Generate-Access-Token) function.
+
+##### Activate Battle Pass Level
+
+Activates a specific battle pass level by id. It then tracks changes on its challenges.
+
+<!-- Function Image -->
+
+**Inputs:**
+
+- Level Id: String. Id of the battle pass to be activate. Best retrieved by one of the other functions in this section.
+
+**Callback Signature:**
+
+- Success: boolean. whether the request was processed successfully
+
+##### Claim Battle Pass Level
+
+Claims the reward of a specific battle pass level by id. This will then trigger according webhooks so that you can unlock the reward on your game's server.
+
+<!-- Function Image -->
+
+**Inputs:**
+
+- Level Id: String. Id of the battle pass id to be unlocked. Best retrieved by one of the other functions in this section.
+
+**Callback Signature:**
+
+- Success: boolean. whether the request was processed successfully
+
+##### Get Active Battle Passes
+
+Retrieves all active battle passes associated with this user.
+
+<!-- Function Image -->
+
+**Inputs:**
+
+_none_
+
+**Callback Signature:**
+
+- BattlePasses: [BattlePass[]](#battle-pass). an array of all retrieved battle passes.
+- Success: boolean. whether the request was processed successfully
+
+##### Get Battle Pass
+
+Retrieves a battle passes specified by id.
+
+<!-- Function Image -->
+
+**Inputs:**
+
+- Battle Pass Id: String. the id of the battle pass to be retrieved.
+
+**Callback Signature:**
+
+- Battle Pass: [BattlePass](#battle-pass). the retrieved battle passes
+- Success: boolean. whether the request was processed successfully
+
+##### Get Battle Pass Levels
+
+Retrieves all levels associated with the specified battle pass.
+
+<!-- Function Image -->
+
+**Inputs:**
+
+- Battle Pass Id: String. the id of the battle pass whose levels should be retrieved.
+
+**Callback Signature:**
+
+- Battle Pass Level: [BattlePassLevel[]](#battle-pass-level). the retrieved battle pass levels
+- Success: boolean. whether the request was processed successfully
+
+##### Get Battle Passes
+
+Retrieves all battle passes associated with your app.
+
+<!-- Function Image -->
+
+**Inputs:**
+
+_none_
+
+**Callback Signature:**
+
+- Battle Passes: [BattlePass[]](#battle-pass). an array of all retrieved battle passes.
+- Success: boolean. whether the request was processed successfully
+
+##### Unlock Battle Pass
+
+Unlocks a battle pass for the user. It can then start to activate its levels for challenge tracking.
+
+<!-- Function Image -->
+
+**Inputs:**
+
+- Battle Pass Id: String. the id of the battle pass to be unlocked.
+- Purchase Price: float. the price that the user paid for the battle pass. can be used for statistical purposes.
+- Purchase Currency: String. the currency identifier for the purchase. can be used for statistical purposes.
+
+**Callback Signature:**
+
+- Battle Pass Unlock Info: [BattlePass[]](#battle-pass). an array of all retrieved battle passes.
+- Success: boolean. whether the request was processed successfully
+
 #### Real-time Updates
+
+These functions start monitoring changes to either a specific battle pass or all personal challenges of a user. These can be used either on the game client's side or on the server side to properly process changes and either display them in the client's UI or to react to them in the game play. A popular example for the latter is providing a player with a reward, after the client has called ["Claim Personal Challenge Reward"](#claim-personal-challenge-reward). If your game does not have a server you can of course also react on the game's client.
+
+##### Receive Battle Pass Updates
+
+Starts monitoring changes to the specified battle pass. Whenever a change occurs, the provided callback is executed. There are three different types of battle pass changes currently: 
+- Battle Pass Challenge Changed occurs when anything (mostly progress) on a battle pass challenge has changed.
+- Battle Pass Reward Claimed occurs when the reward of a battle pass has changed. Use this to trigger gameplay events on your server to provide the claiming player with his reward.
+- Battle Pass Expired occurs once the battle pass is no longer active. This battle pass is not tracking any changes via events anymore.
+
+Unlike the other functions on these classes, the callback function here will be stored called multiple times instead of once. 
+
+<!-- Function Image -->
+
+**Inputs:**
+
+- Battle Pass Id: String. the id of the battle pass to be unlocked.
+
+**Callback Signature:**
+
+- Battle Pass Unlock Info: [BattlePass[]](#battle-pass). an array of all retrieved battle passes.
+- Success: boolean. whether the request was processed successfully
 
 ### ScillClientBackend Component
 
