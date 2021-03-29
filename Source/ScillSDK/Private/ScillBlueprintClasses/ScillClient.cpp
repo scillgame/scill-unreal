@@ -9,7 +9,6 @@ UScillClient::UScillClient()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	mqtt = NewObject<UScillMqtt>();
 
 	// ...
 }
@@ -424,6 +423,8 @@ void UScillClient::ReceiveBattlePassUpdates(FString battlePassId, FBattlePassCha
 void UScillClient::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	mqtt = NewObject<UScillMqtt>();
 
 	auto accessToken = FString();
 	auto userId = FString();
@@ -472,7 +473,7 @@ void UScillClient::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(PingTimer);
 	}
-	if (mqtt && !mqtt->Destroyed)
+	if (mqtt && !(mqtt->Destroyed))
 	{
 		mqtt->Destroy();
 	}
@@ -732,9 +733,6 @@ void UScillClient::ReceiveBattlePassChangeTopic(const ScillSDK::ScillApiAuthApi:
 	mqtt->SubscribeToTopicBP(Response.Content.Topic, callback);
 
 	callbackMapResponseReceived.Remove(guid);
-
-
-	
 }
 
 void UScillClient::ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicResponse& Response, FGuid guid) const
