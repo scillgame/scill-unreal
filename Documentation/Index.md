@@ -45,6 +45,76 @@ The other two parts of the code are:
 
 The next sections describe the Blueprint Classes and how to use them in your project.
 
+### Unreal Structures
+
+In this section you can find a list of all used structure types in the unreal plugin. These are all used, mostly to represent responses of all different kinds from the Scill API.
+
+#### Battle Pass
+
+Represents a Battle Pass Object. Holds all meta data of it. Use its ID e.g. to request the details of its levels and challenges.
+
+- **Battle Pass Id**: String. Unique id of this battle pass.
+- **App Id**: String. Unique id of the app.
+- **Battle Pass Name**: String. The name of the battle bass.
+- **Battle Pass Description**: String. The description of the battle bass. You can set that in the Admin Panel and it can also be HTML.
+- **Battle Pass Short Description**: String. A short description of the battle bass. You can set that in the Admin Panel and it can also be HTML.
+- **Battle Pass Disclaimer**: String. Use this to provide some terms and conditions following along this battle passes purchase.
+- **Battle Pass Priority**: int. The priority of the battle pass. I.e. if multiple are available you can use this field to sort them.
+- **Package Sku Ios/Android**: String.  If you want to sell Battle Passes you can use this field to trigger in-app purchase products within your mobile app. You can set this value in the Admin Panel. There is one for iOS and one for Android.
+- **Image Xs/S/M/L/Xl**: String. Differently sized images. These fields provide names or urls. You can determine the best size distribution yourself and depends on your application or UI.
+- **StartDate/EndDate**: String. The date (in iso format) when the Battle Pass starts. Tracking begins once this date is passed or stops once the end is reached and users will not be able to progress further than what they have achieved up to that point.
+- **Read More Link**: String. If the Battle Pass costs “money” you may want to route the user to a web site/page, where they can learn more about this battle pass. You can also use this field to route the user inside your application by providing a path or whatever works for you.
+- **s Unlocked Incrementally**: bool. Indicates if one level after the other must be activated or if users can activate whichever level they want. Typically battle passes are unlocked level by level, but if battle passes are used for other applications (like user referal programs) it can be useful to set this to false.
+- **Is Active**: bool. Indicated if this battle pass is currently active.
+- **Unlocked At**: String. The date in iso format when the user unlocked this Battle Pass.
+- **Can Purchase With Money/Coins**: bool. Indicates that this Battle Pass can be purchased via in-app purchase or with SCILL Coins respectively. This can be set in the Admin Panel.
+
+#### Battle Pass Level
+
+This is the representation of a battle pass level. A battle pass normally consists of multiple levels that each have several challenges. Use the battle pass functions on the [Scill Client](#scill-client) to receive details about battle pass levels of a specific battle pass.
+
+- **Level Id**: String. Unique identifier of the Battle Pass Level.
+- **App Id**: String. Unique identifier of the associated App.
+- **Battle Pass Id**: String. Unique identifier of the associated Battle Pass.
+- **Reward Amount**: String. In the Admin Panel you can set different types of rewards. You can also set an identifier of an in-game-item or anything you like. Use this to include the reward into your own business logic.
+- **Reward Type Name**: String. There are different types of rewards available. Possible values are Coins, Voucher, Money and Experience. This is deprecated in favor of level_reward_type which uses a slug instead of a human readable expression
+- **Level Reward Type**: String. The reward type in a machine readable slug. Available values are nothing, coin, experience, item.
+- **Level Completed**: bool. Indicates if this level is completed, i.e. all challenges have been completed.
+- **Level Priority**: String. Indicates the position of the level.
+- **Reward Claimed**: bool. Indicates if this level has already be claimed.
+- **Activated At**: String. The date when this level has been activated or emptyif it's not activated.
+- **Challenges**: [BattlePassLevelChallenge](#battle-pass-level-challenge). An array of BattlePassLevelChallenge objects. Please note, not all values are available from the challenge object, as battle passes handle the lifecycle of challenges.
+
+#### Battle Pass Level Challenge
+
+Represents Battle Pass Level Challenge. This is usually nested inside a Battle Pass Level. While the nesting Battle Pass Level is active, any changes through events are tracked. This object differs from the Personal Challenge object.
+
+- **Challenge Id**: String. The unique id of this challenge.
+
+- **Challenge Name**: String. The name of the challenge.
+
+- **Challenge Goal**: int. Indicates how many “tasks” must be completed or done to complete this challenge.
+
+- **Challenge Goal Condition**: int. With this you can set the way how the SCILL system approaches the challenges state. 0 means, that the counter of the challenge must be brought above the goal. If this is 1, then the counter must be kept below the goal. This is often useful for challenges that include times, like: Manage the level in under 50 seconds.
+
+- **User Challenge Current Score**: int. Indicates how many tasks the user already has completed. Use this in combination with Challenge Goal to render a nice progress bar.
+
+- **Challenge Icon/HD**: In the admin panel you can set a string representing an image. This can be a URL, but it can also be an image or texture that you have in your games asset database. Can also have an HD variant.
+
+- **Type**: String. Indicates the status of the challenge. This can be one of the following
+  
+  - `unlock`: Challenge does not track anything.
+  
+  - `in-progress`: Challenge is active and tracking.
+  
+  - `overtime`: User did not manage to finish the challenge in time. 
+  
+  - `unclaimed`: The challenge has been completed but the reward has not yet been claimed. 
+  
+  - `finished`: The challenge has been successfully be completed and the reward has been claimed
+
+### Level Persistency Interface
+
 ### ScillClient Component
 
 This component should be added to your game's custom `PlayerController`. It handles all requests that the client of your game has. Since it lives on the client installed on the player's device, it only polls the state of Scill challenges, battle passes etc.
@@ -328,6 +398,7 @@ These functions start monitoring changes to either a specific battle pass or all
 ##### Receive Battle Pass Updates
 
 Starts monitoring changes to the specified battle pass. Whenever a change occurs, the provided callback is executed. There are three different types of battle pass changes currently: 
+
 - Battle Pass Challenge Changed occurs when anything (mostly progress) on a battle pass challenge has changed.
 - Battle Pass Reward Claimed occurs when the reward of a battle pass has changed. Use this to trigger gameplay events on your server to provide the claiming player with his reward.
 - Battle Pass Expired occurs once the battle pass is no longer active. This battle pass is not tracking any changes via events anymore.
@@ -342,8 +413,29 @@ Unlike the other functions on these classes, the callback function here will be 
 
 **Callback Signature:**
 
-- Battle Pass Unlock Info: [BattlePass[]](#battle-pass). an array of all retrieved battle passes.
-- Success: boolean. whether the request was processed successfully
+- Battle Pass Payload Type: [BattlePassPayloadType](#battle-pass-payload-type). the type of the callback. 
+  - 0: Challenge Changed
+  - 1: Reward Claimed
+  - 2: Expired
+- Battle Pass Changed: [BattlePassChanged](#battle-pass-changed). if the payload type is Challenge Changed this provides the respective details. otherwise no values are set on this.
+- Battle Pass Level Claimed: [BattlePassLevelClaimed](#battle-pass-level-claimed). if the payload type is Reward Claimed this provides the respective details. otherwise no values are set on this.
+- Battle Pass Expired: [BattlePassExpired](#battle-pass-expired). if the payload type is Expired this provides the repsective details. otherwise no values are set on this.
+
+##### Receive Challenge Updates
+
+Starts monitoring changes to all personal challenges of the current user. Whenever a change occurs, the provided callback is executed.
+
+Unlike the other functions on these classes, the callback function here will be stored permanently and called multiple times instead of once.
+
+<!-- Function Image -->
+
+**Inputs:**
+
+_none_
+
+**Callback Signature:**
+
+- Payload: [ChallengeChanged](#challenge-changed). Provides details about how the personal challenge has changed.
 
 ### ScillClientBackend Component
 
@@ -352,7 +444,3 @@ Unlike the other functions on these classes, the callback function here will be 
 #### Generate Access Token
 
 #### Api Key Handling & Security
-
-### Level Persistency Interface
-
-### Unreal Structures

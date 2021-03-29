@@ -13,9 +13,9 @@
 UENUM(meta = (DisplayName="Battle Pass Payload Type"))
 enum BattlePassPayloadType
 {
-	ChallengeChanged = 1,
-	RewardClaimed = 2,
-	Expired = 3
+	ChallengeChanged = 0,
+	RewardClaimed = 1,
+	Expired = 2
 };
 
 DECLARE_DYNAMIC_DELEGATE_FourParams(FBattlePassChangeReceived, BattlePassPayloadType, Type, FBattlePassChanged, BattlePassChanged, FBattlePassLevelClaimed, BattlePassLevelClaimed, FBattlePassExpired, BattlePassExpired);
