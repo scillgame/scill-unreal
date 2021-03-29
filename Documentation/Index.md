@@ -332,7 +332,7 @@ Starts monitoring changes to the specified battle pass. Whenever a change occurs
 - Battle Pass Reward Claimed occurs when the reward of a battle pass has changed. Use this to trigger gameplay events on your server to provide the claiming player with his reward.
 - Battle Pass Expired occurs once the battle pass is no longer active. This battle pass is not tracking any changes via events anymore.
 
-Unlike the other functions on these classes, the callback function here will be stored called multiple times instead of once. 
+Unlike the other functions on these classes, the callback function here will be stored permanently and called multiple times instead of once.
 
 <!-- Function Image -->
 
