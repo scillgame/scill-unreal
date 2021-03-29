@@ -10,6 +10,10 @@
 #include "ScillApiWrapper/ScillApiChallengeCategory.h"
 #include "ScillApiWrapper/ScillApiBattlePassChallengeChangedPayload.h"
 #include "ScillApiWrapper/ScillApiChallengeWebhookPayload.h"
+#include "ScillApiWrapper/ScillApiBattlePassState.h"
+#include "ScillApiWrapper/ScillApiBattlePassExpiredPayload.h"
+#include "ScillApiWrapper/ScillApiBattlePassLevelClaimedPayload.h"
+#include "ScillApiWrapper/ScillApiBattlePassLevelReward.h"
 #include "ScillApiWrapper/ScillApiEventMetaData.h"
 #include "ScillApiWrapper/ScillApiEventPayload.h"
 #include "ScillStructs.generated.h"
@@ -481,6 +485,8 @@ struct SCILLSDK_API FBattlePassState
 	/* Indicated if this battle pass is active. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool IsActive;
+
+	static FBattlePassState FromScillApiBattlePassState(const ScillSDK::ScillApiBattlePassState o);
 };
 
 /*
@@ -513,6 +519,8 @@ struct SCILLSDK_API FBattlePassLevelReward
 	/* There are different types of rewards available. Possible values are Coins, Voucher, Money and Experience. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString RewardTypeName;
+
+	static FBattlePassLevelReward FromScillApiBattlePassLevelReward(const ScillSDK::ScillApiBattlePassLevelReward o);
 };
 
 /*
@@ -719,7 +727,7 @@ struct SCILLSDK_API FBattlePass
 };
 
 /*
-* Represents any update of a battle pass.
+* Represents any update of a battle pass challenge.
 */
 USTRUCT(BlueprintType, Category = "ScillSDK")
 struct SCILLSDK_API FBattlePassChanged
@@ -737,6 +745,45 @@ public:
 	FBattlePassChallengeState NewBattlePassChallenge;
 
 	static FBattlePassChanged FromScillApiBattlePassChallengeChangedPayload(const ScillSDK::ScillApiBattlePassChallengeChangedPayload o);
+};
+
+/*
+* Is returned if a monitored battle pass has expired.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FBattlePassExpired
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the notification. If you receive this payload, it's most likely battlepass-expired */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FBattlePassState OldBattlePass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FBattlePassState NewBattlePass;
+
+	static FBattlePassExpired FromScillApiBattlePassExpiredPayload(const ScillSDK::ScillApiBattlePassExpiredPayload o);
+};
+
+/*
+* Is returned if a Battle Pass Level's reward was claimed.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FBattlePassLevelClaimed
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the notification. If you receive this payload, it's most likely battlepass-expired */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FBattlePassLevelReward BattlePassLevelRewardClaimed;
+
+	static FBattlePassLevelClaimed FromScillApiBattlePassLevelClaimedPayload(const ScillSDK::ScillApiBattlePassLevelClaimedPayload o);
 };
 
 /*

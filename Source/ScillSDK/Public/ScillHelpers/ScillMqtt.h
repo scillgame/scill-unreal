@@ -8,7 +8,17 @@
 #include "ScillBlueprintClasses/ScillStructs.h"
 #include "ScillMqtt.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FBattlePassChangeReceived, FBattlePassChanged, Payload);
+/* Webhook type of your Battle Pass Update.
+*/
+UENUM(meta = (DisplayName="Battle Pass Payload Type"))
+enum BattlePassPayloadType
+{
+	ChallengeChanged = 1,
+	RewardClaimed = 2,
+	Expired = 3
+};
+
+DECLARE_DYNAMIC_DELEGATE_FourParams(FBattlePassChangeReceived, BattlePassPayloadType, Type, FBattlePassChanged, BattlePassChanged, FBattlePassLevelClaimed, BattlePassLevelClaimed, FBattlePassExpired, BattlePassExpired);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FChallengeChangeReceived, FChallengeChanged, Payload);
 
 /**
@@ -22,15 +32,14 @@ public:
 
 	UScillMqtt();
 
-	void SubscribeToTopicBP(const FString& Topic, FBattlePassChangeReceived callback);
-	void SubscribeToTopicC(const FString& Topic, FChallengeChangeReceived callback);
-	void SubscribeToTopic(const FString& Topic);
+	void SubscribeToTopicBP(FString Topic, FBattlePassChangeReceived callback);
+	void SubscribeToTopicC(FString Topic, FChallengeChangeReceived callback);
+	void SubscribeToTopic(FString Topic);
 
 	bool MqttConnected;
 	bool Destroyed;
 	void Ping();
 	void Destroy();
-
 private:
 	void OnConnect();
 	void OnConnectionError(const FString& Error);

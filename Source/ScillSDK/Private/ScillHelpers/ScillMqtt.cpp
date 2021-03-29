@@ -5,6 +5,8 @@
 
 UScillMqtt::UScillMqtt()
 {
+	callbacksBattlePassChanges.Empty();
+
 	mqttWs = FWebSocketsModule::Get().CreateWebSocket(TEXT("wss://mqtt.scillgame.com:8083/mqtt"), TEXT("mqtt"));
 
 	mqttWs->OnConnected().AddUObject(this, &UScillMqtt::OnConnect);
@@ -64,12 +66,34 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 
 			if (callbacksBattlePassChanges.Contains(pubPacket->TopicName))
 			{
+				FString webhookType = JsonObject->GetStringField("webhook_type");
+
 				auto callback = this->callbacksBattlePassChanges.FindRef(pubPacket->TopicName);
 
-				auto battlePass = ScillSDK::ScillApiBattlePassChallengeChangedPayload();
-				battlePass.FromJson(ValueObject);
+				// Battle Pass Challenge Changed
+				if (webhookType == TEXT("battlepass-challenge-changed"))
+				{
+					auto battlePass = ScillSDK::ScillApiBattlePassChallengeChangedPayload();
+					battlePass.FromJson(ValueObject);
 
-				callback.ExecuteIfBound(FBattlePassChanged::FromScillApiBattlePassChallengeChangedPayload(battlePass));
+					callback.ExecuteIfBound(BattlePassPayloadType::ChallengeChanged, FBattlePassChanged::FromScillApiBattlePassChallengeChangedPayload(battlePass), FBattlePassLevelClaimed(), FBattlePassExpired());
+				}
+				// Battle Pass Reward Claimed
+				if (webhookType == TEXT("battlepass-level-reward-claimed"))
+				{
+					auto battlePassRewardClaimed = ScillSDK::ScillApiBattlePassLevelClaimedPayload();
+					battlePassRewardClaimed.FromJson(ValueObject);
+
+					callback.ExecuteIfBound(BattlePassPayloadType::RewardClaimed, FBattlePassChanged(), FBattlePassLevelClaimed::FromScillApiBattlePassLevelClaimedPayload(battlePassRewardClaimed), FBattlePassExpired());
+				}
+				// Battle Pass Expired
+				if (webhookType == TEXT("battlepass-expired"))
+				{
+					auto battlePassExpired = ScillSDK::ScillApiBattlePassExpiredPayload();
+					battlePassExpired.FromJson(ValueObject);
+
+					callback.ExecuteIfBound(BattlePassPayloadType::Expired, FBattlePassChanged(), FBattlePassLevelClaimed(), FBattlePassExpired::FromScillApiBattlePassExpiredPayload(battlePassExpired));
+				}
 			}
 			if (callbacksChallengeChanges.Contains(pubPacket->TopicName))
 			{
@@ -86,7 +110,7 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 	return;
 }
 
-void UScillMqtt::SubscribeToTopic(const FString& Topic)
+void UScillMqtt::SubscribeToTopic(FString Topic)
 {
 	UScillMqttPacketSubscribe* pk = NewObject<UScillMqttPacketSubscribe>();
 
@@ -109,14 +133,14 @@ void UScillMqtt::SubscribeToTopic(const FString& Topic)
 	delete pkBuffer;
 }
 
-void UScillMqtt::SubscribeToTopicBP(const FString& Topic, FBattlePassChangeReceived callback)
+void UScillMqtt::SubscribeToTopicBP(FString Topic, FBattlePassChangeReceived callback)
 {
 	callbacksBattlePassChanges.Add(Topic, callback);
 
 	this->SubscribeToTopic(Topic);
 }
 
-void UScillMqtt::SubscribeToTopicC(const FString& Topic, FChallengeChangeReceived callback)
+void UScillMqtt::SubscribeToTopicC(FString Topic, FChallengeChangeReceived callback)
 {
 	callbacksChallengeChanges.Add(Topic, callback);
 
