@@ -233,3 +233,98 @@ FBattlePass FBattlePass::FromScillApiBattlePass(const ScillSDK::ScillApiBattlePa
 
 	return bp;
 }
+
+FBattlePassChallengeState FBattlePassChallengeState::FromScillApiBattlePassChallengeState(const ScillSDK::ScillApiBattlePassChallengeState o)
+{
+	auto n = FBattlePassChallengeState();
+
+	n.AppId = o.AppId.Get("");
+	n.BattlePassId = o.BattlePassId.Get("");
+	n.LevelId = o.LevelId.Get("");
+	n.UserId = o.UserId.Get("");
+	n.LevelPositionIndex = o.LevelPositionIndex.Get(0);
+	n.ChallengeId = o.ChallengeId.Get("");
+	n.ChallengePositionIndex = o.ChallengePositionIndex.Get(0);
+	n.ChallengeGoal = o.ChallengeGoal.Get(0);
+	n.UserChallengeCurrentScore = o.UserChallengeCurrentScore.Get(0);
+	n.Type = o.Type.Get("");
+
+	return n;
+}
+
+FBattlePassChanged FBattlePassChanged::FromScillApiBattlePassChallengeChangedPayload(const ScillSDK::ScillApiBattlePassChallengeChangedPayload o)
+{
+	auto n = FBattlePassChanged();
+
+	n.WebhookType = o.WebhookType.Get("");
+	n.OldBattlePassChallenge = FBattlePassChallengeState::FromScillApiBattlePassChallengeState(o.OldBattlePassChallenge.Get(ScillSDK::ScillApiBattlePassChallengeState()));
+	n.NewBattlePassChallenge = FBattlePassChallengeState::FromScillApiBattlePassChallengeState(o.NewBattlePassChallenge.Get(ScillSDK::ScillApiBattlePassChallengeState()));
+
+	return n;
+}
+
+FChallengeChanged FChallengeChanged::FromScillApiChallengeWebhookPayload(const ScillSDK::ScillApiChallengeWebhookPayload o)
+{
+	auto n = FChallengeChanged();
+
+	n.WebhookType = o.WebhookType.Get("");
+	n.CategoryPosition = o.CategoryPosition.Get(0.0);
+	n.UserToken = o.UserToken.Get("");
+
+	n.OldChallenge = FChallenge::FromScillApiChallenge(o.OldChallenge.Get(ScillSDK::ScillApiChallenge()));
+	n.NewChallenge = FChallenge::FromScillApiChallenge(o.NewChallenge.Get(ScillSDK::ScillApiChallenge()));
+
+	return n;
+}
+
+FBattlePassState FBattlePassState::FromScillApiBattlePassState(const ScillSDK::ScillApiBattlePassState o)
+{
+	auto n = FBattlePassState();
+
+	n.BattlePassId = o.BattlePassId.Get("");
+	n.BattlePassPriority = o.BattlePassPriority.Get(0);
+	n.AppId = o.AppId.Get("");
+	n.StartDate = o.StartDate.Get("");
+	n.EndDate = o.EndDate.Get("");
+	n.IsActive = o.IsActive.Get(false);
+
+	return n;
+}
+
+FBattlePassExpired FBattlePassExpired::FromScillApiBattlePassExpiredPayload(const ScillSDK::ScillApiBattlePassExpiredPayload o)
+{
+	auto n = FBattlePassExpired();
+
+	n.WebhookType = o.WebhookType.Get("");
+
+	n.OldBattlePass = FBattlePassState::FromScillApiBattlePassState(o.OldBattlePass.Get(ScillSDK::ScillApiBattlePassState()));
+	n.NewBattlePass = FBattlePassState::FromScillApiBattlePassState(o.NewBattlePass.Get(ScillSDK::ScillApiBattlePassState()));
+
+	return n;
+}
+
+FBattlePassLevelReward FBattlePassLevelReward::FromScillApiBattlePassLevelReward(const ScillSDK::ScillApiBattlePassLevelReward o)
+{
+	auto n = FBattlePassLevelReward();
+
+	n.BattlePassId = o.BattlePassId.Get("");
+	n.LevelPositionIndex = o.LevelPositionIndex.Get(0);
+	n.AppId = o.AppId.Get("");
+	n.LevelId = o.LevelId.Get("");
+	n.UserId = o.UserId.Get("");
+	n.RewardAmount = o.RewardAmount.Get("");
+	n.RewardTypeName = o.RewardTypeName.Get("");
+
+	return n;
+}
+
+FBattlePassLevelClaimed FBattlePassLevelClaimed::FromScillApiBattlePassLevelClaimedPayload(const ScillSDK::ScillApiBattlePassLevelClaimedPayload o)
+{
+	auto n = FBattlePassLevelClaimed();
+
+	n.WebhookType = o.WebhookType.Get("");
+
+	n.BattlePassLevelRewardClaimed = FBattlePassLevelReward::FromScillApiBattlePassLevelReward(o.BattlePassLevelRewardClaimed.Get(ScillSDK::ScillApiBattlePassLevelReward()));
+
+	return n;
+}

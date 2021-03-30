@@ -31,23 +31,23 @@ void UScillClientBackend::GenerateAccessToken(FString userId, const FReceiveAcce
 	authApi.GenerateAccessToken(accessTokenRequest, generateAccessTokenDelegate);
 }
 
-void UScillClientBackend::StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback)
-{
-	auto getBattlePassUpdatesTopicRequest = ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicRequest();
-
-	getBattlePassUpdatesTopicRequest.BattlePassId = battlePassId;
-
-	FGuid guid = FGuid::NewGuid();
-
-	callbackMapReceiveBattlepassTopic.Add(guid, callback);
-	
-	auto getBattlePassUpdatesTopicDelegate = ScillSDK::ScillApiAuthApi::FGetUserBattlePassNotificationTopicDelegate::CreateUObject(this, &UScillClientBackend::ReceiveBattlepassTopic, guid);
-	
-	auto tempAuthApi = ScillSDK::ScillApiAuthApi();
-	tempAuthApi.AddHeaderParam("Authorization", "Bearer " + accessToken);
-
-	tempAuthApi.GetUserBattlePassNotificationTopic(getBattlePassUpdatesTopicRequest, getBattlePassUpdatesTopicDelegate);
-}
+//void UScillClientBackend::StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback)
+//{
+//	auto getBattlePassUpdatesTopicRequest = ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicRequest();
+//
+//	getBattlePassUpdatesTopicRequest.BattlePassId = battlePassId;
+//
+//	FGuid guid = FGuid::NewGuid();
+//
+//	callbackMapReceiveBattlepassTopic.Add(guid, callback);
+//	
+//	auto getBattlePassUpdatesTopicDelegate = ScillSDK::ScillApiAuthApi::FGetUserBattlePassNotificationTopicDelegate::CreateUObject(this, &UScillClientBackend::ReceiveBattlepassTopic, guid);
+//	
+//	auto tempAuthApi = ScillSDK::ScillApiAuthApi();
+//	tempAuthApi.AddHeaderParam("Authorization", "Bearer " + accessToken);
+//
+//	tempAuthApi.GetUserBattlePassNotificationTopic(getBattlePassUpdatesTopicRequest, getBattlePassUpdatesTopicDelegate);
+//}
 
 void UScillClientBackend::BeginPlay()
 {

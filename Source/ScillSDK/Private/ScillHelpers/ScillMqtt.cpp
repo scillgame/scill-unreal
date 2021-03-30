@@ -5,6 +5,8 @@
 
 UScillMqtt::UScillMqtt()
 {
+	callbacksBattlePassChanges.Empty();
+
 	mqttWs = FWebSocketsModule::Get().CreateWebSocket(TEXT("wss://mqtt.scillgame.com:8083/mqtt"), TEXT("mqtt"));
 
 	mqttWs->OnConnected().AddUObject(this, &UScillMqtt::OnConnect);
@@ -19,32 +21,130 @@ UScillMqtt::UScillMqtt()
 	mqttWs->Connect();
 }
 
+void UScillMqtt::Destroy()
+{
+	Destroyed = true;
+	if (mqttWs && mqttWs->IsConnected())
+	{
+		if (MqttConnected)
+		{
+			this->Disconnect();
+		}
+		mqttWs->Close();
+	}
+}
+
 void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaining)
 {
-	uint8* receivedMessage = (uint8*)data;
+	uint8* buffer = (uint8*)data;
+	TArray<uint8> receivedMessage;
+	receivedMessage.AddDefaulted(Size);
 
-	ScillMqttPacketBase packet = ScillMqttPacketBase::FromBuffer(receivedMessage);
-
-	if (packet.PacketType == ScillMqttPacketType::CONNACK)
+	for (int i = 0; i < Size; i++)
 	{
-		auto pk = ScillMqttPacketSubscribe();
-
-		pk.PacketIdentifier = ++(this->CurrentPacketIdentifier);
-
-		pk.TopicFilter.Add(TEXT("topic/challenges/95386b38e4feebde747d28bcccde4c2bf815bde1b3e4b9983b8172894e25b4f4fd57fe5e70623f53442874c107c0a3752126897efca5527c58ba453179702894"));
-		pk.RequestedQoS.Add(0);
-
-		pk.Buffer = pk.ToBuffer();
-
-		mqttWs->Send(pk.Buffer, pk.Length, true);
+		receivedMessage[i] = buffer[i];
 	}
-	if (packet.PacketType == ScillMqttPacketType::PUBLISH)
+
+	UScillMqttPacketBase* packet = UScillMqttPacketBase::FromBuffer(receivedMessage);
+
+	if (packet->PacketType == ScillMqttPacketType::CONNACK)
 	{
-		ScillMqttPacketPublish pubPacket = static_cast<ScillMqttPacketPublish&>(packet);
-		UE_LOG(LogTemp, Warning, TEXT("Received MQTT Publish Message: %s"), *pubPacket.Payload);
+		this->MqttConnected = true;
+	}
+	if (packet->PacketType == ScillMqttPacketType::PUBLISH)
+	{
+
+		UScillMqttPacketPublish* pubPacket = Cast<UScillMqttPacketPublish>(packet);
+
+		auto JsonReader = TJsonReaderFactory<TCHAR>::Create(pubPacket->Payload);
+
+		TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+
+		if (FJsonSerializer::Deserialize(JsonReader, JsonObject) && JsonObject.IsValid())
+		{
+			TSharedPtr<FJsonValueObject> ValueObject = MakeShareable(new FJsonValueObject(JsonObject));
+
+			if (callbacksBattlePassChanges.Contains(pubPacket->TopicName))
+			{
+				FString webhookType = JsonObject->GetStringField("webhook_type");
+
+				auto callback = this->callbacksBattlePassChanges.FindRef(pubPacket->TopicName);
+
+				// Battle Pass Challenge Changed
+				if (webhookType == TEXT("battlepass-challenge-changed"))
+				{
+					auto battlePass = ScillSDK::ScillApiBattlePassChallengeChangedPayload();
+					battlePass.FromJson(ValueObject);
+
+					callback.ExecuteIfBound(BattlePassPayloadType::ChallengeChanged, FBattlePassChanged::FromScillApiBattlePassChallengeChangedPayload(battlePass), FBattlePassLevelClaimed(), FBattlePassExpired());
+				}
+				// Battle Pass Reward Claimed
+				if (webhookType == TEXT("battlepass-level-reward-claimed"))
+				{
+					auto battlePassRewardClaimed = ScillSDK::ScillApiBattlePassLevelClaimedPayload();
+					battlePassRewardClaimed.FromJson(ValueObject);
+
+					callback.ExecuteIfBound(BattlePassPayloadType::RewardClaimed, FBattlePassChanged(), FBattlePassLevelClaimed::FromScillApiBattlePassLevelClaimedPayload(battlePassRewardClaimed), FBattlePassExpired());
+				}
+				// Battle Pass Expired
+				if (webhookType == TEXT("battlepass-expired"))
+				{
+					auto battlePassExpired = ScillSDK::ScillApiBattlePassExpiredPayload();
+					battlePassExpired.FromJson(ValueObject);
+
+					callback.ExecuteIfBound(BattlePassPayloadType::Expired, FBattlePassChanged(), FBattlePassLevelClaimed(), FBattlePassExpired::FromScillApiBattlePassExpiredPayload(battlePassExpired));
+				}
+			}
+			if (callbacksChallengeChanges.Contains(pubPacket->TopicName))
+			{
+				auto callback = this->callbacksChallengeChanges.FindRef(pubPacket->TopicName);
+
+				auto challenge = ScillSDK::ScillApiChallengeWebhookPayload();
+				challenge.FromJson(ValueObject);
+
+				callback.ExecuteIfBound(FChallengeChanged::FromScillApiChallengeWebhookPayload(challenge));
+			}
+		}
 	}
 
 	return;
+}
+
+void UScillMqtt::SubscribeToTopic(FString Topic)
+{
+	UScillMqttPacketSubscribe* pk = NewObject<UScillMqttPacketSubscribe>();
+
+	pk->PacketIdentifier = ++(this->CurrentPacketIdentifier);
+
+	pk->TopicFilter.Add(Topic);
+	pk->RequestedQoS.Add(0);
+
+
+	pk->Buffer = pk->ToBuffer();
+	uint8* pkBuffer = new uint8[pk->Buffer.Num()];
+
+	for (int i = 0; i < pk->Buffer.Num(); i++)
+	{
+		pkBuffer[i] = pk->Buffer[i];
+	}
+
+	mqttWs->Send(pkBuffer, pk->Length, true);
+
+	delete pkBuffer;
+}
+
+void UScillMqtt::SubscribeToTopicBP(FString Topic, FBattlePassChangeReceived callback)
+{
+	callbacksBattlePassChanges.Add(Topic, callback);
+
+	this->SubscribeToTopic(Topic);
+}
+
+void UScillMqtt::SubscribeToTopicC(FString Topic, FChallengeChangeReceived callback)
+{
+	callbacksChallengeChanges.Add(Topic, callback);
+
+	this->SubscribeToTopic(Topic);
 }
 
 void UScillMqtt::OnConnectionError(const FString& Error)
@@ -55,19 +155,56 @@ void UScillMqtt::OnConnectionError(const FString& Error)
 
 void UScillMqtt::OnConnect()
 {
-	auto pk = ScillMqttPacketConnect();
+	UScillMqttPacketConnect* pk = NewObject<UScillMqttPacketConnect>();
 
-	pk.KeepAlive = 6000;
-	pk.WillRetain = false;
-	pk.WillQoS = 0;
-	pk.CleanSession = 1;
+	pk->KeepAlive = 300;
+	pk->WillRetain = false;
+	pk->WillQoS = 0;
+	pk->CleanSession = 1;
 
-	pk.Buffer = pk.ToBuffer();
+	pk->Buffer = pk->ToBuffer();
+	uint8* buffer = new uint8[pk->Buffer.Num()];
+	for (int i = 0; i < pk->Buffer.Num(); i++)
+	{
+		buffer[i] = pk->Buffer[i];
+	}
 
-	mqttWs->Send(pk.Buffer, pk.Length, true);
+	mqttWs->Send(buffer, pk->Length, true);
+
+	delete buffer;
 }
 
-uint8* ScillMqttPacketConnect::ToBuffer()
+void UScillMqtt::Ping()
+{
+	UScillMqttPacketPing* pk = NewObject<UScillMqttPacketPing>();
+	pk->Buffer = pk->ToBuffer();
+	uint8* buffer = new uint8[pk->Buffer.Num()];
+	for (int i = 0; i < pk->Buffer.Num(); i++)
+	{
+		buffer[i] = pk->Buffer[i];
+	}
+
+	this->mqttWs->Send(buffer, pk->Length, true);
+
+	delete buffer;
+}
+
+void UScillMqtt::Disconnect()
+{
+	UScillMqttPacketDisconnect* pk = NewObject<UScillMqttPacketDisconnect>();
+	pk->Buffer = pk->ToBuffer();
+	uint8* buffer = new uint8[pk->Buffer.Num()];
+	for (int i = 0; i < pk->Buffer.Num(); i++)
+	{
+		buffer[i] = pk->Buffer[i];
+	}
+
+	this->mqttWs->Send(buffer, pk->Length, true);
+
+	delete buffer;
+}
+
+TArray<uint8> UScillMqttPacketConnect::ToBuffer()
 {
 	//calculate length of packet
 	uint64 length, varlength;
@@ -85,7 +222,7 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 	varlength += this->UserName.IsSet() ? this->UserName.GetValue().Len() + 2 : 0;
 	varlength += this->Password.IsSet() ? this->Password.GetValue().Len() + 2 : 0;
 
-	if (varlength > 268435455) return nullptr;
+	if (varlength > 268435455) return TArray<uint8>();
 
 	// add bytes for remaining length
 	length += varlength < 128 ? 1 : varlength < 16384 ? 2 : varlength < 2097152 ? 3 : 4;
@@ -93,7 +230,8 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 	// allocate array
 	this->Length = length + varlength;
 	this->RemainLength = varlength;
-	uint8* buffer = new uint8[length + varlength];
+	TArray<uint8> buffer;
+	buffer.AddDefaulted(this->Length);
 
 	// write to buffer
 	uint64 pointer = 0;
@@ -118,7 +256,7 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 	buffer[pointer++] = this->ProtocolName.Len() / 256; //MSB
 	buffer[pointer++] = this->ProtocolName.Len() % 256; //LSB
 
-	int32 pnLen = StringHelper::StringToBytesFixed(this->ProtocolName, buffer + pointer, this->ProtocolName.Len());
+	int32 pnLen = StringHelper::StringToTArray(this->ProtocolName, buffer, this->ProtocolName.Len(), pointer);
 	pointer += pnLen;
 
 	// Protocol Level, version 3.1.1
@@ -137,7 +275,7 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 	// Client Identifier
 	buffer[pointer++] = this->ClientId.Len() / 256; //MSB
 	buffer[pointer++] = this->ClientId.Len() % 256; //LSB
-	int32 cIdLen = StringHelper::StringToBytesFixed(this->ClientId, buffer + pointer, this->ClientId.Len());
+	int32 cIdLen = StringHelper::StringToTArray(this->ClientId, buffer, this->ClientId.Len(), pointer);
 	pointer += cIdLen;
 
 	// Will Topic
@@ -146,7 +284,7 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 		buffer[pointer++] = this->WillTopic.Get("").Len() / 256; //MSB
 		buffer[pointer++] = this->WillTopic.Get("").Len() % 256; //LSB
 
-		int32 wtLen = StringHelper::StringToBytesFixed(this->WillTopic.Get(""), buffer + pointer, this->WillTopic.Get("").Len());
+		int32 wtLen = StringHelper::StringToTArray(this->WillTopic.Get(""), buffer, this->WillTopic.Get("").Len(), pointer);
 		pointer += wtLen;
 	}
 
@@ -156,7 +294,7 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 		buffer[pointer++] = this->WillMessage.Get("").Len() / 256; //MSB
 		buffer[pointer++] = this->WillMessage.Get("").Len() % 256; //LSB
 
-		int32 wmLen = StringHelper::StringToBytesFixed(this->WillMessage.Get(""), buffer + pointer, this->WillMessage.Get("").Len());
+		int32 wmLen = StringHelper::StringToTArray(this->WillMessage.Get(""), buffer, this->WillMessage.Get("").Len(), pointer);
 		pointer += wmLen;
 	}
 
@@ -166,7 +304,7 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 		buffer[pointer++] = this->UserName.Get("").Len() / 256; //MSB
 		buffer[pointer++] = this->UserName.Get("").Len() % 256; //LSB
 
-		int32 unLen = StringHelper::StringToBytesFixed(this->UserName.Get(""), buffer + pointer, this->UserName.Get("").Len());
+		int32 unLen = StringHelper::StringToTArray(this->UserName.Get(""), buffer, this->UserName.Get("").Len(), pointer);
 		pointer += unLen;
 	}
 
@@ -176,7 +314,7 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 		buffer[pointer++] = this->Password.Get("").Len() / 256; //MSB
 		buffer[pointer++] = this->Password.Get("").Len() % 256; //LSB
 
-		int32 pwLen = StringHelper::StringToBytesFixed(this->Password.Get(""), buffer + pointer, this->Password.Get("").Len());
+		int32 pwLen = StringHelper::StringToTArray(this->Password.Get(""), buffer, this->Password.Get("").Len(), pointer);
 		pointer += pwLen;
 	}
 
@@ -184,7 +322,7 @@ uint8* ScillMqttPacketConnect::ToBuffer()
 }
 
 
-void ScillMqttPacketConnect::SetConnectFlags() {
+void UScillMqttPacketConnect::SetConnectFlags() {
 	this->ConnectFlags = this->UserName.IsSet() ? ScillMqttConnectFlags::USER_NAME : 0;
 	this->ConnectFlags += this->Password.IsSet() && this->UserName.IsSet() ? ScillMqttConnectFlags::PASSWORD : 0;
 	this->ConnectFlags += this->WillRetain && this->WillMessage.IsSet() && this->WillTopic.IsSet() ? ScillMqttConnectFlags::WILL_RETAIN : 0;
@@ -193,61 +331,69 @@ void ScillMqttPacketConnect::SetConnectFlags() {
 	this->ConnectFlags += this->CleanSession ? ScillMqttConnectFlags::CLEAN_SESSION : 0;
 }
 
-uint8* ScillMqttPacketBase::ToBuffer()
+TArray<uint8> UScillMqttPacketBase::ToBuffer()
 {
-	return new uint8[0];
+	TArray<uint8> result;
+	result.AddDefaulted(0);
+	return result;
 }
 
-ScillMqttPacketConnack ScillMqttPacketConnack::FromBuffer(uint8* buffer)
+UScillMqttPacketConnack* UScillMqttPacketConnack::FromBuffer(TArray<uint8> buffer)
 {
-	auto pk = ScillMqttPacketConnack();
+	UScillMqttPacketConnack* pk = NewObject<UScillMqttPacketConnack>();
 
 	uint64 pointer = 0;
 
 	// Packet Type
 	uint8 firstByte = buffer[pointer++];
-	pk.PacketType = (ScillMqttPacketType)((firstByte & 0xf0) >> 4);
+	pk->PacketType = (ScillMqttPacketType)((firstByte & 0xf0) >> 4);
 
 	// Skip Remaining Length, since it is always "2"
 	pointer++;
 
 	// Session Present
-	pk.SessionPresent = (bool)buffer[pointer++];
+	pk->SessionPresent = (bool)buffer[pointer++];
 
 	// Connection Response Code
-	pk.Code = (ScillMqttConnackCode)buffer[pointer++];
+	pk->Code = (ScillMqttConnackCode)buffer[pointer++];
 
 	return pk;
 }
 
-ScillMqttPacketType ScillMqttPacketBase::GetPacketTypeFromBuffer(uint8* buffer)
+ScillMqttPacketType UScillMqttPacketBase::GetPacketTypeFromBuffer(TArray<uint8> buffer)
 {
 	uint8 firstByte = buffer[0];
 	return (ScillMqttPacketType)((firstByte & 0xf0) >> 4);
 }
 
-ScillMqttPacketBase ScillMqttPacketBase::FromBuffer(uint8* buffer)
+UScillMqttPacketBase* UScillMqttPacketBase::FromBuffer(TArray<uint8> buffer)
 {
-	auto messageType = ScillMqttPacketBase::GetPacketTypeFromBuffer(buffer);
+	auto messageType = UScillMqttPacketBase::GetPacketTypeFromBuffer(buffer);
 
 	if (messageType == ScillMqttPacketType::CONNECT)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Unexpected MQTT packet received: CONNECT"));
-		return ScillMqttPacketConnect();
+		UScillMqttPacketConnect* pk = NewObject<UScillMqttPacketConnect>();
+		return pk;
 	}
 	if (messageType == ScillMqttPacketType::CONNACK)
 	{
-		return ScillMqttPacketConnack::FromBuffer(buffer);
+		return UScillMqttPacketConnack::FromBuffer(buffer);
 	}
 	if (messageType == ScillMqttPacketType::PUBLISH)
 	{
-		return ScillMqttPacketPublish::FromBuffer(buffer);
+		return UScillMqttPacketPublish::FromBuffer(buffer);
+	}
+	if (messageType == ScillMqttPacketType::PINGRESP)
+	{
+		return UScillMqttPacketPingResp::FromBuffer(buffer);
 	}
 
-	return ScillMqttPacketBase();
+	UScillMqttPacketBase* pk = NewObject<UScillMqttPacketBase>();
+	return pk;
 }
 
-uint64 ScillMqttPacketBase::GetRemainingLengthFromBuffer(uint8* buffer)
+uint64 UScillMqttPacketBase::GetRemainingLengthFromBuffer(TArray<uint8> buffer)
 {
 	uint8 pointer = 1;
 
@@ -267,48 +413,50 @@ uint64 ScillMqttPacketBase::GetRemainingLengthFromBuffer(uint8* buffer)
 	return length;
 }
 
-ScillMqttPacketPublish ScillMqttPacketPublish::FromBuffer(uint8* buffer)
+UScillMqttPacketPublish* UScillMqttPacketPublish::FromBuffer(TArray<uint8> buffer)
 {
-	auto pk = ScillMqttPacketPublish();
+	UScillMqttPacketPublish* pk = NewObject<UScillMqttPacketPublish>();
 
 	uint64 pointer = 0;
 
 	// Packet Type
 	uint8 firstByte = buffer[pointer++];
-	pk.PacketType = (ScillMqttPacketType)((firstByte & 0xf0) >> 4);
+	pk->PacketType = (ScillMqttPacketType)((firstByte & 0xf0) >> 4);
 
 	// Packet Flags
-	pk.PacketFlags = firstByte & 0x0f;
+	pk->PacketFlags = firstByte & 0x0f;
 
 	// Set Fields according to Packet Flags
-	pk.Duplicate = (bool)(pk.PacketFlags & 0x01);
-	pk.QoS = (uint8)((pk.PacketFlags & 0x06) >> 1);
-	pk.Retain = (bool)(pk.PacketFlags & 0x08);
+	pk->Duplicate = (bool)(pk->PacketFlags & 0x01);
+	pk->QoS = (uint8)((pk->PacketFlags & 0x06) >> 1);
+	pk->Retain = (bool)(pk->PacketFlags & 0x08);
 
 	// Remain Length
-	pk.RemainLength = ScillMqttPacketBase::GetRemainingLengthFromBuffer(buffer);
-	pk.Length = ScillMqttPacketBase::CalculateLengthFromRemaining(pk.RemainLength);
-	pointer = ScillMqttPacketBase::FixedHeaderLengthFromRemaining(pk.RemainLength) - 1;
+	pk->RemainLength = UScillMqttPacketBase::GetRemainingLengthFromBuffer(buffer);
+	pk->Length = UScillMqttPacketBase::CalculateLengthFromRemaining(pk->RemainLength);
+	pointer += UScillMqttPacketBase::FixedHeaderLengthFromRemaining(pk->RemainLength) - 1;
 
 	// Topic Name
-	uint16 tpLength = buffer[pointer++] * 256 + buffer[pointer++]; // MSB + LSB
-	pk.TopicName = StringHelper::BytesToStringFixed(&buffer[pointer], tpLength);
+	uint16 tpLength = buffer[pointer++] * 256;
+	tpLength += buffer[pointer++]; // MSB + LSB
+	pk->TopicName = StringHelper::TArrayToString(buffer, pointer, tpLength);
 	pointer += tpLength;
 
 	// Packet Identifier
-	if (pk.QoS)
+	if (pk->QoS)
 	{
-		pk.PacketIdentifier = buffer[pointer++] * 256 + buffer[pointer++];
+		pk->PacketIdentifier = buffer[pointer++] * 256;
+		pk->PacketIdentifier += buffer[pointer++];
 	}
 
 	// Payload
-	uint64 plLength = pk.Length - pointer;
-	pk.Payload = StringHelper::BytesToStringFixed(&buffer[pointer], plLength);
+	uint64 plLength = pk->Length - pointer;
+	pk->Payload = StringHelper::TArrayToString(buffer, pointer, plLength);
 
 	return pk;
 }
 
-uint8* ScillMqttPacketSubscribe::ToBuffer()
+TArray<uint8> UScillMqttPacketSubscribe::ToBuffer()
 {
 	//calculate length of packet
 	uint64 varlength;
@@ -317,7 +465,7 @@ uint8* ScillMqttPacketSubscribe::ToBuffer()
 	varlength = 2;
 
 	// Add Topic Filter Lengths
-	for (int i = 0; i < TopicFilter.Num(); i++)
+	for (int i = 0; i < this->TopicFilter.Num(); i++)
 	{
 		if (i > this->RequestedQoS.Num())
 			break;
@@ -328,10 +476,11 @@ uint8* ScillMqttPacketSubscribe::ToBuffer()
 	this->RemainLength = varlength;
 
 	// Set Overall Length
-	this->Length = ScillMqttPacketBase::CalculateLengthFromRemaining(this->RemainLength);
+	this->Length = UScillMqttPacketBase::CalculateLengthFromRemaining(this->RemainLength);
 
 	// Write buffer
-	uint8* buffer = new uint8[this->Length];
+	TArray<uint8> buffer;
+	buffer.AddDefaulted(this->Length);
 	uint64 pointer = 0;
 
 	// Packet Type and Flags
@@ -355,7 +504,7 @@ uint8* ScillMqttPacketSubscribe::ToBuffer()
 	// Subscribe Payload
 
 	// Topic Filters and their respective QoS
-	for (int i = 0; i < TopicFilter.Num(); i++)
+	for (int i = 0; i < this->TopicFilter.Num(); i++)
 	{
 		if (i > this->RequestedQoS.Num())
 			break;
@@ -366,7 +515,7 @@ uint8* ScillMqttPacketSubscribe::ToBuffer()
 		buffer[pointer++] = tfLength % 256; //LSB
 
 		// Topic Filter
-		StringHelper::StringToBytesFixed(this->TopicFilter[i], buffer + pointer, tfLength);
+		StringHelper::StringToTArray(this->TopicFilter[i], buffer, tfLength, pointer);
 		pointer += tfLength;
 
 		buffer[pointer++] = this->RequestedQoS[i];
@@ -375,12 +524,60 @@ uint8* ScillMqttPacketSubscribe::ToBuffer()
 	return buffer;
 }
 
-uint64 ScillMqttPacketBase::CalculateLengthFromRemaining(uint64 remainingLength)
+TArray<uint8> UScillMqttPacketPing::ToBuffer()
+{
+	this->Length = 2;
+	this->RemainLength = 0;
+
+	TArray<uint8> buffer;
+	buffer.AddDefaulted(2);
+
+	// Packet Type and Flags
+	buffer[0] = ScillMqttPacketType::PINGREQ * 16;
+
+	// Remaining Length
+	buffer[1] = 0;
+
+	return buffer;
+}
+
+UScillMqttPacketPingResp* UScillMqttPacketPingResp::FromBuffer(TArray<uint8> buffer)
+{
+	UScillMqttPacketPingResp* pk = NewObject<UScillMqttPacketPingResp>();
+
+	// Packet Type
+	uint8 firstByte = buffer[0];
+	pk->PacketType = (ScillMqttPacketType)((firstByte & 0xf0) >> 4);
+
+	// Packet Length
+	pk->Length = 2;
+
+	return pk;
+}
+
+TArray<uint8> UScillMqttPacketDisconnect::ToBuffer()
+{
+	this->Length = 2;
+	this->RemainLength = 0;
+
+	TArray<uint8> buffer;
+	buffer.AddDefaulted(2);
+
+	// Packet Type and Flags
+	buffer[0] = ScillMqttPacketType::DISCONNECT * 16;
+
+	// Remaining Length
+	buffer[1] = 0;
+
+	return buffer;
+}
+
+uint64 UScillMqttPacketBase::CalculateLengthFromRemaining(uint64 remainingLength)
 {
 	return remainingLength + (remainingLength < 128 ? 2 : remainingLength < 16384 ? 3 : 4);
 }
 
-uint8 ScillMqttPacketBase::FixedHeaderLengthFromRemaining(uint64 remainingLength)
+uint8 UScillMqttPacketBase::FixedHeaderLengthFromRemaining(uint64 remainingLength)
 {
 	return remainingLength < 128 ? 2 : remainingLength < 16384 ? 3 : 4;
 }

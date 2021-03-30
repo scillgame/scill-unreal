@@ -8,6 +8,12 @@
 #include "ScillApiWrapper/ScillApiBattlePassUnlockInfo.h"
 #include "ScillApiWrapper/ScillApiChallenge.h"
 #include "ScillApiWrapper/ScillApiChallengeCategory.h"
+#include "ScillApiWrapper/ScillApiBattlePassChallengeChangedPayload.h"
+#include "ScillApiWrapper/ScillApiChallengeWebhookPayload.h"
+#include "ScillApiWrapper/ScillApiBattlePassState.h"
+#include "ScillApiWrapper/ScillApiBattlePassExpiredPayload.h"
+#include "ScillApiWrapper/ScillApiBattlePassLevelClaimedPayload.h"
+#include "ScillApiWrapper/ScillApiBattlePassLevelReward.h"
 #include "ScillApiWrapper/ScillApiEventMetaData.h"
 #include "ScillApiWrapper/ScillApiEventPayload.h"
 #include "ScillStructs.generated.h"
@@ -479,6 +485,8 @@ struct SCILLSDK_API FBattlePassState
 	/* Indicated if this battle pass is active. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool IsActive;
+
+	static FBattlePassState FromScillApiBattlePassState(const ScillSDK::ScillApiBattlePassState o);
 };
 
 /*
@@ -511,6 +519,8 @@ struct SCILLSDK_API FBattlePassLevelReward
 	/* There are different types of rewards available. Possible values are Coins, Voucher, Money and Experience. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString RewardTypeName;
+
+	static FBattlePassLevelReward FromScillApiBattlePassLevelReward(const ScillSDK::ScillApiBattlePassLevelReward o);
 };
 
 /*
@@ -634,6 +644,8 @@ struct SCILLSDK_API FBattlePassChallengeState
 	/* Indicates the status of the challenge. This can be one of the following unlock: Challenge does not track anything. in-progress: Challenge is active and tracking. overtime: User did not manage to finish the challenge in time. unclaimed: The challenge has been completed but the reward has not yet been claimed. finished: The challenge has been successfully be completed and the reward has been claimed */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Type;
+
+	static FBattlePassChallengeState FromScillApiBattlePassChallengeState(const ScillSDK::ScillApiBattlePassChallengeState o);
 };
 
 /*
@@ -712,4 +724,93 @@ struct SCILLSDK_API FBattlePass
 		bool CanPurchaseWithCoins;
 
 	static FBattlePass FromScillApiBattlePass(const ScillSDK::ScillApiBattlePass battlePass);
+};
+
+/*
+* Represents any update of a battle pass challenge.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FBattlePassChanged
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the notification. If you receive this payload, it's most likely battlepass-challenge-changed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBattlePassChallengeState OldBattlePassChallenge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBattlePassChallengeState NewBattlePassChallenge;
+
+	static FBattlePassChanged FromScillApiBattlePassChallengeChangedPayload(const ScillSDK::ScillApiBattlePassChallengeChangedPayload o);
+};
+
+/*
+* Is returned if a monitored battle pass has expired.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FBattlePassExpired
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the notification. If you receive this payload, it's most likely battlepass-expired */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FBattlePassState OldBattlePass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FBattlePassState NewBattlePass;
+
+	static FBattlePassExpired FromScillApiBattlePassExpiredPayload(const ScillSDK::ScillApiBattlePassExpiredPayload o);
+};
+
+/*
+* Is returned if a Battle Pass Level's reward was claimed.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FBattlePassLevelClaimed
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the notification. If you receive this payload, it's most likely battlepass-expired */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FBattlePassLevelReward BattlePassLevelRewardClaimed;
+
+	static FBattlePassLevelClaimed FromScillApiBattlePassLevelClaimedPayload(const ScillSDK::ScillApiBattlePassLevelClaimedPayload o);
+};
+
+/*
+* Represents an update of a user challenge.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FChallengeChanged
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the notification. If you receive this payload, it's most likely battlepass-challenge-changed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WebhookType;
+
+	/* The index of the category this challenge is linked to. When you request personal challenges, you get an array of categories which contain an array of challenges in their challenges property. This value indicates in which category this challenge can be found. Speeds up updating UI as you don't need to iterate through all catagories and challenges to find the challenge. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CategoryPosition;
+
+	/* The access token for the user of that challenge. You can use that user_token to directly send another event and therefore to chain different SCILL pieces together. For example you can send another event driving another challenge or battle pass whenever a user has completed a challenge. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString UserToken;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FChallenge NewChallenge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FChallenge OldChallenge;
+
+	static FChallengeChanged FromScillApiChallengeWebhookPayload(const ScillSDK::ScillApiChallengeWebhookPayload o);
 };

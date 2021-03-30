@@ -5,7 +5,21 @@
 #include "CoreMinimal.h"
 #include "WebSocketsModule.h"
 #include "IWebSocket.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
 #include "ScillMqtt.generated.h"
+
+/* Webhook type of your Battle Pass Update.
+*/
+UENUM(meta = (DisplayName="Battle Pass Payload Type"))
+enum BattlePassPayloadType
+{
+	ChallengeChanged = 0,
+	RewardClaimed = 1,
+	Expired = 2
+};
+
+DECLARE_DYNAMIC_DELEGATE_FourParams(FBattlePassChangeReceived, BattlePassPayloadType, Type, FBattlePassChanged, BattlePassChanged, FBattlePassLevelClaimed, BattlePassLevelClaimed, FBattlePassExpired, BattlePassExpired);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FChallengeChangeReceived, FChallengeChanged, Payload);
 
 /**
 	*
@@ -18,18 +32,28 @@ public:
 
 	UScillMqtt();
 
-	void TestConnectPacket();
+	void SubscribeToTopicBP(FString Topic, FBattlePassChangeReceived callback);
+	void SubscribeToTopicC(FString Topic, FChallengeChangeReceived callback);
+	void SubscribeToTopic(FString Topic);
 
+	bool MqttConnected;
+	bool Destroyed;
+	void Ping();
+	void Destroy();
 private:
 	void OnConnect();
 	void OnConnectionError(const FString& Error);
 	void OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaining);
+	void Disconnect();
+
+	/*Key: Topic, Value: Callback*/
+	mutable TMap<FString, FBattlePassChangeReceived> callbacksBattlePassChanges;
+	mutable TMap<FString, FChallengeChangeReceived> callbacksChallengeChanges;
 
 	uint16 CurrentPacketIdentifier = 0;
 
 	TSharedPtr<IWebSocket> mqttWs;
 };
-
 
 enum ScillMqttPacketType {
 	CONNECT = 1,
@@ -63,27 +87,31 @@ enum ScillMqttConnectFlags {
 	USER_NAME = 128
 };
 
-class ScillMqttPacketBase
+UCLASS()
+class UScillMqttPacketBase : public UObject
 {
+	GENERATED_BODY()
 public:
-	virtual uint8* ToBuffer();
-	static ScillMqttPacketBase FromBuffer(uint8* buffer);
-	static ScillMqttPacketType GetPacketTypeFromBuffer(uint8* buffer);
-	static uint64 GetRemainingLengthFromBuffer(uint8* buffer);
+	virtual TArray<uint8> ToBuffer();
+	static UScillMqttPacketBase* FromBuffer(TArray<uint8> buffer);
+	static ScillMqttPacketType GetPacketTypeFromBuffer(TArray<uint8> buffer);
+	static uint64 GetRemainingLengthFromBuffer(TArray<uint8> buffer);
 	static uint64 CalculateLengthFromRemaining(uint64 remainingLength);
 	static uint8 FixedHeaderLengthFromRemaining(uint64 remainingLength);
 
 	ScillMqttPacketType PacketType;
 	uint8 PacketFlags;
 	uint64 RemainLength;
-	uint8* Buffer;
+	TArray<uint8> Buffer;
 	uint64 Length;
 };
 
-class ScillMqttPacketConnect : public ScillMqttPacketBase
+UCLASS()
+class UScillMqttPacketConnect : public UScillMqttPacketBase
 {
+	GENERATED_BODY()
 public:
-	uint8* ToBuffer() override;
+	TArray<uint8> ToBuffer() override;
 	void SetConnectFlags();
 
 	FString ProtocolName = TEXT("MQTT");
@@ -110,19 +138,23 @@ enum ScillMqttConnackCode
 	REFUSED_AUTH = 5			// Connection Refused, not authorized										// The Client is not authorized to connect
 };
 
-class ScillMqttPacketConnack : public ScillMqttPacketBase
+UCLASS()
+class UScillMqttPacketConnack : public UScillMqttPacketBase
 {
+	GENERATED_BODY()
 public:
-	static ScillMqttPacketConnack FromBuffer(uint8* buffer);
+	static UScillMqttPacketConnack* FromBuffer(TArray<uint8> buffer);
 
 	ScillMqttConnackCode Code;
 	bool SessionPresent;
 };
 
-class ScillMqttPacketPublish : public ScillMqttPacketBase
+UCLASS()
+class UScillMqttPacketPublish : public UScillMqttPacketBase
 {
+	GENERATED_BODY()
 public:
-	static ScillMqttPacketPublish FromBuffer(uint8* buffer);
+	static UScillMqttPacketPublish* FromBuffer(TArray<uint8> buffer);
 
 	bool Duplicate;
 	uint8 QoS;
@@ -134,15 +166,41 @@ public:
 	FString Payload;
 };
 
-class ScillMqttPacketSubscribe : public ScillMqttPacketBase
+UCLASS()
+class UScillMqttPacketSubscribe : public UScillMqttPacketBase
 {
+	GENERATED_BODY()
 public:
-	uint8* ToBuffer() override;
+	TArray<uint8> ToBuffer() override;
 
 	uint16 PacketIdentifier;
 	TArray<FString> TopicFilter;
 
 	TArray<uint8> RequestedQoS;
+};
+
+UCLASS()
+class UScillMqttPacketPing : public UScillMqttPacketBase
+{
+	GENERATED_BODY()
+public:
+	TArray<uint8> ToBuffer() override;
+};
+
+UCLASS()
+class UScillMqttPacketDisconnect : public UScillMqttPacketBase
+{
+	GENERATED_BODY()
+public:
+	TArray<uint8> ToBuffer() override;
+};
+
+UCLASS()
+class UScillMqttPacketPingResp : public UScillMqttPacketBase
+{
+	GENERATED_BODY()
+public:
+	static UScillMqttPacketPingResp* FromBuffer(TArray<uint8> buffer);
 };
 
 namespace StringHelper
@@ -169,6 +227,38 @@ namespace StringHelper
 		{
 			OutBytes[i] += 1;
 		}
+
+		return count;
+	}
+
+	static FString TArrayToString(const TArray<uint8> In, int32 Start, int32 Count)
+	{
+		uint8* buffer = new uint8[Count];
+
+		for (int i = 0; i < Count; i++)
+		{
+			buffer[i] = In[i + Start];
+		}
+		
+		FString result = BytesToStringFixed(buffer, Count);
+
+		delete buffer;
+
+		return result;
+	}
+
+	static int32 StringToTArray(const FString& String, TArray<uint8>& OutArray, int32 MaxBufferSize, int32 Start)
+	{
+		uint8* buffer = new uint8[MaxBufferSize];
+
+		int32 count = StringToBytesFixed(String, buffer, MaxBufferSize);
+
+		for (int i = 0; i < count; i++)
+		{
+			OutArray[i + Start] = buffer[i];
+		}
+
+		delete buffer;
 
 		return count;
 	}

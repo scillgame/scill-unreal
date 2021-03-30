@@ -18,6 +18,7 @@ void UScillClient::SetAccessToken(FString newAccessToken)
 	this->battlePassesApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->challengesApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
+	this->authApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->AccessToken = newAccessToken;
 	
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
@@ -31,6 +32,8 @@ FString UScillClient::GetAccessToken() const
 {
 	auto value = FString();
 
+	value = this->AccessToken;
+
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 	if (gameInstance->Implements<UScillLevelPersistenceInterface>())
 	{
@@ -43,6 +46,8 @@ FString UScillClient::GetAccessToken() const
 FString UScillClient::GetUserId() const
 {
 	auto value = FString();
+
+	value = this->UserId;
 
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 	if (gameInstance->Implements<UScillLevelPersistenceInterface>())
@@ -377,6 +382,38 @@ void UScillClient::SendEvent(FScillEventPayload payload, FHttpResponseReceived r
 	eventsApi.SendEvent(request, delegate);
 }
 
+// ----------------------------------------------------------------------------------------------------------------------------
+// Realtime Updates
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::ReceiveChallengeUpdates(FChallengeChangeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicRequest();
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapChallengeChangeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiAuthApi::FGetUserChallengesNotificationTopicDelegate::CreateUObject(this, &UScillClient::ReceiveChallengeChangeTopic, guid);
+
+	authApi.GetUserChallengesNotificationTopic(request, delegate);
+}
+
+void UScillClient::ReceiveBattlePassUpdates(FString battlePassId, FBattlePassChangeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicRequest();
+
+	request.BattlePassId = battlePassId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapBattlePassChangeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiAuthApi::FGetUserBattlePassNotificationTopicDelegate::CreateUObject(this, &UScillClient::ReceiveBattlePassChangeTopic, guid);
+
+	authApi.GetUserBattlePassNotificationTopic(request, delegate);
+}
+
 
 // ----------------------------------------------------------------------------------------------------------------------------
 // UActor Event Implementations
@@ -386,6 +423,8 @@ void UScillClient::SendEvent(FScillEventPayload payload, FHttpResponseReceived r
 void UScillClient::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	mqtt = NewObject<UScillMqtt>();
 
 	auto accessToken = FString();
 	auto userId = FString();
@@ -416,8 +455,28 @@ void UScillClient::BeginPlay()
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
 	this->eventsApi.SetURL(TEXT("https://ep.scillgame.com"));
 
-	// ...
-	
+	this->authApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
+	this->authApi.SetURL(TEXT("https://us.scillgame.com"));
+
+	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, false);
+}
+
+void UScillClient::MqttPing()
+{
+	if(mqtt && mqtt->MqttConnected)
+		mqtt->Ping();
+}
+
+void UScillClient::EndPlay(const EEndPlayReason::Type EndPlayReason) 
+{
+	if (GetWorld() && GetWorld()->GetTimerManager().IsTimerActive(PingTimer))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(PingTimer);
+	}
+	if (mqtt && !(mqtt->Destroyed))
+	{
+		mqtt->Destroy();
+	}
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -659,6 +718,28 @@ void UScillClient::ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::S
 {
 	auto callback = callbackMapResponseReceived.FindRef(guid);
 	callback.ExecuteIfBound(Response.IsSuccessful());
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// Realtime Updates Handlers
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::ReceiveBattlePassChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapBattlePassChangeReceived.FindRef(guid);
+
+	mqtt->SubscribeToTopicBP(Response.Content.Topic, callback);
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapChallengeChangeReceived.FindRef(guid);
+
+	mqtt->SubscribeToTopicC(Response.Content.Topic, callback);
 
 	callbackMapResponseReceived.Remove(guid);
 }
