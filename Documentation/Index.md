@@ -4,8 +4,6 @@ Our Unreal Plugin offers easy access to the Scill HTTP API for simple requests a
 
 Since this Plugin is completely open source you are welcomed to adjust them to your own needs, extending or changing the classes.
 
-<!-- Headline Image -->
-
 ## Source Code
 
 You can find the source code to our Unreal Plugin in our public Github repository: https://github.com/scillgame/scill-unreal. If you encounter any bugs or issues with the Plugin, please let us know in the Issues tab of Github.
@@ -16,11 +14,11 @@ If you fix a bug in our code base, please commit your bugfix in a separate branc
 
 Installation of the Plugin is fairly easy. Just download the source from our Github repository and copy the content into the `Plugins/ScillSDK` subdirectory of your Project. If not yet present, create any folder needed.
 
-![PluginFolder.png](.\attachments\PluginFolder.png)
+![PluginFolder.png](/attachments/PluginFolder.png)
 
 After that you normally only have to open the project and start working. It might be necessary to enable the Plugin under `Edit->Plugins` in the Unreal Editor's menu bar.
 
-![MenuBar_Plugins.png](.\attachments\MenuBar_Plugins.png)
+![MenuBar_Plugins.png](/attachments/MenuBar_Plugins.png)
 
 You should not need to compile the source code. If this is not the case you will have to install Visual Studio with the correct workflow modules - refer to Epic Game's documentation about that for more details: https://docs.unrealengine.com/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/index.html.
 
@@ -47,7 +45,7 @@ The other two parts of the code are:
 1. ScillApiWrapper - this is code generated using the [OpenAPI UE4 Generator](https://openapi-generator.tech/). The Plugin uses this code to easily maintain changes to the Scill API. 
 2. ScillHelpers - currently only a very rudimentary MQTT Client resides in this folder. It wraps Scill's MQTT Server to enable real-time updates.
 
-![PluginStructure.png](.\attachments\PluginStructure.png)
+![PluginStructure.png](/attachments/PluginStructure.png)
 
 The next sections describe the Blueprint Classes and how to use them in your project.
 
@@ -467,13 +465,13 @@ Open it and go the _Class Settings_. Then in the Details Pane you can select to 
 
 Best practice is to simply create an instance variable for each, the user id and access token, and just set or read them on the respective methods.
 
-![GameInstance.png](.\attachments\GameInstance.png)
+![GameInstance.png](/attachments/GameInstance.png)
 
 ### ScillClient Component
 
 This component should be added to your game's custom `PlayerController`. It handles all requests that the client of your game has. Since it lives on the client installed on the player's device, it only polls the state of Scill challenges, battle passes etc.
 
-![ScillClientComponent.png](.\attachments\ScillClientComponent.png)
+![ScillClientComponent.png](/attachments/ScillClientComponent.png)
 
 #### Variables
 
@@ -483,7 +481,7 @@ The Scill Client retains the User Id, Access Token and App Id for its lifetime. 
 
 Use the Access Token and User Id variables of the Scill Client to read or write them from your Blueprint Graph.
 
-![SetAccessToken.png](.\attachments\SetAccessToken.png)
+![SetAccessToken.png](/attachments/SetAccessToken.png)
 
 The setter and getter functions of the Access Token and User Id also try to set and get these on the current Game Instance. If the client's Game Instance implements the [Level Persistency Interface](#level-persistency-interface) these functions set and get the access token and user id there. This ensures that these values are persistent across levels or lobby menues. If the Game Instance does not implement that interface it simply uses the values present on the Scill Client Component. In that case you need to make sure to share these values across levels yourself.
 
@@ -495,7 +493,7 @@ Before calling any other function you should make sure to have an access token r
 
 The App Id should not change during game play and thus can be entered as a default value directly in the details pane of the Scill Client Component. Note that this is **not your ApiKey!**
 
-![ScillClientVariables.png](.\attachments\ScillClientVariables.png)
+![ScillClientVariables.png](/attachments/ScillClientVariables.png)
 
 #### Personal Challenges Functions
 
@@ -505,7 +503,7 @@ The Scill Client provides several functions to access the Personal Challenge of 
 
 Activate a personal challenge by id. After activating the challenge tracks changes coming from events.
 
-![ActivatePersonalChallenge.png](.\attachments\ActivatePersonalChallenge.png)
+![ActivatePersonalChallenge.png](/attachments/ActivatePersonalChallenge.png)
 
 **Inputs:**
 
@@ -520,7 +518,7 @@ Activate a personal challenge by id. After activating the challenge tracks chang
 
 Cancels an active personal challenge by id. This stops tracking changes coming from events.
 
-![CancelPersonalChallenge.png](.\attachments\CancelPersonalChallenge.png)
+![CancelPersonalChallenge.png](/attachments/CancelPersonalChallenge.png)
 
 **Inputs:**
 
@@ -535,7 +533,7 @@ Cancels an active personal challenge by id. This stops tracking changes coming f
 
 Claims the Reward of a completed personal challenge. Once claimed the challenge may be activated again if it is defined as repeatable.
 
-![ClaimPersonalChallengeReward.png](.\attachments\ClaimPersonalChallengeReward.png)
+![ClaimPersonalChallengeReward.png](/attachments/ClaimPersonalChallengeReward.png)
 
 **Inputs:**
 
@@ -550,7 +548,7 @@ Claims the Reward of a completed personal challenge. Once claimed the challenge 
 
 Retrieves a list of all active personal challenges. I.e. a list of all challenges that are currently tracking changes from events.
 
-![GetActivePersonalChallenges.png](.\attachments\GetActivePersonalChallenges.png)
+![GetActivePersonalChallenges.png](/attachments/GetActivePersonalChallenges.png)
 
 **Inputs:**
 
@@ -565,7 +563,7 @@ _none_
 
 Retrieves a list of all personal challenges.
 
-![GetAllPersonalChallenges.png](.\attachments\GetAllPersonalChallenges.png)
+![GetAllPersonalChallenges.png](/attachments/GetAllPersonalChallenges.png)
 
 **Inputs:**
 
@@ -580,7 +578,7 @@ _none_
 
 Retrieves a list of uncompleted personal challenges.
 
-![GetActivePersonalChallenges.png](.\attachments\GetActivePersonalChallenges.png)
+![GetActivePersonalChallenges.png](/attachments/GetActivePersonalChallenges.png)
 
 **Inputs:**
 
@@ -595,7 +593,7 @@ _none_
 
 Retrieves a list of unfinished personal challenges.
 
-![GetPersonalChallenges.png](.\attachments\GetPersonalChallenges.png)
+![GetPersonalChallenges.png](/attachments/GetPersonalChallenges.png)
 
 **Inputs:**
 
@@ -610,7 +608,7 @@ _none_
 
 Retrieves a specific personal challenge by id.
 
-![GetPersonalChallengeById.png](.\attachments\GetPersonalChallengeById.png)
+![GetPersonalChallengeById.png](/attachments/GetPersonalChallengeById.png)
 
 **Inputs:**
 
@@ -625,7 +623,7 @@ Retrieves a specific personal challenge by id.
 
 Unlocks a specific personal challenge by id. After that it can be activated (if not set to activate automatically).
 
-![UnlockPersonalChallenge.png](.\attachments\UnlockPersonalChallenge.png)
+![UnlockPersonalChallenge.png](/attachments/UnlockPersonalChallenge.png)
 
 **Inputs:**
 
@@ -644,7 +642,7 @@ The Scill Client provides several functions to access the app's battle passes an
 
 Activates a specific battle pass level by id. It then tracks changes on its challenges.
 
-![ActivateBattlePassLevel.png](.\attachments\ActivateBattlePassLevel.png)
+![ActivateBattlePassLevel.png](/attachments/ActivateBattlePassLevel.png)
 
 **Inputs:**
 
@@ -658,7 +656,7 @@ Activates a specific battle pass level by id. It then tracks changes on its chal
 
 Claims the reward of a specific battle pass level by id. This will then trigger according webhooks so that you can unlock the reward on your game's server.
 
-![ClaimBattlePassLevel.png](.\attachments\ClaimBattlePassLevel.png)
+![ClaimBattlePassLevel.png](/attachments/ClaimBattlePassLevel.png)
 
 **Inputs:**
 
@@ -672,7 +670,7 @@ Claims the reward of a specific battle pass level by id. This will then trigger 
 
 Retrieves all active battle passes associated with this user.
 
-![GetActiveBattlePasses.png](.\attachments\GetActiveBattlePasses.png)
+![GetActiveBattlePasses.png](/attachments/GetActiveBattlePasses.png)
 
 **Inputs:**
 
@@ -687,7 +685,7 @@ _none_
 
 Retrieves a battle passes specified by id.
 
-![GetBattlePass.png](.\attachments\GetBattlePass.png)
+![GetBattlePass.png](/attachments/GetBattlePass.png)
 
 **Inputs:**
 
@@ -702,7 +700,7 @@ Retrieves a battle passes specified by id.
 
 Retrieves all levels associated with the specified battle pass.
 
-![GetBattlePassLevels.png](.\attachments\GetBattlePassLevels.png)
+![GetBattlePassLevels.png](/attachments/GetBattlePassLevels.png)
 
 **Inputs:**
 
@@ -717,7 +715,7 @@ Retrieves all levels associated with the specified battle pass.
 
 Retrieves all battle passes associated with your app.
 
-![GetBattlePasses.png](.\attachments\GetBattlePasses.png)
+![GetBattlePasses.png](/attachments/GetBattlePasses.png)
 
 **Inputs:**
 
@@ -732,7 +730,7 @@ _none_
 
 Unlocks a battle pass for the user. It can then start to activate its levels for challenge tracking.
 
-![UnlockBattlePass.png](.\attachments\UnlockBattlePass.png)
+![UnlockBattlePass.png](/attachments/UnlockBattlePass.png)
 
 **Inputs:**
 
@@ -761,7 +759,7 @@ Starts monitoring changes to the specified battle pass. Whenever a change occurs
 
 Unlike the other functions on these classes, the callback function here will be stored permanently and called multiple times instead of once.
 
-![ReceiveBattlePassUpdates.png](.\attachments\ReceiveBattlePassUpdates.png)
+![ReceiveBattlePassUpdates.png](/attachments/ReceiveBattlePassUpdates.png)
 
 **Inputs:**
 
@@ -783,7 +781,7 @@ Starts monitoring changes to all personal challenges of the current user. Whenev
 
 Unlike the other functions on these classes, the callback function here will be stored permanently and called multiple times instead of once.
 
-![ReceiveChallengeUpdates.png](.\attachments\ReceiveChallengeUpdates.png)
+![ReceiveChallengeUpdates.png](/attachments/ReceiveChallengeUpdates.png)
 
 **Inputs:**
 
@@ -801,7 +799,7 @@ This component should be added to your game's custom `GameMode`. It has authorit
 
 This can be used to send an event to the SCILL Api that will process the corresponding active challenges and battle passes.
 
-![SendEvent.png](.\attachments\SendEvent.png)
+![SendEvent.png](/attachments/SendEvent.png)
 
 **Inputs:**
 
@@ -826,10 +824,10 @@ Generates an access token. Should be initiated by a client and then, using repli
 - Success: boolean. whether the request was processed successfully
 
 _Scill Client/Player Controller - Call the generate access token function on your game mode. The input of the client's player controller is passed to the Server together with the saved user id from the Scill Client Component and then on the server you can access the game mode:_
-![GenerateAccessTokenClient1.png](.\attachments\GenerateAccessTokenClient1.png)
+![GenerateAccessTokenClient1.png](/attachments/GenerateAccessTokenClient1.png)
 
 _Scill Client Backend/Game Mode - Here you can simply call the Generate Access Token function with the passed User Id and the event callback reference. When executed the event is automatically replicated to the client again._
-![GenerateAccessTokenServer.png](.\attachments\GenerateAccessTokenServer.png)
+![GenerateAccessTokenServer.png](/attachments/GenerateAccessTokenServer.png)
 
 _Scill Client/Player Controller - Called once the access token was generated. This passes the access token back to the client's player controller. We just need to save it now:_
-![GenerateAccessTokenClient2.png](.\attachments\GenerateAccessTokenClient2.png)
+![GenerateAccessTokenClient2.png](/attachments/GenerateAccessTokenClient2.png)
