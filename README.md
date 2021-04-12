@@ -19,7 +19,7 @@ Developer documentation can be found here: [https://developers.scillgame.com](ht
 
 ## Documentation
 
-See [here](/documentation/Index.md) for more information on how to download, install and get started with this plugin. Also you can find a detailed reference for each implemented class and function.
+See [here](/Documentation/Index.md) for more information on how to download, install and get started with this plugin. Also you can find a detailed reference for each implemented class and function.
 
 ## Working on the Code
 
