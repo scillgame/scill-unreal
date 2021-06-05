@@ -268,13 +268,9 @@ inline void WriteJsonValue(JsonWriter& Writer, const TMap<FString, T>& Value)
 inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, FString& Value)
 {
 	FString TmpValue;
-	if (JsonValue->TryGetString(TmpValue))
-	{
-		Value = TmpValue;
-		return true;
-	}
-	else
-		return false;
+	JsonValue->TryGetString(TmpValue);
+	Value = TmpValue;
+	return true;
 }
 
 inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, FDateTime& Value)

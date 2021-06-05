@@ -199,7 +199,7 @@ FBattlePassLevel FBattlePassLevel::FromScillApiBattlePassLevel(const ScillSDK::S
 		{
 			challenges.Add(FBattlePassLevelChallenge::FromScillApiBattlePassLevelChallenge(c));
 		}
-
+	n.Challenges = challenges;
 
 	return n;
 }
