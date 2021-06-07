@@ -24,6 +24,7 @@ void UWidgetBattlePassCanvas::NativeConstruct()
     UnlockBattlePass->OnReleased.Add(buttonClickedDelegate);
 
     BattlePassLevelsWidget->LevelButtonDelegate.BindDynamic(this, &UWidgetBattlePassCanvas::OnShowLevelButtonClicked);
+    LevelChallengesWidget->ClaimRewardDelegate.BindDynamic(this, &UWidgetBattlePassCanvas::OnClaimRewardClicked);
 
     QueryBattlePasses();
 }
@@ -43,6 +44,8 @@ void UWidgetBattlePassCanvas::ReceiveBattlePassesResponse(const TArray<FBattlePa
 
 void UWidgetBattlePassCanvas::PopulateBattlePassLevelsData(const TArray<FBattlePassLevel>& BattlePassLevels)
 {
+    CurrentBattlePassLevels = BattlePassLevels;
+
     int currentLevel = 0;
     for (int i = 0; i < BattlePassLevels.Num(); i++)
     {
@@ -91,6 +94,8 @@ void UWidgetBattlePassCanvas::PopulateBattlePassData(const FBattlePass& NewBattl
 {
     BattlePass = NewBattlePass;
 
+    SubscribeToBattlePassChanges();
+
     SetIsBattlePassActive(!BattlePass.UnlockedAt.IsEmpty());
     
     QueryBattlePassLevels(BattlePass.BattlePassId);
@@ -110,16 +115,14 @@ void UWidgetBattlePassCanvas::BattlePassUnlocked(const FBattlePassUnlockInfo& Un
 
 void UWidgetBattlePassCanvas::SetIsBattlePassActive(bool Active)
 {
+    BattlePassName->SetText(FText::AsCultureInvariant(BattlePass.BattlePassName));
+    FDateTime date;
+    FDateTime::ParseIso8601(*BattlePass.EndDate, date);
+    BattlePassEndDate->SetText(FText::AsDate(date));
+
     if (Active)
     {
-        BattlePassName->SetText(FText::AsCultureInvariant(BattlePass.BattlePassName));
-        FDateTime date;
-        FDateTime::ParseIso8601(*BattlePass.EndDate, date);
-        BattlePassEndDate->SetText(FText::AsDate(date));
-
         UnlockBattlePass->SetVisibility(ESlateVisibility::Collapsed);
-        BattlePassName->SetVisibility(ESlateVisibility::Visible);
-        BattlePassEndDate->SetVisibility(ESlateVisibility::Visible);
         BattlePassActiveLevel->SetVisibility(ESlateVisibility::Visible);
         BattlePassLevelsWidget->SetVisibility(ESlateVisibility::Visible);
         LevelChallengesWidget->SetVisibility(ESlateVisibility::Visible);
@@ -128,10 +131,29 @@ void UWidgetBattlePassCanvas::SetIsBattlePassActive(bool Active)
     else
     {
         UnlockBattlePass->SetVisibility(ESlateVisibility::Visible);
-        BattlePassName->SetVisibility(ESlateVisibility::Collapsed);
-        BattlePassEndDate->SetVisibility(ESlateVisibility::Collapsed);
         BattlePassActiveLevel->SetVisibility(ESlateVisibility::Collapsed);
         BattlePassLevelsWidget->SetVisibility(ESlateVisibility::Collapsed);
         LevelChallengesWidget->SetVisibility(ESlateVisibility::Collapsed);
+    }
+}
+
+void UWidgetBattlePassCanvas::OnClaimRewardClicked(FString LevelId)
+{
+    FHttpResponseReceived Delegate;
+    ScillClient->ClaimBattlePassLevel(LevelId, Delegate);
+}
+
+void UWidgetBattlePassCanvas::SubscribeToBattlePassChanges()
+{
+    FBattlePassChangeReceived Delegate;
+    Delegate.BindDynamic(this, &UWidgetBattlePassCanvas::ReceiveBattlePassUpdate);
+    ScillClient->ReceiveBattlePassUpdates(BattlePass.BattlePassId, Delegate);
+}
+
+void UWidgetBattlePassCanvas::ReceiveBattlePassUpdate(BattlePassPayloadType Type, FBattlePassChanged BattlePassChanged, FBattlePassLevelClaimed BattlePassLevelClaimed, FBattlePassExpired BattlePassExpired)
+{
+    if(Type == BattlePassPayloadType::ChallengeChanged)
+    {
+        QueryBattlePasses();
     }
 }

@@ -3,6 +3,15 @@
 
 #include "Widgets/WidgetBattlePassChallenges.h"
 
+void UWidgetBattlePassChallenges::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	FScriptDelegate buttonClickedDelegate;
+	buttonClickedDelegate.BindUFunction(this, "ClaimRewardHandler");
+	ClaimReward->OnReleased.Add(buttonClickedDelegate);
+}
+
 void UWidgetBattlePassChallenges::PopulateBattlePassLevelsData(const TArray<FBattlePassLevel>& BattlePassLevels)
 {
 	CurrentBattlePassLevels.Empty(BattlePassLevels.Num());
@@ -30,4 +39,9 @@ void UWidgetBattlePassChallenges::SwitchToBattlePass(int Id)
 
 		ChallengesPanel->AddChild(ChallengeWidget);
 	}
+}
+
+void UWidgetBattlePassChallenges::ClaimRewardHandler()
+{
+	ClaimRewardDelegate.ExecuteIfBound(CurrentBattlePassLevels[CurrentId].LevelId);
 }

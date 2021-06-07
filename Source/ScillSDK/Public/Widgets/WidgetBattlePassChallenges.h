@@ -7,6 +7,8 @@
 #include "Widgets/WidgetBattlePassChallenge.h"
 #include "WidgetBattlePassChallenges.generated.h"
 
+DECLARE_DYNAMIC_DELEGATE_OneParam(FClaimRewardButtonDelegate, FString, LevelId);
+
 /**
  * 
  */
@@ -17,11 +19,16 @@ class SCILLSDK_API UWidgetBattlePassChallenges : public UUserWidget
 
 public:
 
+	virtual void NativeConstruct() override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UWidgetBattlePassChallenge> ChallengeWidgetType;
 
 	UPROPERTY(meta = (BindWidgetOptional))
 	UPanelWidget* ChallengesPanel;
+
+	UPROPERTY(meta = (BindWidgetOptional))
+	UButton* ClaimReward;
 
 	TArray<FBattlePassLevel> CurrentBattlePassLevels;
 
@@ -32,4 +39,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SwitchToBattlePass(int Id);
+
+	FClaimRewardButtonDelegate ClaimRewardDelegate;
+
+	UFUNCTION()
+		void ClaimRewardHandler();
 };

@@ -48,6 +48,9 @@ public:
 		FBattlePass BattlePass;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TArray<FBattlePassLevel> CurrentBattlePassLevels;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		int BattlePassId;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -86,4 +89,12 @@ protected:
 
 	UFUNCTION()
 		void SetIsBattlePassActive(bool Completed);
+
+	UFUNCTION()
+		void OnClaimRewardClicked(FString LevelId);
+
+		void SubscribeToBattlePassChanges();
+
+	UFUNCTION()
+		void ReceiveBattlePassUpdate(BattlePassPayloadType Type, FBattlePassChanged BattlePassChanged, FBattlePassLevelClaimed BattlePassLevelClaimed, FBattlePassExpired BattlePassExpired);
 };
