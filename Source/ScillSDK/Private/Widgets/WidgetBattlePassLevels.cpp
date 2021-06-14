@@ -24,7 +24,8 @@ void UWidgetBattlePassLevels::PopulateBattlePassLevelData(const TArray<FBattlePa
 	{
 		UWidgetBattlePassLevel* LevelWidget = CreateWidget<UWidgetBattlePassLevel>(this, LevelWidgetType);
 
-		LevelWidget->RewardImage->SetBrushFromTexture(LevelVisuals[*(l.RewardAmount)], true);
+		if(LevelVisuals.Contains(*(l.RewardAmount)))
+			LevelWidget->RewardImage->SetBrushFromTexture(LevelVisuals[*(l.RewardAmount)], true);
 		LevelWidget->Id = i;
 		LevelWidget->LevelName->SetText(FText::Format(FText::FromString(TEXT("Level {0}")), FText::AsNumber(++i)));
 		LevelWidget->LevelButtonDelegate.BindDynamic(this, &UWidgetBattlePassLevels::OnShowLevelButtonClicked);
