@@ -378,11 +378,11 @@ template<typename T>
 inline bool TryGetJsonValue(const TSharedPtr<FJsonObject>& JsonObject, const FString& Key, T& Value)
 {
 	const TSharedPtr<FJsonValue> JsonValue = JsonObject->TryGetField(Key);
-	if (JsonValue.IsValid() && !JsonValue->IsNull())
+	/*if (JsonValue.IsValid() && !JsonValue->IsNull())
 	{
 		return TryGetJsonValue(JsonValue, Value);
-	}
-	return false;
+	}*/
+	return TryGetJsonValue(JsonValue, Value);
 }
 
 template<typename T>
