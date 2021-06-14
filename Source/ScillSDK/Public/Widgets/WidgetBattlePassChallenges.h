@@ -30,8 +30,10 @@ public:
 	UPROPERTY(meta = (BindWidgetOptional))
 	UButton* ClaimReward;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FBattlePassLevel> CurrentBattlePassLevels;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CurrentId;
 
 	UFUNCTION(BlueprintCallable)
