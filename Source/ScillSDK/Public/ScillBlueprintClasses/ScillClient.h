@@ -173,6 +173,12 @@ public:
 		void SendEvent(FScillEventPayload payload, FHttpResponseReceived responseReceived);
 
 	// ----------------------------------------------------
+	// Leaderboards
+
+	/*UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
+		void RetrieveLeaderboard(FScillEventPayload payload, FHttpResponseReceived responseReceived);*/
+
+	// ----------------------------------------------------
 	// Realtime Updates
 
 	/* Start to receive updates from all challenges of the specified battle pass.
