@@ -167,6 +167,12 @@ public:
 		void UnlockPersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
 	// ----------------------------------------------------
+	// Leaderboards
+
+	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
+		void SendEvent(FScillEventPayload payload, FHttpResponseReceived responseReceived);
+
+	// ----------------------------------------------------
 	// Events
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")

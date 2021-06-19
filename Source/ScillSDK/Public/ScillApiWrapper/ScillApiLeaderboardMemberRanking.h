@@ -12,28 +12,29 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiChallenge.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiWrapper/ScillApiLeaderboardRanking.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 /*
- * ScillApiActionResponse
+ * ScillApiLeaderboardMemberRanking
  *
- * Standard response for actions like update or delete. If anything went fine, you&#39;ll receive a HTTP code of 200 and a OK message.
+ * You get these object if you query the leaderboard ranking for a specific user. Only the requested user will be returned.
  */
-class SCILLSDK_API ScillApiActionResponse : public Model
+class SCILLSDK_API ScillApiLeaderboardMemberRanking : public Model
 {
 public:
-    virtual ~ScillApiActionResponse() {}
+    virtual ~ScillApiLeaderboardMemberRanking() {}
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
 	void WriteJson(JsonWriter& Writer) const final;
 
-	/* HTTP status code */
-	int32 Status = 0;
-	FString Message;
-	TOptional<ScillApiChallenge> Challenge;
+	/* The id of the leaderboard */
+	TOptional<FString> LeaderboardId;
+	/* The name of the leaderboard */
+	TOptional<FString> Name;
+	TOptional<ScillApiLeaderboardRanking> Member;
 };
 
 }

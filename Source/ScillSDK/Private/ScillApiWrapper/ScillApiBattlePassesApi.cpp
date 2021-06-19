@@ -54,6 +54,40 @@ bool ScillApiBattlePassesApi::IsValid() const
 	return true;
 }
 
+void ScillApiBattlePassesApi::SetHttpRetryManager(FHttpRetrySystem::FManager& InRetryManager)
+{
+	if(RetryManager != &GetHttpRetryManager())
+	{
+		DefaultRetryManager.Reset();
+		RetryManager = &InRetryManager;
+	}
+}
+
+FHttpRetrySystem::FManager& ScillApiBattlePassesApi::GetHttpRetryManager()
+{
+	return *RetryManager;
+}
+
+FHttpRequestRef ScillApiBattlePassesApi::CreateHttpRequest(const Request& Request) const
+{
+	if (!Request.GetRetryParams().IsSet())
+	{
+		return FHttpModule::Get().CreateRequest();
+	}
+	else
+	{
+		if (!RetryManager)
+		{
+			// Create default retry manager if none was specified
+			DefaultRetryManager = MakeUnique<HttpRetryManager>(6, 60);
+			RetryManager = DefaultRetryManager.Get();
+		}
+
+		const HttpRetryParams& Params = Request.GetRetryParams().GetValue();
+		return RetryManager->CreateRequest(Params.RetryLimitCountOverride, Params.RetryTimeoutRelativeSecondsOverride, Params.RetryResponseCodes, Params.RetryVerbs, Params.RetryDomains);
+	}
+}
+
 void ScillApiBattlePassesApi::HandleResponse(FHttpResponsePtr HttpResponse, bool bSucceeded, Response& InOutResponse) const
 {
 	InOutResponse.SetHttpResponse(HttpResponse);
@@ -103,7 +137,7 @@ bool ScillApiBattlePassesApi::ActivateBattlePassLevel(const ActivateBattlePassLe
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)
@@ -129,7 +163,7 @@ bool ScillApiBattlePassesApi::ClaimBattlePassLevelReward(const ClaimBattlePassLe
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)
@@ -155,7 +189,7 @@ bool ScillApiBattlePassesApi::GetActiveBattlePasses(const GetActiveBattlePassesR
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)
@@ -181,7 +215,7 @@ bool ScillApiBattlePassesApi::GetAllBattlePassLevels(const GetAllBattlePassLevel
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)
@@ -207,7 +241,7 @@ bool ScillApiBattlePassesApi::GetBattlePass(const GetBattlePassRequest& Request,
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)
@@ -233,7 +267,7 @@ bool ScillApiBattlePassesApi::GetBattlePassLevels(const GetBattlePassLevelsReque
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)
@@ -259,7 +293,7 @@ bool ScillApiBattlePassesApi::GetBattlePasses(const GetBattlePassesRequest& Requ
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)
@@ -285,7 +319,7 @@ bool ScillApiBattlePassesApi::GetUnlockedBattlePasses(const GetUnlockedBattlePas
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)
@@ -311,7 +345,7 @@ bool ScillApiBattlePassesApi::UnlockBattlePass(const UnlockBattlePassRequest& Re
 	if (!IsValid())
 		return false;
 
-	FHttpRequestRef HttpRequest = FHttpModule::Get().CreateRequest();
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
 	for(const auto& It : AdditionalHeaderParams)

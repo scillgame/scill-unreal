@@ -21,7 +21,7 @@ namespace ScillSDK
 /*
  * ScillApiBattlePassLevel
  *
- * 
+ * Battle Passes are grouped into levels that contain challenges that must be achieved to unlock the next level. Only challenges for the current level are tracking progress.
  */
 class SCILLSDK_API ScillApiBattlePassLevel : public Model
 {

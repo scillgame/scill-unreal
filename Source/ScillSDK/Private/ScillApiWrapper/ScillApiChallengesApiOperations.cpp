@@ -31,6 +31,14 @@ FString ScillApiChallengesApi::ActivatePersonalChallengeRequest::ComputePath() c
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/activate/{appId}/{challengeId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -87,6 +95,14 @@ FString ScillApiChallengesApi::CancelPersonalChallengeRequest::ComputePath() con
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/cancel/{appId}/{challengeId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -143,6 +159,14 @@ FString ScillApiChallengesApi::ClaimPersonalChallengeRewardRequest::ComputePath(
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/claim/{appId}/{challengeId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -249,6 +273,14 @@ FString ScillApiChallengesApi::GetActivePersonalChallengesRequest::ComputePath()
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/get-in-progress-challenges/{appId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -304,6 +336,22 @@ FString ScillApiChallengesApi::GetAllPersonalChallengesRequest::ComputePath() co
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/all/{appId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(IncludeCategories.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("include_categories=")) + CollectionToUrlString_csv(IncludeCategories.GetValue(), TEXT("include_categories")));
+	}
+	if(ExcludeCategories.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("exclude_categories=")) + CollectionToUrlString_csv(ExcludeCategories.GetValue(), TEXT("exclude_categories")));
+	}
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -360,6 +408,14 @@ FString ScillApiChallengesApi::GetPersonalChallengeByIdRequest::ComputePath() co
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/get/{appId}/{challengeId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -415,6 +471,22 @@ FString ScillApiChallengesApi::GetPersonalChallengesRequest::ComputePath() const
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/get/{appId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(IncludeCategories.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("include_categories=")) + CollectionToUrlString_csv(IncludeCategories.GetValue(), TEXT("include_categories")));
+	}
+	if(ExcludeCategories.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("exclude_categories=")) + CollectionToUrlString_csv(ExcludeCategories.GetValue(), TEXT("exclude_categories")));
+	}
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -470,6 +542,22 @@ FString ScillApiChallengesApi::GetUnresolvedPersonalChallengesRequest::ComputePa
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/unresolved/{appId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(IncludeCategories.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("include_categories=")) + CollectionToUrlString_csv(IncludeCategories.GetValue(), TEXT("include_categories")));
+	}
+	if(ExcludeCategories.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("exclude_categories=")) + CollectionToUrlString_csv(ExcludeCategories.GetValue(), TEXT("exclude_categories")));
+	}
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -526,6 +614,14 @@ FString ScillApiChallengesApi::UnlockPersonalChallengeRequest::ComputePath() con
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/unlock/{appId}/{challengeId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 

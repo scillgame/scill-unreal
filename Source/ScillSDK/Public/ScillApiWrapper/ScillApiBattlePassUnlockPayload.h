@@ -20,7 +20,7 @@ namespace ScillSDK
 /*
  * ScillApiBattlePassUnlockPayload
  *
- * 
+ * Unlocking a battle pass requires some info to be sent so we can validate everything is ok
  */
 class SCILLSDK_API ScillApiBattlePassUnlockPayload : public Model
 {

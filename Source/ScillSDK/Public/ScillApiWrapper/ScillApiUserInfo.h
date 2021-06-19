@@ -13,27 +13,26 @@
 #pragma once
 
 #include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiChallenge.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 /*
- * ScillApiActionResponse
+ * ScillApiUserInfo
  *
- * Standard response for actions like update or delete. If anything went fine, you&#39;ll receive a HTTP code of 200 and a OK message.
+ * Can be any object that is attached to the user. You can set these values in the user service. For example you can provide a user name and an avatar image url.
  */
-class SCILLSDK_API ScillApiActionResponse : public Model
+class SCILLSDK_API ScillApiUserInfo : public Model
 {
 public:
-    virtual ~ScillApiActionResponse() {}
+    virtual ~ScillApiUserInfo() {}
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
 	void WriteJson(JsonWriter& Writer) const final;
 
-	/* HTTP status code */
-	int32 Status = 0;
-	FString Message;
-	TOptional<ScillApiChallenge> Challenge;
+	/* The user name of the user */
+	TOptional<FString> Username;
+	/* The name or URL of an avatar image for a user. */
+	TOptional<FString> AvatarImage;
 };
 
 }
