@@ -338,6 +338,16 @@ FUserInfo FUserInfo::FromScillApiUserInfo(const ScillSDK::ScillApiUserInfo o)
 	return n;
 }
 
+ScillSDK::ScillApiUserInfo FUserInfo::ToScillApiUserInfo(const FUserInfo o)
+{
+	auto n = ScillSDK::ScillApiUserInfo();
+
+	n.Username = o.Username;
+	n.AvatarImage = o.AvatarImage;
+
+	return n;
+}
+
 FLeaderboardRanking FLeaderboardRanking::FromScillApiLeaderboardRanking(const ScillSDK::ScillApiLeaderboardRanking o)
 {
 	auto n = FLeaderboardRanking();

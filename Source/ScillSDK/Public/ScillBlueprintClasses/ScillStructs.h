@@ -835,6 +835,7 @@ public:
 		FString AvatarImage;
 
 	static FUserInfo FromScillApiUserInfo(const ScillSDK::ScillApiUserInfo o);
+	static ScillSDK::ScillApiUserInfo ToScillApiUserInfo(const FUserInfo o);
 };
 
 /*The ranking for the user or team in the leaderboard
