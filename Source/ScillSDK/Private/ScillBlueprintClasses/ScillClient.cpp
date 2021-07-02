@@ -572,7 +572,7 @@ void UScillClient::BeginPlay()
 	this->leaderboardsApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
 	this->leaderboardsApi.SetURL(TEXT("https://ls.scillgame.com"));
 
-	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, false);
+	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, true);
 }
 
 void UScillClient::MqttPing()
