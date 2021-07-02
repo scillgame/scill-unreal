@@ -54,7 +54,7 @@ public:
 		int BattlePassId;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		bool GetBattlePassFromApi;
+		bool GetBattlePassFromApi = true;
 
 	FBattlePassArrayReceived BattlePassArrayReceived;
 	FBattlePassLevelArrayReceived BattlePassLevelsArrayReceived;
