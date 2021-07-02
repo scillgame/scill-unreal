@@ -20,7 +20,7 @@ namespace ScillSDK
 /*
  * ScillApiAccessToken
  *
- * 
+ * As SCILL does not know anything about the users an access token is required to handle authentication. Requesting an access token in the backend returns this object that contains the token which needs to be set as the Authentication Bearer in subsequent requests to the SCILL backend.
  */
 class SCILLSDK_API ScillApiAccessToken : public Model
 {

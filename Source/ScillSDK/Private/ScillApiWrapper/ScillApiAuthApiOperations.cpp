@@ -251,4 +251,111 @@ bool ScillApiAuthApi::GetUserChallengesNotificationTopicResponse::FromJson(const
 	return TryGetJsonValue(JsonValue, Content);
 }
 
+FString ScillApiAuthApi::GetUserInfoRequest::ComputePath() const
+{
+	FString Path(TEXT("/api/v1/user-additional-info"));
+	return Path;
+}
+
+void ScillApiAuthApi::GetUserInfoRequest::SetupHttpRequest(const FHttpRequestRef& HttpRequest) const
+{
+	static const TArray<FString> Consumes = {  };
+	//static const TArray<FString> Produces = { TEXT("application/json") };
+
+	HttpRequest->SetVerb(TEXT("GET"));
+
+	// Default to Json Body request
+	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
+	{
+	}
+	else if (Consumes.Contains(TEXT("multipart/form-data")))
+	{
+	}
+	else if (Consumes.Contains(TEXT("application/x-www-form-urlencoded")))
+	{
+	}
+	else
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Request ContentType not supported (%s)"), *FString::Join(Consumes, TEXT(",")));
+	}
+}
+
+void ScillApiAuthApi::GetUserInfoResponse::SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode)
+{
+	Response::SetHttpResponseCode(InHttpResponseCode);
+	switch ((int)InHttpResponseCode)
+	{
+	case 200:
+		SetResponseString(TEXT("Returns the socket token"));
+		break;
+	case 403:
+		SetResponseString(TEXT("Unauthorized"));
+		break;
+	}
+}
+
+bool ScillApiAuthApi::GetUserInfoResponse::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
+{
+	return TryGetJsonValue(JsonValue, Content);
+}
+
+FString ScillApiAuthApi::SetUserInfoRequest::ComputePath() const
+{
+	FString Path(TEXT("/api/v1/user-additional-info"));
+	return Path;
+}
+
+void ScillApiAuthApi::SetUserInfoRequest::SetupHttpRequest(const FHttpRequestRef& HttpRequest) const
+{
+	static const TArray<FString> Consumes = { TEXT("application/json") };
+	//static const TArray<FString> Produces = { TEXT("application/json") };
+
+	HttpRequest->SetVerb(TEXT("PUT"));
+
+	// Default to Json Body request
+	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
+	{
+		// Body parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+
+		WriteJsonValue(Writer, ScillApiUserInfo);
+		Writer->Close();
+
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
+	}
+	else if (Consumes.Contains(TEXT("multipart/form-data")))
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Body parameter (ScillApiUserInfo) was ignored, not supported in multipart form"));
+	}
+	else if (Consumes.Contains(TEXT("application/x-www-form-urlencoded")))
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Body parameter (ScillApiUserInfo) was ignored, not supported in urlencoded requests"));
+	}
+	else
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Request ContentType not supported (%s)"), *FString::Join(Consumes, TEXT(",")));
+	}
+}
+
+void ScillApiAuthApi::SetUserInfoResponse::SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode)
+{
+	Response::SetHttpResponseCode(InHttpResponseCode);
+	switch ((int)InHttpResponseCode)
+	{
+	case 200:
+		SetResponseString(TEXT("Returns the socket token"));
+		break;
+	case 403:
+		SetResponseString(TEXT("Unauthorized"));
+		break;
+	}
+}
+
+bool ScillApiAuthApi::SetUserInfoResponse::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
+{
+	return TryGetJsonValue(JsonValue, Content);
+}
+
 }

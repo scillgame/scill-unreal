@@ -12,6 +12,7 @@
 #include "ScillApiWrapper/ScillApiChallengesApiOperations.h"
 #include "ScillApiWrapper/ScillApiEventsApi.h"
 #include "ScillApiWrapper/ScillApiAuthApi.h"
+#include "ScillApiWrapper/ScillApiLeaderboardsApi.h"
 #include "ScillHelpers/ScillMqtt.h"
 #include "Kismet/GameplayStatics.h"
 #include "ScillClient.generated.h"
@@ -23,8 +24,11 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassUnlockInfoReceived, const FBattleP
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassLevelArrayReceived, const TArray<FBattlePassLevel>&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeReceived, const FChallenge&, Challenge, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeCategoryArrayReceived, const TArray<FChallengeCategory>&, ChallengeCategories, bool, Success); 
-
-
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardReceived, const FLeaderboard&, Leaderboard, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardsReceived, const TArray<FLeaderboard>&, Leaderboards, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardRankingReceived, const FLeaderboardMemberRanking&, LeaderboardRanking, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardRankingsReceived, const TArray<FLeaderboardMemberRanking>&, LeaderboardRankings, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FUserInfoReceived, const FUserInfo&, UserInfo, bool, Success);
 
 
 UCLASS(ClassGroup=(ScillSDK), meta=(BlueprintSpawnableComponent), Category = "ScillSDK")
@@ -167,9 +171,31 @@ public:
 		void UnlockPersonalChallenge(FString challengeId, FChallengeReceived responseReceived);
 
 	// ----------------------------------------------------
+	// Leaderboards
+
+	
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboard(FString BoardId, int CurrentPage, int PageSize, FString Language, FLeaderboardReceived responseReceived);
+		
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardRanking(FString MemberType, FString MemberId, FString LeaderboardId, FString Language, FLeaderboardRankingReceived responseReceived);
+	
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardRankings(FString MemberType, FString MemberId, FString Language, FLeaderboardRankingsReceived responseReceived);
+	
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboards(int CurrentPage, int PageSize, FString Language, FLeaderboardsReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void SetUserData(FUserInfo UserInfo, FUserInfoReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetUserData(FUserInfoReceived responseReceived);
+
+	// ----------------------------------------------------
 	// Events
 
-	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
+		UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
 		void SendEvent(FScillEventPayload payload, FHttpResponseReceived responseReceived);
 
 	// ----------------------------------------------------
@@ -196,6 +222,7 @@ private:
 	ScillSDK::ScillApiChallengesApi challengesApi;
 	ScillSDK::ScillApiEventsApi eventsApi;
 	ScillSDK::ScillApiAuthApi authApi;
+	ScillSDK::ScillApiLeaderboardsApi leaderboardsApi;
 	UScillMqtt* mqtt;
 
 	FTimerHandle PingTimer;
@@ -246,6 +273,25 @@ private:
 
 	mutable TMap<FGuid, FChallengeReceived> callbackMapChallengeReceived;
 	mutable TMap<FGuid, FChallengeCategoryArrayReceived> callbackMapChallengeCategoryArrayReceived;
+
+	// ----------------------------------------------------------------------------------
+	// Leaderboard Helpers
+
+	mutable TMap<FGuid, FLeaderboardReceived> callbackMapLeaderboardReceived;
+	mutable TMap<FGuid, FLeaderboardsReceived> callbackMapLeaderboardsReceived;
+	mutable TMap<FGuid, FLeaderboardRankingReceived> callbackMapLeaderboardRankingReceived;
+	mutable TMap<FGuid, FLeaderboardRankingsReceived> callbackMapLeaderboardRankingsReceived; 
+	mutable TMap<FGuid, FUserInfoReceived> callbackMapUserInfoReceived;
+
+	// ----------------------------------------------------------------------------------
+	// Leaderboard Handlers
+
+	void ReceiveGetLeaderboardResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardResponse& Response, FGuid guid) const;
+	void ReceiveGetLeaderboardRankingResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingResponse& Response, FGuid guid) const;
+	void ReceiveGetLeaderboardRankingsResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingsResponse& Response, FGuid guid) const;
+	void ReceiveGetLeaderboardsResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardsResponse& Response, FGuid guid) const;
+	void ReceiveSetUserInfoResponse(const ScillSDK::ScillApiAuthApi::SetUserInfoResponse& Response, FGuid guid) const;
+	void ReceiveGetUserInfoResponse(const ScillSDK::ScillApiAuthApi::GetUserInfoResponse& Response, FGuid guid) const;
 
 	// ----------------------------------------------------------------------------------
 	// Events Handlers

@@ -20,7 +20,7 @@ namespace ScillSDK
 /*
  * ScillApiChallenge
  *
- * 
+ * The challenge object holds all information about a users challenge. It contains information like the duration, the type, progress states like counter and the goal and various other info.
  */
 class SCILLSDK_API ScillApiChallenge : public Model
 {

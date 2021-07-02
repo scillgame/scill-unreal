@@ -21,7 +21,7 @@ namespace ScillSDK
 /*
  * ScillApiEventPayload
  *
- * 
+ * Events are the engine and driver for challenges, battle passes and leaderboards within the SCILL ecosystem. They are a simple, yet powerful data structure. The idea is, that you just send events for actions and things that happen in your game or application. SCILL leverages these info to update and progress challenges or to figure out the users score within a leaderboard. You don&#39;t have to handle any state in your application or game, as everything is done by SCILL.
  */
 class SCILLSDK_API ScillApiEventPayload : public Model
 {
@@ -39,6 +39,8 @@ public:
 	/* This is either single or group. You can send multiple events in one request (group) or send events in sequence. Please note, that depending on your tier you might run into rate limits. */
 	TOptional<FString> EventType;
 	TOptional<ScillApiEventMetaData> MetaData;
+	/* Provide an optional team id that will be used in leaderboards to group results of teams. */
+	TOptional<FString> TeamId;
 };
 
 }

@@ -40,6 +40,7 @@ public class ScillSDK : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
+				"UMG",
 				"Slate",
 				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	

@@ -39,6 +39,8 @@ public:
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
 	FString ChallengeId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::ActivatePersonalChallengeResponse : public Response
@@ -66,6 +68,8 @@ public:
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
 	FString ChallengeId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::CancelPersonalChallengeResponse : public Response
@@ -93,6 +97,8 @@ public:
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
 	FString ChallengeId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::ClaimPersonalChallengeRewardResponse : public Response
@@ -141,6 +147,8 @@ public:
     
 	/* The app id */
 	FString AppId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::GetActivePersonalChallengesResponse : public Response
@@ -166,6 +174,12 @@ public:
     
 	/* The app id */
 	FString AppId;
+	/* A list of categories that should be included in the response. Only the categories provided will be returned */
+	TOptional<TArray<FString>> IncludeCategories;
+	/* A list of categories that should be excluded from the response. All  categories except those listed here will be returned */
+	TOptional<TArray<FString>> ExcludeCategories;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::GetAllPersonalChallengesResponse : public Response
@@ -193,6 +207,8 @@ public:
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
 	FString ChallengeId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::GetPersonalChallengeByIdResponse : public Response
@@ -218,6 +234,12 @@ public:
     
 	/* The app id */
 	FString AppId;
+	/* A list of categories that should be included in the response. Only the categories provided will be returned */
+	TOptional<TArray<FString>> IncludeCategories;
+	/* A list of categories that should be excluded from the response. All  categories except those listed here will be returned */
+	TOptional<TArray<FString>> ExcludeCategories;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::GetPersonalChallengesResponse : public Response
@@ -243,6 +265,12 @@ public:
     
 	/* The app id */
 	FString AppId;
+	/* A list of categories that should be included in the response. Only the categories provided will be returned */
+	TOptional<TArray<FString>> IncludeCategories;
+	/* A list of categories that should be excluded from the response. All  categories except those listed here will be returned */
+	TOptional<TArray<FString>> ExcludeCategories;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::GetUnresolvedPersonalChallengesResponse : public Response
@@ -270,6 +298,8 @@ public:
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
 	FString ChallengeId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiChallengesApi::UnlockPersonalChallengeResponse : public Response

@@ -20,7 +20,7 @@ namespace ScillSDK
 /*
  * ScillApiNotificationTopic
  *
- * 
+ * Realtime updates are implemented via MQTT - a resource efficient real time message system. Each user has it&#39;s own channel in our MQTT system that you need to request from the backend. This structure returns the topic for the user provided with the access token.
  */
 class SCILLSDK_API ScillApiNotificationTopic : public Model
 {

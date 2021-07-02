@@ -19,6 +19,7 @@
 #include "ScillApiWrapper/ScillApiError.h"
 #include "ScillApiWrapper/ScillApiForeignUserIdentifier.h"
 #include "ScillApiWrapper/ScillApiNotificationTopic.h"
+#include "ScillApiUserInfo.h"
 
 namespace ScillSDK 
 {
@@ -118,6 +119,54 @@ public:
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
     
     ScillApiNotificationTopic Content;
+};
+
+/* Get additional info stored per user
+ *
+ * Returns additional info object with usernames and avatar image for a user which is used in the leaderboard system
+*/
+class SCILLSDK_API ScillApiAuthApi::GetUserInfoRequest : public Request
+{
+public:
+    virtual ~GetUserInfoRequest() {}
+	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
+	FString ComputePath() const final;
+    
+};
+
+class SCILLSDK_API ScillApiAuthApi::GetUserInfoResponse : public Response
+{
+public:
+    virtual ~GetUserInfoResponse() {}
+	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
+	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
+    
+    ScillApiUserInfo Content;
+};
+
+/* Set additional info stored per user
+ *
+ * Sets user info like username and avatar image which is returned as part of the user rankings in leaderboards.
+*/
+class SCILLSDK_API ScillApiAuthApi::SetUserInfoRequest : public Request
+{
+public:
+    virtual ~SetUserInfoRequest() {}
+	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
+	FString ComputePath() const final;
+    
+	/* UserInfo object stored in the SCILL database for the user */
+	ScillApiUserInfo ScillApiUserInfo;
+};
+
+class SCILLSDK_API ScillApiAuthApi::SetUserInfoResponse : public Response
+{
+public:
+    virtual ~SetUserInfoResponse() {}
+	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
+	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
+    
+    ScillApiUserInfo Content;
 };
 
 }

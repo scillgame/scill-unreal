@@ -40,6 +40,8 @@ public:
 	FString AppId;
 	/* The id of the battle pass level. */
 	FString LevelId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiBattlePassesApi::ActivateBattlePassLevelResponse : public Response
@@ -67,6 +69,8 @@ public:
 	FString AppId;
 	/* The id of the battle pass level. */
 	FString LevelId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiBattlePassesApi::ClaimBattlePassLevelRewardResponse : public Response
@@ -92,6 +96,8 @@ public:
     
 	/* The app id */
 	FString AppId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiBattlePassesApi::GetActiveBattlePassesResponse : public Response
@@ -117,6 +123,8 @@ public:
     
 	/* The app id */
 	FString AppId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiBattlePassesApi::GetAllBattlePassLevelsResponse : public Response
@@ -144,6 +152,8 @@ public:
 	FString AppId;
 	/* The id of the battle pass. It’s the same as in battle_pass_id you received in earlier requests (i.e. getting all active battle passes for a product). */
 	FString BattlePassId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiBattlePassesApi::GetBattlePassResponse : public Response
@@ -171,6 +181,8 @@ public:
 	FString AppId;
 	/* The id of the battle pass. It’s the same as in battle_pass_id you received in earlier requests (i.e. getting all active battle passes for a product). */
 	FString BattlePassId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiBattlePassesApi::GetBattlePassLevelsResponse : public Response
@@ -196,6 +208,8 @@ public:
     
 	/* The app id */
 	FString AppId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiBattlePassesApi::GetBattlePassesResponse : public Response
@@ -221,6 +235,8 @@ public:
     
 	/* The app id */
 	FString AppId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 };
 
 class SCILLSDK_API ScillApiBattlePassesApi::GetUnlockedBattlePassesResponse : public Response
@@ -248,6 +264,8 @@ public:
 	FString AppId;
 	/* The id of the battle pass. It’s the same as in battle_pass_id you received in earlier requests (i.e. getting all active battle passes for a product). */
 	FString BattlePassId;
+	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
+	TOptional<FString> Language;
 	/* Provide purchase info for the battle pass */
 	TOptional<ScillApiBattlePassUnlockPayload> ScillApiBattlePassUnlockPayload;
 };
