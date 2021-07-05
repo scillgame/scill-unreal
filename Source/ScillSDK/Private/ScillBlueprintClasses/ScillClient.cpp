@@ -575,6 +575,32 @@ void UScillClient::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, true);
 }
 
+void UScillClient::RetrieveUserInfoOrSetToDefault()
+{
+	FUserInfoReceived Delegate;
+	Delegate.BindDynamic(this, &UScillClient::UserInfoRetrieved);
+	this->GetUserData(Delegate);
+}
+
+void UScillClient::UserInfoRetrieved(const FUserInfo& UserInfo, bool Success)
+{
+	if (!Success || UserInfo.Username.IsEmpty())
+	{
+		//Send default User Info because there is none yet for this user.
+		FUserInfoReceived Delegate;
+
+		auto ui = FUserInfo();
+		ui.Username = TEXT("John Doe");
+		ui.AvatarImage = TEXT("0");
+
+		this->SetUserData(ui, Delegate);
+	}
+	else
+	{
+		this->CurrentUserInfo = UserInfo;
+	}
+}
+
 void UScillClient::MqttPing()
 {
 	if(mqtt && mqtt->MqttConnected)

@@ -9,6 +9,7 @@
 #include "ScillBlueprintClasses/ScillStructs.h"
 #include "Widgets/WidgetBattlePassLevels.h"
 #include "Widgets/WidgetBattlePassChallenges.h"
+#include "Components/Button.h"
 #include "WidgetBattlePassCanvas.generated.h"
 
 /**

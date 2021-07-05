@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
 #include "Widgets/WidgetBattlePassChallenge.h"
 #include "WidgetBattlePassChallenges.generated.h"
 

@@ -192,6 +192,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetUserData(FUserInfoReceived responseReceived);
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		FUserInfo CurrentUserInfo;
+
+	// ----------------------------------------------------------------------------------
+	// User Info Helpers
+	/*This can be called after receiving a valid access token to make sure that the current user has User Info set for leaderboards.*/
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void RetrieveUserInfoOrSetToDefault();
+
 	// ----------------------------------------------------
 	// Events
 
@@ -310,6 +319,9 @@ private:
 
 	mutable TMap<FGuid, FBattlePassChangeReceived> callbackMapBattlePassChangeReceived;
 	mutable TMap<FGuid, FChallengeChangeReceived> callbackMapChallengeChangeReceived;
+
+	UFUNCTION()
+	void UserInfoRetrieved(const FUserInfo& UserInfo, bool Success);
 
 public:	
 	// Called every frame
