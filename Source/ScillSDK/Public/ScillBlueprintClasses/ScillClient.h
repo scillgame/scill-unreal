@@ -192,6 +192,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void GetUserData(FUserInfoReceived responseReceived);
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		FUserInfo CurrentUserInfo;
+
+	// ----------------------------------------------------------------------------------
+	// User Info Helpers
+	/*This can be called after receiving a valid access token to make sure that the current user has User Info set for leaderboards.*/
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void RetrieveUserInfoOrSetToDefault();
+
 	// ----------------------------------------------------
 	// Events
 
@@ -210,6 +219,11 @@ public:
 	*/
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void ReceiveChallengeUpdates(FChallengeChangeReceived responseReceived);
+
+	/* Start to receive updates from a single leaderboards.
+	*/
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void ReceiveLeaderboardUpdates(FString LeaderboardId, FLeaderboardChangeReceived responseReceived);
 
 
 protected:
@@ -303,13 +317,17 @@ private:
 
 	void ReceiveBattlePassChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserBattlePassNotificationTopicResponse& Response, FGuid guid) const;
 	void ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicResponse& Response, FGuid guid) const;
-
+	void ReceiveLeaderboardChangeTopic(const ScillSDK::ScillApiAuthApi::GetLeaderboardNotificationTopicResponse& Response, FGuid guid) const;
 
 	// ----------------------------------------------------------------------------------
 	// Realtime Updates Helpers
 
 	mutable TMap<FGuid, FBattlePassChangeReceived> callbackMapBattlePassChangeReceived;
 	mutable TMap<FGuid, FChallengeChangeReceived> callbackMapChallengeChangeReceived;
+	mutable TMap<FGuid, FLeaderboardChangeReceived> callbackMapLeaderboardChangeReceived;
+
+	UFUNCTION()
+	void UserInfoRetrieved(const FUserInfo& UserInfo, bool Success);
 
 public:	
 	// Called every frame

@@ -20,6 +20,9 @@
 #include "ScillApiWrapper/ScillApiLeaderboardRanking.h"
 #include "ScillApiWrapper/ScillApiLeaderboardMemberRanking.h"
 #include "ScillApiWrapper/ScillApiLeaderboard.h"
+#include "ScillApiWrapper/ScillApiLeaderboardInfo.h"
+#include "ScillApiWrapper/ScillApiLeaderboardScore.h"
+#include "ScillApiWrapper/ScillApiLeaderboardUpdatePayload.h"
 #include "ScillStructs.generated.h"
 
 /*
@@ -914,4 +917,74 @@ public:
 		TArray<FLeaderboardRanking> GroupedByTeams;
 
 	static FLeaderboard FromScillApiLeaderboard(const ScillSDK::ScillApiLeaderboard o);
+};
+
+/* Contains info about rank and score
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardScore
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The score achieved as an integer value. If you want to store floats, for example laptimes you need to convert them into an int before (i.e. multiply by 100 to get hundreds of seconds and format back to float in UI) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int Score;
+
+	/* The position within the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int Rank;
+
+	static FLeaderboardScore FromScillApiLeaderboardScore(const ScillSDK::ScillApiLeaderboardScore o);
+};
+
+/* The Leaderboard object contains information about the leaderboard itself like the name and the id
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardInfo
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The id of the app */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString AppId;
+	/* The id of the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString LeaderboardId;
+	/* The name of the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Name;
+	/* The event type that triggers this leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString EventType;
+	/* True if this leaderboard sorts the score ascending or false if the ranking is defined by a descending score. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool SortOrderAscending;
+
+	static FLeaderboardInfo FromScillApiLeaderboardInfo(const ScillSDK::ScillApiLeaderboardInfo o);
+};
+
+/* The payload used for realtime updates and webhooks if a leaderboard is updated.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardUpdatePayload
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The type of the webhook, in this case it is leaderboard-ranking-changed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FLeaderboardInfo LeaderboardData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FLeaderboardRanking MemberData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FLeaderboardScore OldLeaderboardRanking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FLeaderboardScore NewLeaderboardRanking;
+
+	static FLeaderboardUpdatePayload FromScillApiLeaderboardUpdatePayload(const ScillSDK::ScillApiLeaderboardUpdatePayload o);
 };

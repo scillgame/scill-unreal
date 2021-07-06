@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Image.h"
+#include "Components/Button.h"
 #include "WidgetBattlePassLevel.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FShowLevelButtonDelegate, int, BattlePassId);

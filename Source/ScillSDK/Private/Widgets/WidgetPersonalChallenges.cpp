@@ -19,13 +19,6 @@ void UWidgetPersonalChallenges::NativeConstruct()
         ScillClient = Controller->FindComponentByClass<UScillClient>();
     }
 
-    /*FScriptDelegate buttonClickedDelegate;
-    buttonClickedDelegate.BindUFunction(this, "UnlockBattlePassHandler");
-    UnlockBattlePass->OnReleased.Add(buttonClickedDelegate);
-
-    BattlePassLevelsWidget->LevelButtonDelegate.BindDynamic(this, &UWidgetBattlePassCanvas::OnShowLevelButtonClicked);
-    LevelChallengesWidget->ClaimRewardDelegate.BindDynamic(this, &UWidgetBattlePassCanvas::OnClaimRewardClicked);*/
-
     QueryChallenges();
     SubscribeToPersonalChallengesChanges();
 }
