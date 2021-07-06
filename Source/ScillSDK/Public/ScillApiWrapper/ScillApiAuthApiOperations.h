@@ -30,10 +30,10 @@ namespace ScillSDK
 class SCILLSDK_API ScillApiAuthApi::GenerateAccessTokenRequest : public Request
 {
 public:
-    virtual ~GenerateAccessTokenRequest() {}
+	virtual ~GenerateAccessTokenRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* Foreign user identifier. */
 	ScillApiForeignUserIdentifier ScillApiForeignUserIdentifier;
 };
@@ -41,11 +41,36 @@ public:
 class SCILLSDK_API ScillApiAuthApi::GenerateAccessTokenResponse : public Response
 {
 public:
-    virtual ~GenerateAccessTokenResponse() {}
+	virtual ~GenerateAccessTokenResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
-    ScillApiAccessToken Content;
+
+	ScillApiAccessToken Content;
+};
+
+/* Get MQTT topic for leaderboard
+ *
+ * Get a topic to be used with an MQTT client to receive real time updates whenever the specified leaderboard changes.
+*/
+class SCILLSDK_API ScillApiAuthApi::GetLeaderboardNotificationTopicRequest : public Request
+{
+public:
+	virtual ~GetLeaderboardNotificationTopicRequest() {}
+	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
+	FString ComputePath() const final;
+
+	/* The id of the leaderboard you want to get notified */
+	FString LeaderboardId;
+};
+
+class SCILLSDK_API ScillApiAuthApi::GetLeaderboardNotificationTopicResponse : public Response
+{
+public:
+	virtual ~GetLeaderboardNotificationTopicResponse() {}
+	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
+	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
+
+	ScillApiNotificationTopic Content;
 };
 
 /* Get a topic to be used with an MQTT client to receive real time updates whenever a battle pass or challenges and levels within the battle pass change
@@ -55,10 +80,10 @@ public:
 class SCILLSDK_API ScillApiAuthApi::GetUserBattlePassNotificationTopicRequest : public Request
 {
 public:
-    virtual ~GetUserBattlePassNotificationTopicRequest() {}
+	virtual ~GetUserBattlePassNotificationTopicRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The battle pass you want to get notified */
 	FString BattlePassId;
 };
@@ -66,11 +91,11 @@ public:
 class SCILLSDK_API ScillApiAuthApi::GetUserBattlePassNotificationTopicResponse : public Response
 {
 public:
-    virtual ~GetUserBattlePassNotificationTopicResponse() {}
+	virtual ~GetUserBattlePassNotificationTopicResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
-    ScillApiNotificationTopic Content;
+
+	ScillApiNotificationTopic Content;
 };
 
 /* Get a topic to be used with an MQTT client to receive real time updates whenever the specified challenge changes.
@@ -80,10 +105,10 @@ public:
 class SCILLSDK_API ScillApiAuthApi::GetUserChallengeNotificationTopicRequest : public Request
 {
 public:
-    virtual ~GetUserChallengeNotificationTopicRequest() {}
+	virtual ~GetUserChallengeNotificationTopicRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The challenge id you want to get notified */
 	FString ChallengeId;
 };
@@ -91,11 +116,11 @@ public:
 class SCILLSDK_API ScillApiAuthApi::GetUserChallengeNotificationTopicResponse : public Response
 {
 public:
-    virtual ~GetUserChallengeNotificationTopicResponse() {}
+	virtual ~GetUserChallengeNotificationTopicResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
-    ScillApiNotificationTopic Content;
+
+	ScillApiNotificationTopic Content;
 };
 
 /* Get a topic to be used with an MQTT client to receive real time updates whenever challenges for the user provided by the access token changes.
@@ -105,20 +130,20 @@ public:
 class SCILLSDK_API ScillApiAuthApi::GetUserChallengesNotificationTopicRequest : public Request
 {
 public:
-    virtual ~GetUserChallengesNotificationTopicRequest() {}
+	virtual ~GetUserChallengesNotificationTopicRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 };
 
 class SCILLSDK_API ScillApiAuthApi::GetUserChallengesNotificationTopicResponse : public Response
 {
 public:
-    virtual ~GetUserChallengesNotificationTopicResponse() {}
+	virtual ~GetUserChallengesNotificationTopicResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
-    ScillApiNotificationTopic Content;
+
+	ScillApiNotificationTopic Content;
 };
 
 /* Get additional info stored per user
@@ -128,20 +153,20 @@ public:
 class SCILLSDK_API ScillApiAuthApi::GetUserInfoRequest : public Request
 {
 public:
-    virtual ~GetUserInfoRequest() {}
+	virtual ~GetUserInfoRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 };
 
 class SCILLSDK_API ScillApiAuthApi::GetUserInfoResponse : public Response
 {
 public:
-    virtual ~GetUserInfoResponse() {}
+	virtual ~GetUserInfoResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
-    ScillApiUserInfo Content;
+
+	ScillApiUserInfo Content;
 };
 
 /* Set additional info stored per user
@@ -151,10 +176,10 @@ public:
 class SCILLSDK_API ScillApiAuthApi::SetUserInfoRequest : public Request
 {
 public:
-    virtual ~SetUserInfoRequest() {}
+	virtual ~SetUserInfoRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* UserInfo object stored in the SCILL database for the user */
 	ScillApiUserInfo ScillApiUserInfo;
 };
@@ -162,11 +187,11 @@ public:
 class SCILLSDK_API ScillApiAuthApi::SetUserInfoResponse : public Response
 {
 public:
-    virtual ~SetUserInfoResponse() {}
+	virtual ~SetUserInfoResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
-    ScillApiUserInfo Content;
+
+	ScillApiUserInfo Content;
 };
 
 }

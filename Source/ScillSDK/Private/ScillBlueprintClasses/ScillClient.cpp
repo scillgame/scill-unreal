@@ -525,6 +525,21 @@ void UScillClient::ReceiveBattlePassUpdates(FString battlePassId, FBattlePassCha
 	authApi.GetUserBattlePassNotificationTopic(request, delegate);
 }
 
+void UScillClient::ReceiveLeaderboardUpdates(FString LeaderboardId, FLeaderboardChangeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiAuthApi::GetLeaderboardNotificationTopicRequest();
+
+	request.LeaderboardId = LeaderboardId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardChangeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiAuthApi::FGetLeaderboardNotificationTopicDelegate::CreateUObject(this, &UScillClient::ReceiveLeaderboardChangeTopic, guid);
+
+	authApi.GetLeaderboardNotificationTopic(request, delegate);
+}
+
 
 // ----------------------------------------------------------------------------------------------------------------------------
 // UActor Event Implementations
@@ -952,6 +967,15 @@ void UScillClient::ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::
 	auto callback = callbackMapChallengeChangeReceived.FindRef(guid);
 
 	mqtt->SubscribeToTopicC(Response.Content.Topic, callback);
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveLeaderboardChangeTopic(const ScillSDK::ScillApiAuthApi::GetLeaderboardNotificationTopicResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapLeaderboardChangeReceived.FindRef(guid);
+
+	mqtt->SubscribeToTopicL(Response.Content.Topic, callback);
 
 	callbackMapResponseReceived.Remove(guid);
 }

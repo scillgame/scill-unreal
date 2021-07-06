@@ -20,7 +20,22 @@ void UWidgetLeaderboard::NativeConstruct()
     }
 
     QueryLeaderboards();
-    //SubscribeToPersonalLeaderboardChanges();
+    SubscribeToLeaderboardChanges();
+}
+
+void UWidgetLeaderboard::SubscribeToLeaderboardChanges()
+{
+    for (auto l : CurrentLeaderboards)
+    {
+        FLeaderboardChangeReceived Delegate;
+        Delegate.BindDynamic(this, &UWidgetLeaderboard::ReceiveLeaderboardUpdate);
+        ScillClient->ReceiveLeaderboardUpdates(l.LeaderboardId, Delegate);
+    }
+}
+
+void UWidgetLeaderboard::ReceiveLeaderboardUpdate(FLeaderboardUpdatePayload LeaderboardChanged)
+{
+    QueryLeaderboards();
 }
 
 void UWidgetLeaderboard::QueryLeaderboards()

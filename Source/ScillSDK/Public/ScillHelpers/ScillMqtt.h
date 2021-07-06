@@ -20,6 +20,7 @@ enum BattlePassPayloadType
 
 DECLARE_DYNAMIC_DELEGATE_FourParams(FBattlePassChangeReceived, BattlePassPayloadType, Type, FBattlePassChanged, BattlePassChanged, FBattlePassLevelClaimed, BattlePassLevelClaimed, FBattlePassExpired, BattlePassExpired);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FChallengeChangeReceived, FChallengeChanged, Payload);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FLeaderboardChangeReceived, FLeaderboardUpdatePayload, Payload);
 
 /**
 	*
@@ -34,6 +35,7 @@ public:
 
 	void SubscribeToTopicBP(FString Topic, FBattlePassChangeReceived callback);
 	void SubscribeToTopicC(FString Topic, FChallengeChangeReceived callback);
+	void SubscribeToTopicL(FString Topic, FLeaderboardChangeReceived callback);
 	void SubscribeToTopic(FString Topic);
 
 	bool MqttConnected;
@@ -49,6 +51,7 @@ private:
 	/*Key: Topic, Value: Callback*/
 	mutable TMap<FString, FBattlePassChangeReceived> callbacksBattlePassChanges;
 	mutable TMap<FString, FChallengeChangeReceived> callbacksChallengeChanges;
+	mutable TMap<FString, FLeaderboardChangeReceived> callbacksLeaderboardChanges;
 
 	uint16 CurrentPacketIdentifier = 0;
 

@@ -58,8 +58,8 @@ private:
 
 	void PopulateLeaderboardDataToChildrenWidgets();
 
-	//void SubscribeToLeaderboardChanges();
+	void SubscribeToLeaderboardChanges();
 
-	/*UFUNCTION()
-		void ReceiveLeaderboardUpdate(FChallengeChanged ChallengeChanged);*/
+	UFUNCTION()
+		void ReceiveLeaderboardUpdate(FLeaderboardUpdatePayload LeaderboardChanged);
 };

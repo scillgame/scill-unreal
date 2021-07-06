@@ -399,3 +399,39 @@ FLeaderboard FLeaderboard::FromScillApiLeaderboard(const ScillSDK::ScillApiLeade
 
 	return n;
 }
+
+FLeaderboardScore FLeaderboardScore::FromScillApiLeaderboardScore(const ScillSDK::ScillApiLeaderboardScore o)
+{
+	auto n = FLeaderboardScore();
+
+	n.Score = o.Score.Get(0);
+	n.Rank = o.Rank.Get(0);
+
+	return n;
+}
+
+FLeaderboardInfo FLeaderboardInfo::FromScillApiLeaderboardInfo(const ScillSDK::ScillApiLeaderboardInfo o)
+{
+	auto n = FLeaderboardInfo();
+
+	n.AppId = o.AppId.Get("");
+	n.LeaderboardId = o.LeaderboardId.Get("");
+	n.Name = o.Name.Get("");
+	n.EventType = o.EventType.Get("");
+	n.SortOrderAscending = o.SortOrderAscending.Get(false);
+
+	return n;
+}
+
+FLeaderboardUpdatePayload FLeaderboardUpdatePayload::FromScillApiLeaderboardUpdatePayload(const ScillSDK::ScillApiLeaderboardUpdatePayload o)
+{
+	auto n = FLeaderboardUpdatePayload();
+
+	n.WebhookType = o.WebhookType.Get("");
+	n.LeaderboardData = FLeaderboardInfo::FromScillApiLeaderboardInfo(o.LeaderboardData.Get(ScillSDK::ScillApiLeaderboardInfo()));
+	n.MemberData = FLeaderboardRanking::FromScillApiLeaderboardRanking(o.MemberData.Get(ScillSDK::ScillApiLeaderboardRanking()));
+	n.OldLeaderboardRanking = FLeaderboardScore::FromScillApiLeaderboardScore(o.OldLeaderboardRanking.Get(ScillSDK::ScillApiLeaderboardScore()));
+	n.NewLeaderboardRanking = FLeaderboardScore::FromScillApiLeaderboardScore(o.NewLeaderboardRanking.Get(ScillSDK::ScillApiLeaderboardScore()));
+
+	return n;
+}
