@@ -15,8 +15,6 @@ Learn more about SCILL here: [https://www.scillgame.com](https://www.scillgame.c
 
 Developer documentation can be found here: [https://developers.scillgame.com](https://developers.scillgame.com/sdks/csharp.html)
 
-
-
 ## Documentation
 
 See [here](/Documentation/Index.md) for more information on how to download, install and get started with this plugin. Also you can find a detailed reference for each implemented class and function.
