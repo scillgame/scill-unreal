@@ -977,10 +977,13 @@ Generates an access token. Should be initiated by a client and then, using repli
 - Success: boolean. whether the request was processed successfully
 
 _Scill Client/Player Controller - Call the generate access token function on your game mode. The input of the client's player controller is passed to the Server together with the saved user id from the Scill Client Component and then on the server you can access the game mode:_
+
 ![GenerateAccessTokenClient1.png](/Documentation/attachments/GenerateAccessTokenClient1.png)
 
 _Scill Client Backend/Game Mode - Here you can simply call the Generate Access Token function with the passed User Id and the event callback reference. When executed the event is automatically replicated to the client again._
+
 ![GenerateAccessTokenServer.png](/Documentation/attachments/GenerateAccessTokenServer.png)
 
 _Scill Client/Player Controller - Called once the access token was generated. This passes the access token back to the client's player controller. We just need to save it now:_
+
 ![GenerateAccessTokenClient2.png](/Documentation/attachments/GenerateAccessTokenClient2.png)

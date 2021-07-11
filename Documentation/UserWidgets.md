@@ -14,7 +14,7 @@ This page gives you insight into how to setup the built-in User Widgets and give
 
 To use the Blueprint Widgets you only need to add one of the `[...]Canvas` Widgets to the Viewport anywhere needed. For them to function properly you will need to add the [Scill Client Component](/Documentation/Blueprints#scill-client-component). to the Player Controller of your game client and use proper values for the App Id and User Id. Once setup, the widgets generate a reference to the Scill Client Component automatically and use it for all needed requests to the Scill API.
 
-[AddToViewport.png](/Documentation/attachments/AddToViewport.png)
+![AddToViewport.png](/Documentation/attachments/AddToViewport.png)
 
 Classes that can be added to the viewport directly are:
 
