@@ -8,7 +8,7 @@ This page gives you insight into how to setup the built-in User Widgets and give
 - You can use any of the Blueprint Widgets in your Blueprint Classes directly or you can inherit your own classes from them. Additionally these Blueprint Widgets are inherited from C++-Classes that take care of the business logic - like polling and distributing the needed data. You can also derive your own classes from these - either in Blueprints or in C++.
 - Since these classes are part of the plugin, they can be found in the `ScillSDK Content` folder of your project after the plugin was enabled. This folder can be accessed via the tree view in the Content Browser or via the button that is highlighted in the image below.
 
-[SwitchToScillSDKContent.png](/Documentation/attachments/SwitchToScillSDKContent.png)
+![SwitchToScillSDKContent.png](/Documentation/attachments/SwitchToScillSDKContent.png)
 
 ## Getting Started with the Blueprint Widgets
 
