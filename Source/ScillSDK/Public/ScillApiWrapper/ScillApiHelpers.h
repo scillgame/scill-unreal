@@ -268,13 +268,9 @@ inline void WriteJsonValue(JsonWriter& Writer, const TMap<FString, T>& Value)
 inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, FString& Value)
 {
 	FString TmpValue;
-	if (JsonValue->TryGetString(TmpValue))
-	{
-		Value = TmpValue;
-		return true;
-	}
-	else
-		return false;
+	JsonValue->TryGetString(TmpValue);
+	Value = TmpValue;
+	return true;
 }
 
 inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, FDateTime& Value)
@@ -382,11 +378,11 @@ template<typename T>
 inline bool TryGetJsonValue(const TSharedPtr<FJsonObject>& JsonObject, const FString& Key, T& Value)
 {
 	const TSharedPtr<FJsonValue> JsonValue = JsonObject->TryGetField(Key);
-	if (JsonValue.IsValid() && !JsonValue->IsNull())
+	if (JsonValue)
 	{
 		return TryGetJsonValue(JsonValue, Value);
 	}
-	return false;
+	return false; // TryGetJsonValue(JsonValue, Value);
 }
 
 template<typename T>

@@ -19,6 +19,7 @@ void UScillClient::SetAccessToken(FString newAccessToken)
 	this->challengesApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
+	this->leaderboardsApi.AddHeaderParam("Authorization", "Bearer " + newAccessToken);
 	this->AccessToken = newAccessToken;
 	
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
@@ -364,6 +365,116 @@ void UScillClient::UnlockPersonalChallenge(FString challengeId, FChallengeReceiv
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------
+// Leaderboards
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::GetLeaderboard(FString BoardId, int CurrentPage, int PageSize, FString Language, FLeaderboardReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRequest();
+
+	request.LeaderboardId = BoardId;
+	request.CurrentPage = CurrentPage;
+	if(PageSize != 0)
+		request.PageSize = PageSize;
+	if(!Language.IsEmpty())
+		request.Language = Language;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsApi::FGetLeaderboardDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardResponse, guid);
+
+	leaderboardsApi.GetLeaderboard(request, delegate);
+}
+
+void UScillClient::GetLeaderboards(int CurrentPage, int PageSize, FString Language, FLeaderboardsReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardsRequest();
+
+	request.CurrentPage = CurrentPage;
+	if (PageSize != 0)
+		request.PageSize = PageSize;
+	if (!Language.IsEmpty())
+		request.Language = Language;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardsReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsApi::FGetLeaderboardsDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardsResponse, guid);
+
+	leaderboardsApi.GetLeaderboards(request, delegate);
+}
+
+void UScillClient::GetLeaderboardRanking(FString MemberType, FString MemberId, FString LeaderboardId, FString Language, FLeaderboardRankingReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingRequest();
+
+	request.LeaderboardId = LeaderboardId;
+	request.MemberType = MemberType;
+	request.MemberId = MemberId;
+
+	if (!Language.IsEmpty())
+		request.Language = Language;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardRankingReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsApi::FGetLeaderboardRankingDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardRankingResponse, guid);
+
+	leaderboardsApi.GetLeaderboardRanking(request, delegate);
+}
+
+void UScillClient::GetLeaderboardRankings(FString MemberType, FString MemberId, FString Language, FLeaderboardRankingsReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingsRequest();
+
+	request.MemberType = MemberType;
+	request.MemberId = MemberId;
+
+	if (!Language.IsEmpty())
+		request.Language = Language;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardRankingsReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsApi::FGetLeaderboardRankingsDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardRankingsResponse, guid);
+
+	leaderboardsApi.GetLeaderboardRankings(request, delegate);
+}
+
+void UScillClient::SetUserData(FUserInfo UserInfo, FUserInfoReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiAuthApi::SetUserInfoRequest();
+
+	request.ScillApiUserInfo = FUserInfo::ToScillApiUserInfo(UserInfo);
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapUserInfoReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiAuthApi::FSetUserInfoDelegate::CreateUObject(this, &UScillClient::ReceiveSetUserInfoResponse, guid);
+
+	authApi.SetUserInfo(request, delegate);
+}
+
+void UScillClient::GetUserData(FUserInfoReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiAuthApi::GetUserInfoRequest();
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapUserInfoReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiAuthApi::FGetUserInfoDelegate::CreateUObject(this, &UScillClient::ReceiveGetUserInfoResponse, guid);
+
+	authApi.GetUserInfo(request, delegate);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
 // Events
 // ----------------------------------------------------------------------------------------------------------------------------
 
@@ -414,6 +525,21 @@ void UScillClient::ReceiveBattlePassUpdates(FString battlePassId, FBattlePassCha
 	authApi.GetUserBattlePassNotificationTopic(request, delegate);
 }
 
+void UScillClient::ReceiveLeaderboardUpdates(FString LeaderboardId, FLeaderboardChangeReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiAuthApi::GetLeaderboardNotificationTopicRequest();
+
+	request.LeaderboardId = LeaderboardId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardChangeReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiAuthApi::FGetLeaderboardNotificationTopicDelegate::CreateUObject(this, &UScillClient::ReceiveLeaderboardChangeTopic, guid);
+
+	authApi.GetLeaderboardNotificationTopic(request, delegate);
+}
+
 
 // ----------------------------------------------------------------------------------------------------------------------------
 // UActor Event Implementations
@@ -458,7 +584,36 @@ void UScillClient::BeginPlay()
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
 	this->authApi.SetURL(TEXT("https://us.scillgame.com"));
 
-	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, false);
+	this->leaderboardsApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
+	this->leaderboardsApi.SetURL(TEXT("https://ls.scillgame.com"));
+
+	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, true);
+}
+
+void UScillClient::RetrieveUserInfoOrSetToDefault()
+{
+	FUserInfoReceived Delegate;
+	Delegate.BindDynamic(this, &UScillClient::UserInfoRetrieved);
+	this->GetUserData(Delegate);
+}
+
+void UScillClient::UserInfoRetrieved(const FUserInfo& UserInfo, bool Success)
+{
+	if (!Success || UserInfo.Username.IsEmpty())
+	{
+		//Send default User Info because there is none yet for this user.
+		FUserInfoReceived Delegate;
+
+		auto ui = FUserInfo();
+		ui.Username = TEXT("John Doe");
+		ui.AvatarImage = TEXT("0");
+
+		this->SetUserData(ui, Delegate);
+	}
+	else
+	{
+		this->CurrentUserInfo = UserInfo;
+	}
 }
 
 void UScillClient::MqttPing()
@@ -711,6 +866,78 @@ void UScillClient::ReceiveUnlockPersonalChallengeResponse(const ScillSDK::ScillA
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------
+// Leaderboards Handlers
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::ReceiveGetLeaderboardResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapLeaderboardReceived.FindRef(guid);
+	callback.ExecuteIfBound(FLeaderboard::FromScillApiLeaderboard(Response.Content), Response.IsSuccessful());
+
+	callbackMapLeaderboardReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveGetLeaderboardRankingResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapLeaderboardRankingReceived.FindRef(guid);
+	callback.ExecuteIfBound(FLeaderboardMemberRanking::FromScillApiLeaderboardMemberRanking(Response.Content), Response.IsSuccessful());
+
+	callbackMapLeaderboardRankingReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveGetLeaderboardRankingsResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingsResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapLeaderboardRankingsReceived.FindRef(guid);
+
+	auto Result = TArray<FLeaderboardMemberRanking>();
+	if (Response.IsSuccessful())
+	{
+		for(ScillSDK::ScillApiLeaderboardMemberRanking r : Response.Content)
+		{
+			Result.Add(FLeaderboardMemberRanking::FromScillApiLeaderboardMemberRanking(r));
+		}
+	}
+
+	callback.ExecuteIfBound(Result, Response.IsSuccessful());
+
+	callbackMapLeaderboardRankingsReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveGetLeaderboardsResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardsResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapLeaderboardsReceived.FindRef(guid);
+
+	auto Result = TArray<FLeaderboard>();
+	if (Response.IsSuccessful())
+	{
+		for (ScillSDK::ScillApiLeaderboard r : Response.Content)
+		{
+			Result.Add(FLeaderboard::FromScillApiLeaderboard(r));
+		}
+	}
+
+	callback.ExecuteIfBound(Result, Response.IsSuccessful());
+
+	callbackMapLeaderboardsReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveSetUserInfoResponse(const ScillSDK::ScillApiAuthApi::SetUserInfoResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapUserInfoReceived.FindRef(guid);
+	callback.ExecuteIfBound(FUserInfo::FromScillApiUserInfo(Response.Content), Response.IsSuccessful());
+
+	callbackMapUserInfoReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveGetUserInfoResponse(const ScillSDK::ScillApiAuthApi::GetUserInfoResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapUserInfoReceived.FindRef(guid);
+	callback.ExecuteIfBound(FUserInfo::FromScillApiUserInfo(Response.Content), Response.IsSuccessful());
+
+	callbackMapUserInfoReceived.Remove(guid);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
 // Events Handlers
 // ----------------------------------------------------------------------------------------------------------------------------
 
@@ -740,6 +967,15 @@ void UScillClient::ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::
 	auto callback = callbackMapChallengeChangeReceived.FindRef(guid);
 
 	mqtt->SubscribeToTopicC(Response.Content.Topic, callback);
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+void UScillClient::ReceiveLeaderboardChangeTopic(const ScillSDK::ScillApiAuthApi::GetLeaderboardNotificationTopicResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapLeaderboardChangeReceived.FindRef(guid);
+
+	mqtt->SubscribeToTopicL(Response.Content.Topic, callback);
 
 	callbackMapResponseReceived.Remove(guid);
 }

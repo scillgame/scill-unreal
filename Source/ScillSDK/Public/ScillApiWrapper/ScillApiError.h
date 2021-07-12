@@ -20,7 +20,7 @@ namespace ScillSDK
 /*
  * ScillApiError
  *
- * 
+ * Errors are reported using this structure. Error messages are human readable and will be translated (if available) in the language provided by the language query parameter.
  */
 class SCILLSDK_API ScillApiError : public Model
 {

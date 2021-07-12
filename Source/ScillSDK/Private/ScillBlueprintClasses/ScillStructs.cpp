@@ -199,7 +199,7 @@ FBattlePassLevel FBattlePassLevel::FromScillApiBattlePassLevel(const ScillSDK::S
 		{
 			challenges.Add(FBattlePassLevelChallenge::FromScillApiBattlePassLevelChallenge(c));
 		}
-
+	n.Challenges = challenges;
 
 	return n;
 }
@@ -325,6 +325,113 @@ FBattlePassLevelClaimed FBattlePassLevelClaimed::FromScillApiBattlePassLevelClai
 	n.WebhookType = o.WebhookType.Get("");
 
 	n.BattlePassLevelRewardClaimed = FBattlePassLevelReward::FromScillApiBattlePassLevelReward(o.BattlePassLevelRewardClaimed.Get(ScillSDK::ScillApiBattlePassLevelReward()));
+
+	return n;
+}
+
+FUserInfo FUserInfo::FromScillApiUserInfo(const ScillSDK::ScillApiUserInfo o)
+{
+	auto n = FUserInfo();
+	n.Username = o.Username.Get("");
+	n.AvatarImage = o.AvatarImage.Get("");
+
+	return n;
+}
+
+ScillSDK::ScillApiUserInfo FUserInfo::ToScillApiUserInfo(const FUserInfo o)
+{
+	auto n = ScillSDK::ScillApiUserInfo();
+
+	n.Username = o.Username;
+	n.AvatarImage = o.AvatarImage;
+
+	return n;
+}
+
+FLeaderboardRanking FLeaderboardRanking::FromScillApiLeaderboardRanking(const ScillSDK::ScillApiLeaderboardRanking o)
+{
+	auto n = FLeaderboardRanking();
+
+	n.MemberId = o.MemberId.Get("");
+	n.MemberType = o.MemberType.Get("");
+	n.Score = o.Score.Get(0);
+	n.Rank = o.Rank.Get(0);
+
+	n.AdditionalInfo = FUserInfo::FromScillApiUserInfo(o.AdditionalInfo.Get(ScillSDK::ScillApiUserInfo()));
+
+	return n;
+}
+
+FLeaderboardMemberRanking FLeaderboardMemberRanking::FromScillApiLeaderboardMemberRanking(const ScillSDK::ScillApiLeaderboardMemberRanking o)
+{
+	auto n = FLeaderboardMemberRanking();
+
+	n.LeaderboardId = o.LeaderboardId.Get("");
+	n.Name = o.Name.Get("");
+
+	n.Member = FLeaderboardRanking::FromScillApiLeaderboardRanking(o.Member.Get(ScillSDK::ScillApiLeaderboardRanking()));
+
+	return n;
+}
+
+FLeaderboard FLeaderboard::FromScillApiLeaderboard(const ScillSDK::ScillApiLeaderboard o)
+{
+	auto n = FLeaderboard();
+
+	n.LeaderboardId = o.LeaderboardId.Get("");
+	n.Name = o.Name.Get("");
+
+	TArray<FLeaderboardRanking> groupedByUsers = TArray<FLeaderboardRanking>();
+	if (o.GroupedByUsers.IsSet())
+		for (auto& c : o.GroupedByUsers.GetValue())
+		{
+			groupedByUsers.Add(FLeaderboardRanking::FromScillApiLeaderboardRanking(c));
+		}
+	n.GroupedByUsers = groupedByUsers;
+
+	TArray<FLeaderboardRanking> groupedByTeams = TArray<FLeaderboardRanking>();
+	if (o.GroupedByTeams.IsSet())
+		for (auto& c : o.GroupedByTeams.GetValue())
+		{
+			groupedByTeams.Add(FLeaderboardRanking::FromScillApiLeaderboardRanking(c));
+		}
+	n.GroupedByTeams = groupedByTeams;
+
+	return n;
+}
+
+FLeaderboardScore FLeaderboardScore::FromScillApiLeaderboardScore(const ScillSDK::ScillApiLeaderboardScore o)
+{
+	auto n = FLeaderboardScore();
+
+	n.Score = o.Score.Get(0);
+	n.Rank = o.Rank.Get(0);
+
+	return n;
+}
+
+FLeaderboardInfo FLeaderboardInfo::FromScillApiLeaderboardInfo(const ScillSDK::ScillApiLeaderboardInfo o)
+{
+	auto n = FLeaderboardInfo();
+
+	n.AppId = o.AppId.Get("");
+	n.LeaderboardId = o.LeaderboardId.Get("");
+	n.Name = o.Name.Get("");
+	n.EventType = o.EventType.Get("");
+	n.SortOrderAscending = o.SortOrderAscending.Get(false);
+
+	return n;
+}
+
+FLeaderboardUpdatePayload FLeaderboardUpdatePayload::FromScillApiLeaderboardUpdatePayload(const ScillSDK::ScillApiLeaderboardUpdatePayload o)
+{
+	auto n = FLeaderboardUpdatePayload();
+
+	n.WebhookType = o.WebhookType.Get("");
+	n.LeaderboardData = FLeaderboardInfo::FromScillApiLeaderboardInfo(o.LeaderboardData.Get(ScillSDK::ScillApiLeaderboardInfo()));
+	n.MemberData = FLeaderboardRanking::FromScillApiLeaderboardRanking(o.MemberData.Get(ScillSDK::ScillApiLeaderboardRanking()));
+	n.OldLeaderboardRanking = FLeaderboardScore::FromScillApiLeaderboardScore(o.OldLeaderboardRanking.Get(ScillSDK::ScillApiLeaderboardScore()));
+	n.NewLeaderboardRanking = FLeaderboardScore::FromScillApiLeaderboardScore(o.NewLeaderboardRanking.Get(ScillSDK::ScillApiLeaderboardScore()));
 
 	return n;
 }

@@ -21,7 +21,7 @@ namespace ScillSDK
 /*
  * ScillApiChallengeCategory
  *
- * 
+ * Challenges are grouped into categories. You can exclude or include categories in queries. Per default all categories will be returned.
  */
 class SCILLSDK_API ScillApiChallengeCategory : public Model
 {

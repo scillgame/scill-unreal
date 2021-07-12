@@ -31,6 +31,14 @@ FString ScillApiBattlePassesApi::ActivateBattlePassLevelRequest::ComputePath() c
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-pass-levels/{appId}/activate/{levelId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -87,6 +95,14 @@ FString ScillApiBattlePassesApi::ClaimBattlePassLevelRewardRequest::ComputePath(
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-pass-levels/{appId}/claim/{levelId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -142,6 +158,14 @@ FString ScillApiBattlePassesApi::GetActiveBattlePassesRequest::ComputePath() con
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}/active"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -197,6 +221,14 @@ FString ScillApiBattlePassesApi::GetAllBattlePassLevelsRequest::ComputePath() co
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-pass-levels/{appId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -253,6 +285,14 @@ FString ScillApiBattlePassesApi::GetBattlePassRequest::ComputePath() const
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}/single/{battlePassId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -309,6 +349,14 @@ FString ScillApiBattlePassesApi::GetBattlePassLevelsRequest::ComputePath() const
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-pass-levels/{appId}/{battlePassId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -364,6 +412,14 @@ FString ScillApiBattlePassesApi::GetBattlePassesRequest::ComputePath() const
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -419,6 +475,14 @@ FString ScillApiBattlePassesApi::GetUnlockedBattlePassesRequest::ComputePath() c
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}/unlocked"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 
@@ -475,6 +539,14 @@ FString ScillApiBattlePassesApi::UnlockBattlePassRequest::ComputePath() const
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}/unlock/{battlePassId}"), PathParams);
 	
+	TArray<FString> QueryParams;
+	if(Language.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
+	}
+	Path += TCHAR('?');
+	Path += FString::Join(QueryParams, TEXT("&"));
+
 	return Path;
 }
 

@@ -21,7 +21,7 @@ namespace ScillSDK
 /*
  * ScillApiActionResponse
  *
- * 
+ * Standard response for actions like update or delete. If anything went fine, you&#39;ll receive a HTTP code of 200 and a OK message.
  */
 class SCILLSDK_API ScillApiActionResponse : public Model
 {

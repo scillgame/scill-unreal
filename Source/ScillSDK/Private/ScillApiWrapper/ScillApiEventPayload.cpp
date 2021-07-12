@@ -43,6 +43,10 @@ void ScillApiEventPayload::WriteJson(JsonWriter& Writer) const
 	{
 		Writer->WriteIdentifierPrefix(TEXT("meta_data")); WriteJsonValue(Writer, MetaData.GetValue());	
 	}
+	if (TeamId.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("team_id")); WriteJsonValue(Writer, TeamId.GetValue());	
+	}
 	Writer->WriteObjectEnd();
 }
 
@@ -59,6 +63,7 @@ bool ScillApiEventPayload::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("event_name"), EventName);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("event_type"), EventType);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("meta_data"), MetaData);
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("team_id"), TeamId);
 
 	return ParseSuccess;
 }

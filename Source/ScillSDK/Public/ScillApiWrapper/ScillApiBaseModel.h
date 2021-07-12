@@ -16,11 +16,38 @@
 #include "Interfaces/IHttpResponse.h"
 #include "Serialization/JsonWriter.h"
 #include "Dom/JsonObject.h"
+#include "HttpRetrySystem.h"
+#include "Containers/Ticker.h"
 
 namespace ScillSDK 
 {
 
 typedef TSharedRef<TJsonWriter<>> JsonWriter;
+using namespace FHttpRetrySystem;
+
+struct SCILLSDK_API HttpRetryManager : public FManager, public FTickerObjectBase
+{
+	using FManager::FManager;
+
+	bool Tick(float DeltaTime) final;
+};
+
+struct SCILLSDK_API HttpRetryParams
+{
+	HttpRetryParams(
+		const FRetryLimitCountSetting& InRetryLimitCountOverride = FRetryLimitCountSetting(),
+		const FRetryTimeoutRelativeSecondsSetting& InRetryTimeoutRelativeSecondsOverride = FRetryTimeoutRelativeSecondsSetting(),
+		const FRetryResponseCodes& InRetryResponseCodes = FRetryResponseCodes(),
+		const FRetryVerbs& InRetryVerbs = FRetryVerbs(),
+		const FRetryDomainsPtr& InRetryDomains = FRetryDomainsPtr()
+	);
+
+	FRetryLimitCountSetting              RetryLimitCountOverride;
+	FRetryTimeoutRelativeSecondsSetting  RetryTimeoutRelativeSecondsOverride;
+	FRetryResponseCodes					 RetryResponseCodes;
+	FRetryVerbs                          RetryVerbs;
+	FRetryDomainsPtr					 RetryDomains;
+};
 
 class SCILLSDK_API Model
 { 
@@ -36,6 +63,13 @@ public:
 	virtual ~Request() {}
 	virtual void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const = 0;
 	virtual FString ComputePath() const = 0;
+
+	/* Enables retry and optionally sets a retry policy for this request */
+	void SetShouldRetry(const HttpRetryParams& Params = HttpRetryParams()) { RetryParams = Params; }
+	const TOptional<HttpRetryParams>& GetRetryParams() const { return RetryParams; }
+
+private:
+	TOptional<HttpRetryParams> RetryParams;
 };
 
 class SCILLSDK_API Response

@@ -104,6 +104,15 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 
 				callback.ExecuteIfBound(FChallengeChanged::FromScillApiChallengeWebhookPayload(challenge));
 			}
+			if (callbacksLeaderboardChanges.Contains(pubPacket->TopicName))
+			{
+				auto callback = this->callbacksLeaderboardChanges.FindRef(pubPacket->TopicName);
+
+				auto leaderboardUpdate = ScillSDK::ScillApiLeaderboardUpdatePayload();
+				leaderboardUpdate.FromJson(ValueObject);
+
+				callback.ExecuteIfBound(FLeaderboardUpdatePayload::FromScillApiLeaderboardUpdatePayload(leaderboardUpdate));
+			}
 		}
 	}
 
@@ -143,6 +152,13 @@ void UScillMqtt::SubscribeToTopicBP(FString Topic, FBattlePassChangeReceived cal
 void UScillMqtt::SubscribeToTopicC(FString Topic, FChallengeChangeReceived callback)
 {
 	callbacksChallengeChanges.Add(Topic, callback);
+
+	this->SubscribeToTopic(Topic);
+}
+
+void UScillMqtt::SubscribeToTopicL(FString Topic, FLeaderboardChangeReceived callback)
+{
+	callbacksLeaderboardChanges.Add(Topic, callback);
 
 	this->SubscribeToTopic(Topic);
 }

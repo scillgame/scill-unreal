@@ -57,7 +57,7 @@ public:
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
     
-	/* Event payload */
+	/* Event payload or team event payload */
 	ScillApiEventPayload ScillApiEventPayload;
 };
 
