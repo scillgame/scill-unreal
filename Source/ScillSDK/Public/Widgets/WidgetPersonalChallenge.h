@@ -5,9 +5,14 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/ProgressBar.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
+
 #include "WidgetPersonalChallenge.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FChallengeButtonsDelegate, int, ChallengeIndex);
+
+class UButton;
+class UTextBlock;
 
 /**
  * 
