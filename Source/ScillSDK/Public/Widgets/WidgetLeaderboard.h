@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "ScillBlueprintClasses/ScillClient.h"
 #include "Widgets/WidgetLeaderboardUserRank.h"
 #include "WidgetLeaderboard.generated.h"
 
+class UScillClient;
 /**
  * 
  */

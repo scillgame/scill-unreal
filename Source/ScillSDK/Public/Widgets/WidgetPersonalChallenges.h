@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "ScillBlueprintClasses/ScillClient.h"
 #include "Widgets/WidgetPersonalChallenge.h"
 #include "WidgetPersonalChallenges.generated.h"
 
+class UScillClient;
 /**
  * 
  */

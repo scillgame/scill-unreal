@@ -3,6 +3,9 @@
 
 #include "Widgets/WidgetBattlePassChallenges.h"
 
+#include "Components/TextBlock.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
+
 void UWidgetBattlePassChallenges::NativeConstruct()
 {
 	Super::NativeConstruct();

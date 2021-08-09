@@ -10,6 +10,8 @@
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FShowLevelButtonDelegate, int, BattlePassId);
 
+class UTextBlock;
+
 /**
  * 
  */

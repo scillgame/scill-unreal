@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
+
 #include "WidgetLeaderboardUserRank.generated.h"
+
+class UTextBlock;
 
 /**
  * 
