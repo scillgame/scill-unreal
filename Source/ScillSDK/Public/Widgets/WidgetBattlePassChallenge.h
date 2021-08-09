@@ -7,6 +7,8 @@
 #include "Components/ProgressBar.h"
 #include "WidgetBattlePassChallenge.generated.h"
 
+class UTextBlock;
+
 /**
  * 
  */

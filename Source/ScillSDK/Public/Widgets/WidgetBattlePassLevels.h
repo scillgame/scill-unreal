@@ -7,6 +7,8 @@
 #include "Widgets/WidgetBattlePassLevel.h"
 #include "Components/Image.h"
 #include "Components/PanelWidget.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
+
 #include "WidgetBattlePassLevels.generated.h"
 
 /**

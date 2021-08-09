@@ -3,6 +3,9 @@
 
 #include "Widgets/WidgetLeaderboard.h"
 
+#include "Components/PanelWidget.h"
+#include "Components/TextBlock.h"
+
 UWidgetLeaderboard::UWidgetLeaderboard(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {

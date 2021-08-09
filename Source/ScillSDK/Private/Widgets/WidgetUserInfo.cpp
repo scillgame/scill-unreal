@@ -3,6 +3,10 @@
 
 #include "Widgets/WidgetUserInfo.h"
 
+#include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
+#include "ScillBlueprintClasses/ScillClient.h"
+
 UWidgetUserInfo::UWidgetUserInfo(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {

@@ -3,6 +3,11 @@
 
 #include "Widgets/WidgetPersonalChallenges.h"
 
+#include "Components/PanelWidget.h"
+#include "Components/TextBlock.h"
+#include "ScillBlueprintClasses/ScillClient.h"
+#include "ScillHelpers/ScillMqtt.h"
+
 UWidgetPersonalChallenges::UWidgetPersonalChallenges(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
 {

@@ -3,6 +3,10 @@
 
 #include "ScillBlueprintClasses/ScillClient.h"
 
+#include "ScillApiWrapper/ScillApiAuthApiOperations.h"
+#include "ScillApiWrapper/ScillApiEventsApiOperations.h"
+#include "ScillApiWrapper/ScillApiLeaderboardsApiOperations.h"
+
 // Sets default values for this component's properties
 UScillClient::UScillClient()
 {

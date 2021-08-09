@@ -5,8 +5,13 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/EditableText.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
+
 #include "WidgetUserInfo.generated.h"
 
+
+class UButton;
+class UScillClient;
 /**
  * 
  */

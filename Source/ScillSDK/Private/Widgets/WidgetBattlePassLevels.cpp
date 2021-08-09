@@ -3,6 +3,9 @@
 
 #include "Widgets/WidgetBattlePassLevels.h"
 
+#include "Components/TextBlock.h"
+#include "ScillBlueprintClasses/ScillStructs.h"
+
 UWidgetBattlePassLevels::UWidgetBattlePassLevels(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
