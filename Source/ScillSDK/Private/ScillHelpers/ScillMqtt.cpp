@@ -50,6 +50,7 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 	if (packet->PacketType == ScillMqttPacketType::CONNACK)
 	{
 		this->MqttConnected = true;
+		this->MqttConnectionEstablishedDelegate.Broadcast();
 	}
 	if (packet->PacketType == ScillMqttPacketType::PUBLISH)
 	{
