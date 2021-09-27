@@ -948,7 +948,7 @@ Unlike the other functions on these classes, the callback function here will be 
 
 Waits for the Realtime Update Connection to open and then executes the callback function. This is used to call the Start Realtime Updates functions only once the underlying connection is ready for subscriptions.
 
-![ReceiveChallengeUpdates.png](/Documentation/attachments/OnRealtimeConnectionOpen.png)
+![OnRealtimeConnectionOpen.png](/Documentation/attachments/OnRealtimeConnectionOpen.png)
 
 This function has no input arguments and the callback signature has no arguments as well.
 
