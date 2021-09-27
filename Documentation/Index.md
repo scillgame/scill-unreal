@@ -104,6 +104,7 @@ After retrieving and saving the access token to your Scill Client Component on y
 
 - The access token usually expires after 24 hours. So make sure to re-retrieve an access token in an appropriate time interval. Keep in mind that these calls also count towards your rate limit and you should not simply generate an access token before any other API call.
 - Use the [Real-Time Updates](#real-time-updates) to start listening to any changes on a user's challenges or battle passes. The callbacks on these functions are used to process the corresponding payloads. This can be helpful to easily implement UI that is unrelated to the rest of your game logic.
+- Before starting Realtime Updates, you must make sure, that the MQTT connection is established already. You can use the [On Realtime Connection Open](/Documentation/Reference.md) function and start the updates in the provided callback.
 
 ## Classes and Structs Reference
 
