@@ -944,6 +944,14 @@ Unlike the other functions on these classes, the callback function here will be 
 
 - Payload: [LeaderboardUpdatePayload](#leaderboard-update-payload). Provides details about what has changed in the leaderboard.
 
+##### On Realtime Connection Open
+
+Waits for the Realtime Update Connection to open and then executes the callback function. This is used to call the Start Realtime Updates functions only once the underlying connection is ready for subscriptions.
+
+![OnRealtimeConnectionOpen.png](/Documentation/attachments/OnRealtimeConnectionOpen.png)
+
+This function has no input arguments and the callback signature has no arguments as well.
+
 ### ScillClientBackend Component
 
 This component should be added to your game's custom `GameMode`. It has authority to send events, generate access tokens and the like. Also, it holds the API Key, so this should not live on your game's client executable. Since the `GameMode` is defined to only reside on the server this is the perfect place. Also make sure to load your API Key during Runtime from a configuration file and do not store it directly in your source code or blueprint assets. Although deployed encrypted to your players, it is not impossible for a user to decrypt your game's assets and thus API Key.

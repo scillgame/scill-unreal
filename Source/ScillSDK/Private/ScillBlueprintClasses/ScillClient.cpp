@@ -594,6 +594,20 @@ void UScillClient::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, true);
 }
 
+void UScillClient::OnRealtimeConnectionOpen(FRealtimeConnectionEstablished onConnectionEstablished)
+{
+	FGuid guid = FGuid::NewGuid();
+	callbackMqttConnectionEstablished.Add(guid, onConnectionEstablished);
+	mqtt->MqttConnectionEstablishedDelegate.AddUObject(this, &UScillClient::MqttConnectionOpen, guid);
+}
+
+void UScillClient::MqttConnectionOpen(FGuid guid) const
+{
+	auto callback = callbackMqttConnectionEstablished.FindRef(guid);
+	callback.ExecuteIfBound();
+	callbackMqttConnectionEstablished.Remove(guid);
+}
+
 void UScillClient::RetrieveUserInfoOrSetToDefault()
 {
 	FUserInfoReceived Delegate;

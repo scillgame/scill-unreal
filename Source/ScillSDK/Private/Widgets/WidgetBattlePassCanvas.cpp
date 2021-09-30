@@ -36,7 +36,7 @@ void UWidgetBattlePassCanvas::OnShowLevelButtonClicked(int Id)
 
 void UWidgetBattlePassCanvas::ReceiveBattlePassesResponse(const TArray<FBattlePass>& BattlePasses, bool Success)
 {
-    if (Success)
+    if (Success && BattlePasses.Num() > 0)
     {
         PopulateBattlePassData(BattlePasses[BattlePassId]);
     }

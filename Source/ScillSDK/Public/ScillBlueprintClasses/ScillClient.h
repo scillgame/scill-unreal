@@ -29,6 +29,7 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardsReceived, const TArray<FLeaderbo
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardRankingReceived, const FLeaderboardMemberRanking&, LeaderboardRanking, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardRankingsReceived, const TArray<FLeaderboardMemberRanking>&, LeaderboardRankings, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FUserInfoReceived, const FUserInfo&, UserInfo, bool, Success);
+DECLARE_DYNAMIC_DELEGATE(FRealtimeConnectionEstablished);
 
 
 UCLASS(ClassGroup=(ScillSDK), meta=(BlueprintSpawnableComponent), Category = "ScillSDK")
@@ -225,6 +226,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void ReceiveLeaderboardUpdates(FString LeaderboardId, FLeaderboardChangeReceived responseReceived);
 
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void OnRealtimeConnectionOpen(FRealtimeConnectionEstablished onConnectionEstablished);
+
 
 protected:
 	// Called when the game starts
@@ -319,12 +323,16 @@ private:
 	void ReceiveChallengeChangeTopic(const ScillSDK::ScillApiAuthApi::GetUserChallengesNotificationTopicResponse& Response, FGuid guid) const;
 	void ReceiveLeaderboardChangeTopic(const ScillSDK::ScillApiAuthApi::GetLeaderboardNotificationTopicResponse& Response, FGuid guid) const;
 
+	UFUNCTION()
+		void MqttConnectionOpen(FGuid guid) const;
+
 	// ----------------------------------------------------------------------------------
 	// Realtime Updates Helpers
 
 	mutable TMap<FGuid, FBattlePassChangeReceived> callbackMapBattlePassChangeReceived;
 	mutable TMap<FGuid, FChallengeChangeReceived> callbackMapChallengeChangeReceived;
 	mutable TMap<FGuid, FLeaderboardChangeReceived> callbackMapLeaderboardChangeReceived;
+	mutable TMap<FGuid, FRealtimeConnectionEstablished> callbackMqttConnectionEstablished;
 
 	UFUNCTION()
 	void UserInfoRetrieved(const FUserInfo& UserInfo, bool Success);
