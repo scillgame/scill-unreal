@@ -42,7 +42,10 @@ FString UScillClient::GetAccessToken() const
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 	if (gameInstance->Implements<UScillLevelPersistenceInterface>())
 	{
-		IScillLevelPersistenceInterface::Execute_GetAccessToken(gameInstance, value);
+		auto instanceValue = FString();
+		IScillLevelPersistenceInterface::Execute_GetAccessToken(gameInstance, instanceValue);
+		if (!instanceValue.IsEmpty())
+			value = instanceValue;
 	}
 
 	return value;
@@ -57,7 +60,10 @@ FString UScillClient::GetUserId() const
 	auto gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 	if (gameInstance->Implements<UScillLevelPersistenceInterface>())
 	{
-		IScillLevelPersistenceInterface::Execute_GetUserId(gameInstance, value);
+		auto instanceValue = FString();
+		IScillLevelPersistenceInterface::Execute_GetUserId(gameInstance, instanceValue);
+		if (!instanceValue.IsEmpty())
+			value = instanceValue;
 	}
 
 	return value;
@@ -577,19 +583,19 @@ void UScillClient::BeginPlay()
 	SetUserId(this->UserId);
 
 	this->battlePassesApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
-	this->battlePassesApi.SetURL(TEXT("https://es.scillgame.com"));
+	this->battlePassesApi.SetURL(TEXT("https://es.scill.4players.io"));
 
 	this->challengesApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
-	this->challengesApi.SetURL(TEXT("https://pcs.scillgame.com"));
+	this->challengesApi.SetURL(TEXT("https://pcs.scill.4players.io"));
 
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
-	this->eventsApi.SetURL(TEXT("https://ep.scillgame.com"));
+	this->eventsApi.SetURL(TEXT("https://ep.scill.4players.io"));
 
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
-	this->authApi.SetURL(TEXT("https://us.scillgame.com"));
+	this->authApi.SetURL(TEXT("https://us.scill.4players.io"));
 
 	this->leaderboardsApi.AddHeaderParam("Authorization", "Bearer " + this->AccessToken);
-	this->leaderboardsApi.SetURL(TEXT("https://ls.scillgame.com"));
+	this->leaderboardsApi.SetURL(TEXT("https://ls.scill.4players.io"));
 
 	GetWorld()->GetTimerManager().SetTimer(PingTimer, this, &UScillClient::MqttPing, 250, true);
 }
