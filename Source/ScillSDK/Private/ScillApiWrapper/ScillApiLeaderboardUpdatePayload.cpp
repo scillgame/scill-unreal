@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiLeaderboardUpdatePayload::WriteJson(JsonWriter& Writer) const
@@ -25,23 +25,23 @@ void ScillApiLeaderboardUpdatePayload::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (WebhookType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());
 	}
 	if (LeaderboardData.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("leaderboard_data")); WriteJsonValue(Writer, LeaderboardData.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("leaderboard_data")); WriteJsonValue(Writer, LeaderboardData.GetValue());
 	}
 	if (MemberData.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("member_data")); WriteJsonValue(Writer, MemberData.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("member_data")); WriteJsonValue(Writer, MemberData.GetValue());
 	}
 	if (OldLeaderboardRanking.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("old_leaderboard_ranking")); WriteJsonValue(Writer, OldLeaderboardRanking.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("old_leaderboard_ranking")); WriteJsonValue(Writer, OldLeaderboardRanking.GetValue());
 	}
 	if (NewLeaderboardRanking.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("new_leaderboard_ranking")); WriteJsonValue(Writer, NewLeaderboardRanking.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("new_leaderboard_ranking")); WriteJsonValue(Writer, NewLeaderboardRanking.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

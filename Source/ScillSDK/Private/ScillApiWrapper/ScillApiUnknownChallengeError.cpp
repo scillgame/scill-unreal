@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiUnknownChallengeError::WriteJson(JsonWriter& Writer) const
@@ -25,15 +25,15 @@ void ScillApiUnknownChallengeError::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (Error.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("error")); WriteJsonValue(Writer, Error.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("error")); WriteJsonValue(Writer, Error.GetValue());
 	}
 	if (ErrorSlug.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("error_slug")); WriteJsonValue(Writer, ErrorSlug.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("error_slug")); WriteJsonValue(Writer, ErrorSlug.GetValue());
 	}
 	if (StatusCode.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("status_code")); WriteJsonValue(Writer, StatusCode.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("status_code")); WriteJsonValue(Writer, StatusCode.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

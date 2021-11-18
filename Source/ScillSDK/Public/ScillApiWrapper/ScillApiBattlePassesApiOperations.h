@@ -22,7 +22,7 @@
 #include "ScillApiWrapper/ScillApiBattlePassUnlockPayload.h"
 #include "ScillApiWrapper/ScillApiError.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 /* Activate a given battle pass level by id
@@ -35,7 +35,7 @@ public:
     virtual ~ActivateBattlePassLevelRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The id of the battle pass level. */
@@ -50,7 +50,7 @@ public:
     virtual ~ActivateBattlePassLevelResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiActionResponse Content;
 };
 
@@ -64,7 +64,7 @@ public:
     virtual ~ClaimBattlePassLevelRewardRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The id of the battle pass level. */
@@ -79,7 +79,7 @@ public:
     virtual ~ClaimBattlePassLevelRewardResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiActionResponse Content;
 };
 
@@ -93,7 +93,7 @@ public:
     virtual ~GetActiveBattlePassesRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
@@ -106,7 +106,7 @@ public:
     virtual ~GetActiveBattlePassesResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiBattlePass> Content;
 };
 
@@ -120,7 +120,7 @@ public:
     virtual ~GetAllBattlePassLevelsRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
@@ -133,7 +133,7 @@ public:
     virtual ~GetAllBattlePassLevelsResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiBattlePassLevel> Content;
 };
 
@@ -147,7 +147,7 @@ public:
     virtual ~GetBattlePassRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The id of the battle pass. It’s the same as in battle_pass_id you received in earlier requests (i.e. getting all active battle passes for a product). */
@@ -162,7 +162,7 @@ public:
     virtual ~GetBattlePassResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiBattlePass Content;
 };
 
@@ -176,7 +176,7 @@ public:
     virtual ~GetBattlePassLevelsRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The id of the battle pass. It’s the same as in battle_pass_id you received in earlier requests (i.e. getting all active battle passes for a product). */
@@ -191,7 +191,7 @@ public:
     virtual ~GetBattlePassLevelsResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiBattlePassLevel> Content;
 };
 
@@ -205,7 +205,7 @@ public:
     virtual ~GetBattlePassesRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
@@ -218,7 +218,7 @@ public:
     virtual ~GetBattlePassesResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiBattlePass> Content;
 };
 
@@ -232,7 +232,7 @@ public:
     virtual ~GetUnlockedBattlePassesRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
@@ -245,7 +245,7 @@ public:
     virtual ~GetUnlockedBattlePassesResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiBattlePass> Content;
 };
 
@@ -259,7 +259,7 @@ public:
     virtual ~UnlockBattlePassRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The id of the battle pass. It’s the same as in battle_pass_id you received in earlier requests (i.e. getting all active battle passes for a product). */
@@ -276,7 +276,7 @@ public:
     virtual ~UnlockBattlePassResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiBattlePassUnlockInfo Content;
 };
 

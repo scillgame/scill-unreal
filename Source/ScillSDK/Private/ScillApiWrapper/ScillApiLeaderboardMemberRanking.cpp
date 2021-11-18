@@ -25,15 +25,15 @@ void ScillApiLeaderboardMemberRanking::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (LeaderboardId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("leaderboard_id")); WriteJsonValue(Writer, LeaderboardId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("leaderboard_id")); WriteJsonValue(Writer, LeaderboardId.GetValue());
 	}
 	if (Name.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("name")); WriteJsonValue(Writer, Name.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("name")); WriteJsonValue(Writer, Name.GetValue());
 	}
 	if (Member.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("member")); WriteJsonValue(Writer, Member.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("member")); WriteJsonValue(Writer, Member.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

@@ -29,7 +29,7 @@ FString ScillApiLeaderboardsApi::GetLeaderboardRequest::ComputePath() const
 	{ TEXT("leaderboardId"), ToStringFormatArg(LeaderboardId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/leaderboards/{leaderboardId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(CurrentPage.IsSet())
 	{
@@ -38,6 +38,14 @@ FString ScillApiLeaderboardsApi::GetLeaderboardRequest::ComputePath() const
 	if(PageSize.IsSet())
 	{
 		QueryParams.Add(FString(TEXT("pageSize=")) + ToUrlString(PageSize.GetValue()));
+	}
+	if(StartDate.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("startDate=")) + ToUrlString(StartDate.GetValue()));
+	}
+	if(EndDate.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("endDate=")) + ToUrlString(EndDate.GetValue()));
 	}
 	if(Language.IsSet())
 	{
@@ -59,6 +67,14 @@ void ScillApiLeaderboardsApi::GetLeaderboardRequest::SetupHttpRequest(const FHtt
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -102,8 +118,16 @@ FString ScillApiLeaderboardsApi::GetLeaderboardRankingRequest::ComputePath() con
 	{ TEXT("leaderboardId"), ToStringFormatArg(LeaderboardId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/leaderboards-members/{memberType}/{memberId}/{leaderboardId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
+	if(StartDate.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("startDate=")) + ToUrlString(StartDate.GetValue()));
+	}
+	if(EndDate.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("endDate=")) + ToUrlString(EndDate.GetValue()));
+	}
 	if(Language.IsSet())
 	{
 		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
@@ -124,6 +148,14 @@ void ScillApiLeaderboardsApi::GetLeaderboardRankingRequest::SetupHttpRequest(con
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -166,8 +198,16 @@ FString ScillApiLeaderboardsApi::GetLeaderboardRankingsRequest::ComputePath() co
 	{ TEXT("memberId"), ToStringFormatArg(MemberId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/leaderboards-members/{memberType}/{memberId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
+	if(StartDate.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("startDate=")) + ToUrlString(StartDate.GetValue()));
+	}
+	if(EndDate.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("endDate=")) + ToUrlString(EndDate.GetValue()));
+	}
 	if(Language.IsSet())
 	{
 		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
@@ -188,6 +228,14 @@ void ScillApiLeaderboardsApi::GetLeaderboardRankingsRequest::SetupHttpRequest(co
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -235,6 +283,14 @@ FString ScillApiLeaderboardsApi::GetLeaderboardsRequest::ComputePath() const
 	{
 		QueryParams.Add(FString(TEXT("pageSize=")) + ToUrlString(PageSize.GetValue()));
 	}
+	if(StartDate.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("startDate=")) + ToUrlString(StartDate.GetValue()));
+	}
+	if(EndDate.IsSet())
+	{
+		QueryParams.Add(FString(TEXT("endDate=")) + ToUrlString(EndDate.GetValue()));
+	}
 	if(Language.IsSet())
 	{
 		QueryParams.Add(FString(TEXT("language=")) + ToUrlString(Language.GetValue()));
@@ -255,6 +311,14 @@ void ScillApiLeaderboardsApi::GetLeaderboardsRequest::SetupHttpRequest(const FHt
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -286,6 +350,71 @@ void ScillApiLeaderboardsApi::GetLeaderboardsResponse::SetHttpResponseCode(EHttp
 }
 
 bool ScillApiLeaderboardsApi::GetLeaderboardsResponse::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
+{
+	return TryGetJsonValue(JsonValue, Content);
+}
+
+FString ScillApiLeaderboardsApi::ResetLeaderboardRankingsRequest::ComputePath() const
+{
+	TMap<FString, FStringFormatArg> PathParams = { 
+	{ TEXT("memberType"), ToStringFormatArg(MemberType) },
+	{ TEXT("appId"), ToStringFormatArg(AppId) },
+	{ TEXT("memberId"), ToStringFormatArg(MemberId) } };
+
+	FString Path = FString::Format(TEXT("/api/v1/reset-leaderboard/{memberType}/{appId}/{memberId}"), PathParams);
+
+	return Path;
+}
+
+void ScillApiLeaderboardsApi::ResetLeaderboardRankingsRequest::SetupHttpRequest(const FHttpRequestRef& HttpRequest) const
+{
+	static const TArray<FString> Consumes = {  };
+	//static const TArray<FString> Produces = { TEXT("application/json") };
+
+	HttpRequest->SetVerb(TEXT("DELETE"));
+
+	// Default to Json Body request
+	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
+	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
+	}
+	else if (Consumes.Contains(TEXT("multipart/form-data")))
+	{
+	}
+	else if (Consumes.Contains(TEXT("application/x-www-form-urlencoded")))
+	{
+	}
+	else
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Request ContentType not supported (%s)"), *FString::Join(Consumes, TEXT(",")));
+	}
+}
+
+void ScillApiLeaderboardsApi::ResetLeaderboardRankingsResponse::SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode)
+{
+	Response::SetHttpResponseCode(InHttpResponseCode);
+	switch ((int)InHttpResponseCode)
+	{
+	case 200:
+		SetResponseString(TEXT("The action has been successful"));
+		break;
+	case 403:
+		SetResponseString(TEXT("Unauthorized"));
+		break;
+	case 404:
+		SetResponseString(TEXT("The specified resource was not found"));
+		break;
+	}
+}
+
+bool ScillApiLeaderboardsApi::ResetLeaderboardRankingsResponse::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
 {
 	return TryGetJsonValue(JsonValue, Content);
 }

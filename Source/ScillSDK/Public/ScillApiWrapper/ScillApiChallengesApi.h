@@ -15,7 +15,7 @@
 #include "CoreMinimal.h"
 #include "ScillApiWrapper/ScillApiBaseModel.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 class SCILLSDK_API ScillApiChallengesApi
@@ -24,16 +24,16 @@ public:
 	ScillApiChallengesApi();
 	~ScillApiChallengesApi();
 
-	/* Sets the URL Endpoint. 
+	/* Sets the URL Endpoint.
 	* Note: several fallback endpoints can be configured in request retry policies, see Request::SetShouldRetry */
 	void SetURL(const FString& Url);
 
 	/* Adds global header params to all requests */
 	void AddHeaderParam(const FString& Key, const FString& Value);
 	void ClearHeaderParams();
-	
+
 	/* Sets the retry manager to the user-defined retry manager. User must manage the lifetime of the retry manager.
-	* If no retry manager is specified and a request needs retries, a default retry manager will be used. 
+	* If no retry manager is specified and a request needs retries, a default retry manager will be used.
 	* See also: Request::SetShouldRetry */
 	void SetHttpRetryManager(FHttpRetrySystem::FManager& RetryManager);
 	FHttpRetrySystem::FManager& GetHttpRetryManager();
@@ -56,6 +56,8 @@ public:
 	class GetPersonalChallengesResponse;
 	class GetUnresolvedPersonalChallengesRequest;
 	class GetUnresolvedPersonalChallengesResponse;
+	class ResetUserAppChallengesRequest;
+	class ResetUserAppChallengesResponse;
 	class UnlockPersonalChallengeRequest;
 	class UnlockPersonalChallengeResponse;
 	
@@ -68,18 +70,20 @@ public:
     DECLARE_DELEGATE_OneParam(FGetPersonalChallengeByIdDelegate, const GetPersonalChallengeByIdResponse&);
     DECLARE_DELEGATE_OneParam(FGetPersonalChallengesDelegate, const GetPersonalChallengesResponse&);
     DECLARE_DELEGATE_OneParam(FGetUnresolvedPersonalChallengesDelegate, const GetUnresolvedPersonalChallengesResponse&);
+    DECLARE_DELEGATE_OneParam(FResetUserAppChallengesDelegate, const ResetUserAppChallengesResponse&);
     DECLARE_DELEGATE_OneParam(FUnlockPersonalChallengeDelegate, const UnlockPersonalChallengeResponse&);
     
-    bool ActivatePersonalChallenge(const ActivatePersonalChallengeRequest& Request, const FActivatePersonalChallengeDelegate& Delegate = FActivatePersonalChallengeDelegate()) const;
-    bool CancelPersonalChallenge(const CancelPersonalChallengeRequest& Request, const FCancelPersonalChallengeDelegate& Delegate = FCancelPersonalChallengeDelegate()) const;
-    bool ClaimPersonalChallengeReward(const ClaimPersonalChallengeRewardRequest& Request, const FClaimPersonalChallengeRewardDelegate& Delegate = FClaimPersonalChallengeRewardDelegate()) const;
-    bool GenerateWebsocketAccessToken(const GenerateWebsocketAccessTokenRequest& Request, const FGenerateWebsocketAccessTokenDelegate& Delegate = FGenerateWebsocketAccessTokenDelegate()) const;
-    bool GetActivePersonalChallenges(const GetActivePersonalChallengesRequest& Request, const FGetActivePersonalChallengesDelegate& Delegate = FGetActivePersonalChallengesDelegate()) const;
-    bool GetAllPersonalChallenges(const GetAllPersonalChallengesRequest& Request, const FGetAllPersonalChallengesDelegate& Delegate = FGetAllPersonalChallengesDelegate()) const;
-    bool GetPersonalChallengeById(const GetPersonalChallengeByIdRequest& Request, const FGetPersonalChallengeByIdDelegate& Delegate = FGetPersonalChallengeByIdDelegate()) const;
-    bool GetPersonalChallenges(const GetPersonalChallengesRequest& Request, const FGetPersonalChallengesDelegate& Delegate = FGetPersonalChallengesDelegate()) const;
-    bool GetUnresolvedPersonalChallenges(const GetUnresolvedPersonalChallengesRequest& Request, const FGetUnresolvedPersonalChallengesDelegate& Delegate = FGetUnresolvedPersonalChallengesDelegate()) const;
-    bool UnlockPersonalChallenge(const UnlockPersonalChallengeRequest& Request, const FUnlockPersonalChallengeDelegate& Delegate = FUnlockPersonalChallengeDelegate()) const;
+    FHttpRequestPtr ActivatePersonalChallenge(const ActivatePersonalChallengeRequest& Request, const FActivatePersonalChallengeDelegate& Delegate = FActivatePersonalChallengeDelegate()) const;
+    FHttpRequestPtr CancelPersonalChallenge(const CancelPersonalChallengeRequest& Request, const FCancelPersonalChallengeDelegate& Delegate = FCancelPersonalChallengeDelegate()) const;
+    FHttpRequestPtr ClaimPersonalChallengeReward(const ClaimPersonalChallengeRewardRequest& Request, const FClaimPersonalChallengeRewardDelegate& Delegate = FClaimPersonalChallengeRewardDelegate()) const;
+    FHttpRequestPtr GenerateWebsocketAccessToken(const GenerateWebsocketAccessTokenRequest& Request, const FGenerateWebsocketAccessTokenDelegate& Delegate = FGenerateWebsocketAccessTokenDelegate()) const;
+    FHttpRequestPtr GetActivePersonalChallenges(const GetActivePersonalChallengesRequest& Request, const FGetActivePersonalChallengesDelegate& Delegate = FGetActivePersonalChallengesDelegate()) const;
+    FHttpRequestPtr GetAllPersonalChallenges(const GetAllPersonalChallengesRequest& Request, const FGetAllPersonalChallengesDelegate& Delegate = FGetAllPersonalChallengesDelegate()) const;
+    FHttpRequestPtr GetPersonalChallengeById(const GetPersonalChallengeByIdRequest& Request, const FGetPersonalChallengeByIdDelegate& Delegate = FGetPersonalChallengeByIdDelegate()) const;
+    FHttpRequestPtr GetPersonalChallenges(const GetPersonalChallengesRequest& Request, const FGetPersonalChallengesDelegate& Delegate = FGetPersonalChallengesDelegate()) const;
+    FHttpRequestPtr GetUnresolvedPersonalChallenges(const GetUnresolvedPersonalChallengesRequest& Request, const FGetUnresolvedPersonalChallengesDelegate& Delegate = FGetUnresolvedPersonalChallengesDelegate()) const;
+    FHttpRequestPtr ResetUserAppChallenges(const ResetUserAppChallengesRequest& Request, const FResetUserAppChallengesDelegate& Delegate = FResetUserAppChallengesDelegate()) const;
+    FHttpRequestPtr UnlockPersonalChallenge(const UnlockPersonalChallengeRequest& Request, const FUnlockPersonalChallengeDelegate& Delegate = FUnlockPersonalChallengeDelegate()) const;
     
 private:
     void OnActivatePersonalChallengeResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FActivatePersonalChallengeDelegate Delegate) const;
@@ -91,6 +95,7 @@ private:
     void OnGetPersonalChallengeByIdResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetPersonalChallengeByIdDelegate Delegate) const;
     void OnGetPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetPersonalChallengesDelegate Delegate) const;
     void OnGetUnresolvedPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUnresolvedPersonalChallengesDelegate Delegate) const;
+    void OnResetUserAppChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FResetUserAppChallengesDelegate Delegate) const;
     void OnUnlockPersonalChallengeResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FUnlockPersonalChallengeDelegate Delegate) const;
     
 	FHttpRequestRef CreateHttpRequest(const Request& Request) const;
@@ -102,5 +107,5 @@ private:
 	mutable FHttpRetrySystem::FManager* RetryManager = nullptr;
 	mutable TUniquePtr<HttpRetryManager> DefaultRetryManager;
 };
-	
+
 }

@@ -18,10 +18,10 @@
 #include "HttpModule.h"
 #include "Serialization/JsonSerializer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
-ScillApiEventsApi::ScillApiEventsApi() 
+ScillApiEventsApi::ScillApiEventsApi()
 : Url(TEXT("https://virtserver.swaggerhub.com/4Players-GmbH/scill-gaas/1.0.0"))
 {
 }
@@ -65,6 +65,7 @@ void ScillApiEventsApi::SetHttpRetryManager(FHttpRetrySystem::FManager& InRetryM
 
 FHttpRetrySystem::FManager& ScillApiEventsApi::GetHttpRetryManager()
 {
+	checkf(RetryManager, TEXT("ScillApiEventsApi: RetryManager is null.  You may have meant to set it with SetHttpRetryManager first, or you may not be using a custom RetryManager at all."))
 	return *RetryManager;
 }
 
@@ -132,10 +133,10 @@ void ScillApiEventsApi::HandleResponse(FHttpResponsePtr HttpResponse, bool bSucc
 	InOutResponse.SetHttpResponseCode(EHttpResponseCodes::RequestTimeout);
 }
 
-bool ScillApiEventsApi::GetAvailableEvents(const GetAvailableEventsRequest& Request, const FGetAvailableEventsDelegate& Delegate /*= FGetAvailableEventsDelegate()*/) const
+FHttpRequestPtr ScillApiEventsApi::GetAvailableEvents(const GetAvailableEventsRequest& Request, const FGetAvailableEventsDelegate& Delegate /*= FGetAvailableEventsDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -146,9 +147,10 @@ bool ScillApiEventsApi::GetAvailableEvents(const GetAvailableEventsRequest& Requ
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiEventsApi::OnGetAvailableEventsResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiEventsApi::OnGetAvailableEventsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetAvailableEventsDelegate Delegate) const
@@ -158,10 +160,10 @@ void ScillApiEventsApi::OnGetAvailableEventsResponse(FHttpRequestPtr HttpRequest
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiEventsApi::SendEvent(const SendEventRequest& Request, const FSendEventDelegate& Delegate /*= FSendEventDelegate()*/) const
+FHttpRequestPtr ScillApiEventsApi::SendEvent(const SendEventRequest& Request, const FSendEventDelegate& Delegate /*= FSendEventDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -172,9 +174,10 @@ bool ScillApiEventsApi::SendEvent(const SendEventRequest& Request, const FSendEv
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiEventsApi::OnSendEventResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiEventsApi::OnSendEventResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FSendEventDelegate Delegate) const

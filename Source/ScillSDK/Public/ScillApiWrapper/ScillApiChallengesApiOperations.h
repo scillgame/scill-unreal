@@ -21,7 +21,7 @@
 #include "ScillApiWrapper/ScillApiError.h"
 #include "ScillApiWrapper/ScillApiSocketToken.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 /* Activate a personal challenges
@@ -34,7 +34,7 @@ public:
     virtual ~ActivatePersonalChallengeRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
@@ -49,7 +49,7 @@ public:
     virtual ~ActivatePersonalChallengeResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiActionResponse Content;
 };
 
@@ -63,7 +63,7 @@ public:
     virtual ~CancelPersonalChallengeRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
@@ -78,7 +78,7 @@ public:
     virtual ~CancelPersonalChallengeResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiActionResponse Content;
 };
 
@@ -92,7 +92,7 @@ public:
     virtual ~ClaimPersonalChallengeRewardRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
@@ -107,7 +107,7 @@ public:
     virtual ~ClaimPersonalChallengeRewardResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiActionResponse Content;
 };
 
@@ -121,7 +121,7 @@ public:
     virtual ~GenerateWebsocketAccessTokenRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 };
 
 class SCILLSDK_API ScillApiChallengesApi::GenerateWebsocketAccessTokenResponse : public Response
@@ -130,7 +130,7 @@ public:
     virtual ~GenerateWebsocketAccessTokenResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiSocketToken Content;
 };
 
@@ -144,7 +144,7 @@ public:
     virtual ~GetActivePersonalChallengesRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
@@ -157,7 +157,7 @@ public:
     virtual ~GetActivePersonalChallengesResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiChallengeCategory> Content;
 };
 
@@ -171,7 +171,7 @@ public:
     virtual ~GetAllPersonalChallengesRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* A list of categories that should be included in the response. Only the categories provided will be returned */
@@ -188,7 +188,7 @@ public:
     virtual ~GetAllPersonalChallengesResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiChallengeCategory> Content;
 };
 
@@ -202,7 +202,7 @@ public:
     virtual ~GetPersonalChallengeByIdRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
@@ -217,7 +217,7 @@ public:
     virtual ~GetPersonalChallengeByIdResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiChallenge Content;
 };
 
@@ -231,7 +231,7 @@ public:
     virtual ~GetPersonalChallengesRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* A list of categories that should be included in the response. Only the categories provided will be returned */
@@ -248,7 +248,7 @@ public:
     virtual ~GetPersonalChallengesResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiChallengeCategory> Content;
 };
 
@@ -262,7 +262,7 @@ public:
     virtual ~GetUnresolvedPersonalChallengesRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* A list of categories that should be included in the response. Only the categories provided will be returned */
@@ -279,8 +279,35 @@ public:
     virtual ~GetUnresolvedPersonalChallengesResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiChallengeCategory> Content;
+};
+
+/* Resets all challenges for the given app ID and user ID
+ *
+ * Resets all challenges for the given app ID and user ID
+*/
+class SCILLSDK_API ScillApiChallengesApi::ResetUserAppChallengesRequest : public Request
+{
+public:
+    virtual ~ResetUserAppChallengesRequest() {}
+	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
+	FString ComputePath() const final;
+
+	/* The app id */
+	FString AppId;
+	/* The user id ( */
+	FString UserId;
+};
+
+class SCILLSDK_API ScillApiChallengesApi::ResetUserAppChallengesResponse : public Response
+{
+public:
+    virtual ~ResetUserAppChallengesResponse() {}
+	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
+	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
+
+    ScillApiActionResponse Content;
 };
 
 /* Unlock a personal challenges
@@ -293,7 +320,7 @@ public:
     virtual ~UnlockPersonalChallengeRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The app id */
 	FString AppId;
 	/* The challenge id (see challenge_id of Challenge object) */
@@ -308,7 +335,7 @@ public:
     virtual ~UnlockPersonalChallengeResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiActionResponse Content;
 };
 

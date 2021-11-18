@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiBattlePassLevelReward::WriteJson(JsonWriter& Writer) const
@@ -25,31 +25,31 @@ void ScillApiBattlePassLevelReward::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (AppId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("app_id")); WriteJsonValue(Writer, AppId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("app_id")); WriteJsonValue(Writer, AppId.GetValue());
 	}
 	if (BattlePassId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("battle_pass_id")); WriteJsonValue(Writer, BattlePassId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("battle_pass_id")); WriteJsonValue(Writer, BattlePassId.GetValue());
 	}
 	if (LevelId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("level_id")); WriteJsonValue(Writer, LevelId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("level_id")); WriteJsonValue(Writer, LevelId.GetValue());
 	}
 	if (UserId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_id")); WriteJsonValue(Writer, UserId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_id")); WriteJsonValue(Writer, UserId.GetValue());
 	}
 	if (LevelPositionIndex.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("level_position_index")); WriteJsonValue(Writer, LevelPositionIndex.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("level_position_index")); WriteJsonValue(Writer, LevelPositionIndex.GetValue());
 	}
 	if (RewardAmount.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("reward_amount")); WriteJsonValue(Writer, RewardAmount.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("reward_amount")); WriteJsonValue(Writer, RewardAmount.GetValue());
 	}
 	if (RewardTypeName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("reward_type_name")); WriteJsonValue(Writer, RewardTypeName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("reward_type_name")); WriteJsonValue(Writer, RewardTypeName.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

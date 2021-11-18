@@ -18,22 +18,22 @@
 #include "HttpModule.h"
 #include "Serialization/JsonSerializer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 ScillApiAuthApi::ScillApiAuthApi()
-	: Url(TEXT("https://virtserver.swaggerhub.com/4Players-GmbH/scill-gaas/1.0.0"))
+: Url(TEXT("https://virtserver.swaggerhub.com/4Players-GmbH/scill-gaas/1.0.0"))
 {
 }
 
 ScillApiAuthApi::~ScillApiAuthApi() {}
 
-void ScillApiAuthApi::SetURL(const FString & InUrl)
+void ScillApiAuthApi::SetURL(const FString& InUrl)
 {
 	Url = InUrl;
 }
 
-void ScillApiAuthApi::AddHeaderParam(const FString & Key, const FString & Value)
+void ScillApiAuthApi::AddHeaderParam(const FString& Key, const FString& Value)
 {
 	AdditionalHeaderParams.Add(Key, Value);
 }
@@ -54,9 +54,9 @@ bool ScillApiAuthApi::IsValid() const
 	return true;
 }
 
-void ScillApiAuthApi::SetHttpRetryManager(FHttpRetrySystem::FManager & InRetryManager)
+void ScillApiAuthApi::SetHttpRetryManager(FHttpRetrySystem::FManager& InRetryManager)
 {
-	if (RetryManager != &GetHttpRetryManager())
+	if(RetryManager != &GetHttpRetryManager())
 	{
 		DefaultRetryManager.Reset();
 		RetryManager = &InRetryManager;
@@ -65,10 +65,11 @@ void ScillApiAuthApi::SetHttpRetryManager(FHttpRetrySystem::FManager & InRetryMa
 
 FHttpRetrySystem::FManager& ScillApiAuthApi::GetHttpRetryManager()
 {
+	checkf(RetryManager, TEXT("ScillApiAuthApi: RetryManager is null.  You may have meant to set it with SetHttpRetryManager first, or you may not be using a custom RetryManager at all."))
 	return *RetryManager;
 }
 
-FHttpRequestRef ScillApiAuthApi::CreateHttpRequest(const Request & Request) const
+FHttpRequestRef ScillApiAuthApi::CreateHttpRequest(const Request& Request) const
 {
 	if (!Request.GetRetryParams().IsSet())
 	{
@@ -88,7 +89,7 @@ FHttpRequestRef ScillApiAuthApi::CreateHttpRequest(const Request & Request) cons
 	}
 }
 
-void ScillApiAuthApi::HandleResponse(FHttpResponsePtr HttpResponse, bool bSucceeded, Response & InOutResponse) const
+void ScillApiAuthApi::HandleResponse(FHttpResponsePtr HttpResponse, bool bSucceeded, Response& InOutResponse) const
 {
 	InOutResponse.SetHttpResponse(HttpResponse);
 	InOutResponse.SetSuccessful(bSucceeded);
@@ -116,7 +117,7 @@ void ScillApiAuthApi::HandleResponse(FHttpResponsePtr HttpResponse, bool bSuccee
 					return; // Successfully parsed
 			}
 		}
-		else if (ContentType.StartsWith(TEXT("text/plain")))
+		else if(ContentType.StartsWith(TEXT("text/plain")))
 		{
 			Content = HttpResponse->GetContentAsString();
 			InOutResponse.SetResponseString(Content);
@@ -124,7 +125,7 @@ void ScillApiAuthApi::HandleResponse(FHttpResponsePtr HttpResponse, bool bSuccee
 		}
 
 		// Report the parse error but do not mark the request as unsuccessful. Data could be partial or malformed, but the request succeeded.
-		UE_LOG(LogScillSDK, Error, TEXT("Failed to deserialize Http response content (type:%s):\n%s"), *ContentType, *Content);
+		UE_LOG(LogScillSDK, Error, TEXT("Failed to deserialize Http response content (type:%s):\n%s"), *ContentType , *Content);
 		return;
 	}
 
@@ -132,15 +133,15 @@ void ScillApiAuthApi::HandleResponse(FHttpResponsePtr HttpResponse, bool bSuccee
 	InOutResponse.SetHttpResponseCode(EHttpResponseCodes::RequestTimeout);
 }
 
-bool ScillApiAuthApi::GenerateAccessToken(const GenerateAccessTokenRequest & Request, const FGenerateAccessTokenDelegate & Delegate /*= FGenerateAccessTokenDelegate()*/) const
+FHttpRequestPtr ScillApiAuthApi::GenerateAccessToken(const GenerateAccessTokenRequest& Request, const FGenerateAccessTokenDelegate& Delegate /*= FGenerateAccessTokenDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
-	for (const auto& It : AdditionalHeaderParams)
+	for(const auto& It : AdditionalHeaderParams)
 	{
 		HttpRequest->SetHeader(It.Key, It.Value);
 	}
@@ -148,7 +149,8 @@ bool ScillApiAuthApi::GenerateAccessToken(const GenerateAccessTokenRequest & Req
 	Request.SetupHttpRequest(HttpRequest);
 
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiAuthApi::OnGenerateAccessTokenResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiAuthApi::OnGenerateAccessTokenResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGenerateAccessTokenDelegate Delegate) const
@@ -158,15 +160,15 @@ void ScillApiAuthApi::OnGenerateAccessTokenResponse(FHttpRequestPtr HttpRequest,
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiAuthApi::GetLeaderboardNotificationTopic(const GetLeaderboardNotificationTopicRequest & Request, const FGetLeaderboardNotificationTopicDelegate & Delegate /*= FGetLeaderboardNotificationTopicDelegate()*/) const
+FHttpRequestPtr ScillApiAuthApi::GetLeaderboardNotificationTopic(const GetLeaderboardNotificationTopicRequest& Request, const FGetLeaderboardNotificationTopicDelegate& Delegate /*= FGetLeaderboardNotificationTopicDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
-	for (const auto& It : AdditionalHeaderParams)
+	for(const auto& It : AdditionalHeaderParams)
 	{
 		HttpRequest->SetHeader(It.Key, It.Value);
 	}
@@ -174,7 +176,8 @@ bool ScillApiAuthApi::GetLeaderboardNotificationTopic(const GetLeaderboardNotifi
 	Request.SetupHttpRequest(HttpRequest);
 
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiAuthApi::OnGetLeaderboardNotificationTopicResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiAuthApi::OnGetLeaderboardNotificationTopicResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardNotificationTopicDelegate Delegate) const
@@ -184,15 +187,15 @@ void ScillApiAuthApi::OnGetLeaderboardNotificationTopicResponse(FHttpRequestPtr 
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiAuthApi::GetUserBattlePassNotificationTopic(const GetUserBattlePassNotificationTopicRequest & Request, const FGetUserBattlePassNotificationTopicDelegate & Delegate /*= FGetUserBattlePassNotificationTopicDelegate()*/) const
+FHttpRequestPtr ScillApiAuthApi::GetUserBattlePassNotificationTopic(const GetUserBattlePassNotificationTopicRequest& Request, const FGetUserBattlePassNotificationTopicDelegate& Delegate /*= FGetUserBattlePassNotificationTopicDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
-	for (const auto& It : AdditionalHeaderParams)
+	for(const auto& It : AdditionalHeaderParams)
 	{
 		HttpRequest->SetHeader(It.Key, It.Value);
 	}
@@ -200,7 +203,8 @@ bool ScillApiAuthApi::GetUserBattlePassNotificationTopic(const GetUserBattlePass
 	Request.SetupHttpRequest(HttpRequest);
 
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiAuthApi::OnGetUserBattlePassNotificationTopicResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiAuthApi::OnGetUserBattlePassNotificationTopicResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUserBattlePassNotificationTopicDelegate Delegate) const
@@ -210,15 +214,15 @@ void ScillApiAuthApi::OnGetUserBattlePassNotificationTopicResponse(FHttpRequestP
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiAuthApi::GetUserChallengeNotificationTopic(const GetUserChallengeNotificationTopicRequest & Request, const FGetUserChallengeNotificationTopicDelegate & Delegate /*= FGetUserChallengeNotificationTopicDelegate()*/) const
+FHttpRequestPtr ScillApiAuthApi::GetUserChallengeNotificationTopic(const GetUserChallengeNotificationTopicRequest& Request, const FGetUserChallengeNotificationTopicDelegate& Delegate /*= FGetUserChallengeNotificationTopicDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
-	for (const auto& It : AdditionalHeaderParams)
+	for(const auto& It : AdditionalHeaderParams)
 	{
 		HttpRequest->SetHeader(It.Key, It.Value);
 	}
@@ -226,7 +230,8 @@ bool ScillApiAuthApi::GetUserChallengeNotificationTopic(const GetUserChallengeNo
 	Request.SetupHttpRequest(HttpRequest);
 
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiAuthApi::OnGetUserChallengeNotificationTopicResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiAuthApi::OnGetUserChallengeNotificationTopicResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUserChallengeNotificationTopicDelegate Delegate) const
@@ -236,15 +241,15 @@ void ScillApiAuthApi::OnGetUserChallengeNotificationTopicResponse(FHttpRequestPt
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiAuthApi::GetUserChallengesNotificationTopic(const GetUserChallengesNotificationTopicRequest & Request, const FGetUserChallengesNotificationTopicDelegate & Delegate /*= FGetUserChallengesNotificationTopicDelegate()*/) const
+FHttpRequestPtr ScillApiAuthApi::GetUserChallengesNotificationTopic(const GetUserChallengesNotificationTopicRequest& Request, const FGetUserChallengesNotificationTopicDelegate& Delegate /*= FGetUserChallengesNotificationTopicDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
-	for (const auto& It : AdditionalHeaderParams)
+	for(const auto& It : AdditionalHeaderParams)
 	{
 		HttpRequest->SetHeader(It.Key, It.Value);
 	}
@@ -252,7 +257,8 @@ bool ScillApiAuthApi::GetUserChallengesNotificationTopic(const GetUserChallenges
 	Request.SetupHttpRequest(HttpRequest);
 
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiAuthApi::OnGetUserChallengesNotificationTopicResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiAuthApi::OnGetUserChallengesNotificationTopicResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUserChallengesNotificationTopicDelegate Delegate) const
@@ -262,15 +268,15 @@ void ScillApiAuthApi::OnGetUserChallengesNotificationTopicResponse(FHttpRequestP
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiAuthApi::GetUserInfo(const GetUserInfoRequest & Request, const FGetUserInfoDelegate & Delegate /*= FGetUserInfoDelegate()*/) const
+FHttpRequestPtr ScillApiAuthApi::GetUserInfo(const GetUserInfoRequest& Request, const FGetUserInfoDelegate& Delegate /*= FGetUserInfoDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
-	for (const auto& It : AdditionalHeaderParams)
+	for(const auto& It : AdditionalHeaderParams)
 	{
 		HttpRequest->SetHeader(It.Key, It.Value);
 	}
@@ -278,7 +284,8 @@ bool ScillApiAuthApi::GetUserInfo(const GetUserInfoRequest & Request, const FGet
 	Request.SetupHttpRequest(HttpRequest);
 
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiAuthApi::OnGetUserInfoResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiAuthApi::OnGetUserInfoResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUserInfoDelegate Delegate) const
@@ -288,15 +295,15 @@ void ScillApiAuthApi::OnGetUserInfoResponse(FHttpRequestPtr HttpRequest, FHttpRe
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiAuthApi::SetUserInfo(const SetUserInfoRequest & Request, const FSetUserInfoDelegate & Delegate /*= FSetUserInfoDelegate()*/) const
+FHttpRequestPtr ScillApiAuthApi::SetUserInfo(const SetUserInfoRequest& Request, const FSetUserInfoDelegate& Delegate /*= FSetUserInfoDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
 
-	for (const auto& It : AdditionalHeaderParams)
+	for(const auto& It : AdditionalHeaderParams)
 	{
 		HttpRequest->SetHeader(It.Key, It.Value);
 	}
@@ -304,7 +311,8 @@ bool ScillApiAuthApi::SetUserInfo(const SetUserInfoRequest & Request, const FSet
 	Request.SetupHttpRequest(HttpRequest);
 
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiAuthApi::OnSetUserInfoResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiAuthApi::OnSetUserInfoResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FSetUserInfoDelegate Delegate) const

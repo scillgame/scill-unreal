@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiChallengeCategory::WriteJson(JsonWriter& Writer) const
@@ -25,27 +25,27 @@ void ScillApiChallengeCategory::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (IsDailyCategory.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("is_daily_category")); WriteJsonValue(Writer, IsDailyCategory.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("is_daily_category")); WriteJsonValue(Writer, IsDailyCategory.GetValue());
 	}
 	if (CategoryPosition.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("category_position")); WriteJsonValue(Writer, CategoryPosition.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("category_position")); WriteJsonValue(Writer, CategoryPosition.GetValue());
 	}
 	if (CategorySlug.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("category_slug")); WriteJsonValue(Writer, CategorySlug.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("category_slug")); WriteJsonValue(Writer, CategorySlug.GetValue());
 	}
 	if (CategoryName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("category_name")); WriteJsonValue(Writer, CategoryName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("category_name")); WriteJsonValue(Writer, CategoryName.GetValue());
 	}
 	if (CategoryId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("category_id")); WriteJsonValue(Writer, CategoryId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("category_id")); WriteJsonValue(Writer, CategoryId.GetValue());
 	}
 	if (Challenges.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenges")); WriteJsonValue(Writer, Challenges.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenges")); WriteJsonValue(Writer, Challenges.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

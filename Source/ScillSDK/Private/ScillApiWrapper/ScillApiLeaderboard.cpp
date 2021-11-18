@@ -25,19 +25,27 @@ void ScillApiLeaderboard::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (LeaderboardId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("leaderboard_id")); WriteJsonValue(Writer, LeaderboardId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("leaderboard_id")); WriteJsonValue(Writer, LeaderboardId.GetValue());
 	}
 	if (Name.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("name")); WriteJsonValue(Writer, Name.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("name")); WriteJsonValue(Writer, Name.GetValue());
 	}
 	if (GroupedByUsers.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("grouped_by_users")); WriteJsonValue(Writer, GroupedByUsers.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("grouped_by_users")); WriteJsonValue(Writer, GroupedByUsers.GetValue());
 	}
 	if (GroupedByTeams.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("grouped_by_teams")); WriteJsonValue(Writer, GroupedByTeams.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("grouped_by_teams")); WriteJsonValue(Writer, GroupedByTeams.GetValue());
+	}
+	if (NumTeams.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("num_teams")); WriteJsonValue(Writer, NumTeams.GetValue());
+	}
+	if (NumUsers.IsSet())
+	{
+		Writer->WriteIdentifierPrefix(TEXT("num_users")); WriteJsonValue(Writer, NumUsers.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }
@@ -54,6 +62,8 @@ bool ScillApiLeaderboard::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("name"), Name);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("grouped_by_users"), GroupedByUsers);
 	ParseSuccess &= TryGetJsonValue(*Object, TEXT("grouped_by_teams"), GroupedByTeams);
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("num_teams"), NumTeams);
+	ParseSuccess &= TryGetJsonValue(*Object, TEXT("num_users"), NumUsers);
 
 	return ParseSuccess;
 }

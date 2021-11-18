@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiBattlePassLevelChallenge::WriteJson(JsonWriter& Writer) const
@@ -25,39 +25,39 @@ void ScillApiBattlePassLevelChallenge::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (ChallengeId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_id")); WriteJsonValue(Writer, ChallengeId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_id")); WriteJsonValue(Writer, ChallengeId.GetValue());
 	}
 	if (ChallengeName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_name")); WriteJsonValue(Writer, ChallengeName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_name")); WriteJsonValue(Writer, ChallengeName.GetValue());
 	}
 	if (ChallengeGoal.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_goal")); WriteJsonValue(Writer, ChallengeGoal.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_goal")); WriteJsonValue(Writer, ChallengeGoal.GetValue());
 	}
 	if (ChallengeGoalCondition.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_goal_condition")); WriteJsonValue(Writer, ChallengeGoalCondition.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_goal_condition")); WriteJsonValue(Writer, ChallengeGoalCondition.GetValue());
 	}
 	if (UserChallengeCurrentScore.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_challenge_current_score")); WriteJsonValue(Writer, UserChallengeCurrentScore.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_challenge_current_score")); WriteJsonValue(Writer, UserChallengeCurrentScore.GetValue());
 	}
 	if (ChallengeXp.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_xp")); WriteJsonValue(Writer, ChallengeXp.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_xp")); WriteJsonValue(Writer, ChallengeXp.GetValue());
 	}
 	if (ChallengeIcon.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_icon")); WriteJsonValue(Writer, ChallengeIcon.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_icon")); WriteJsonValue(Writer, ChallengeIcon.GetValue());
 	}
 	if (ChallengeIconHd.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_icon_hd")); WriteJsonValue(Writer, ChallengeIconHd.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_icon_hd")); WriteJsonValue(Writer, ChallengeIconHd.GetValue());
 	}
 	if (Type.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("type")); WriteJsonValue(Writer, Type.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("type")); WriteJsonValue(Writer, Type.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

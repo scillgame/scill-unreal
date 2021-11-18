@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiBattlePassChallengeChangedPayload::WriteJson(JsonWriter& Writer) const
@@ -25,15 +25,15 @@ void ScillApiBattlePassChallengeChangedPayload::WriteJson(JsonWriter& Writer) co
 	Writer->WriteObjectStart();
 	if (WebhookType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());
 	}
 	if (OldBattlePassChallenge.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("old_battle_pass_challenge")); WriteJsonValue(Writer, OldBattlePassChallenge.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("old_battle_pass_challenge")); WriteJsonValue(Writer, OldBattlePassChallenge.GetValue());
 	}
 	if (NewBattlePassChallenge.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("new_battle_pass_challenge")); WriteJsonValue(Writer, NewBattlePassChallenge.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("new_battle_pass_challenge")); WriteJsonValue(Writer, NewBattlePassChallenge.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

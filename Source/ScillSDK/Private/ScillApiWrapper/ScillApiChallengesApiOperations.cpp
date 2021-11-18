@@ -20,7 +20,7 @@
 #include "HttpModule.h"
 #include "PlatformHttp.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 FString ScillApiChallengesApi::ActivatePersonalChallengeRequest::ComputePath() const
@@ -30,7 +30,7 @@ FString ScillApiChallengesApi::ActivatePersonalChallengeRequest::ComputePath() c
 	{ TEXT("challengeId"), ToStringFormatArg(ChallengeId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/activate/{appId}/{challengeId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -52,6 +52,14 @@ void ScillApiChallengesApi::ActivatePersonalChallengeRequest::SetupHttpRequest(c
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -94,7 +102,7 @@ FString ScillApiChallengesApi::CancelPersonalChallengeRequest::ComputePath() con
 	{ TEXT("challengeId"), ToStringFormatArg(ChallengeId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/cancel/{appId}/{challengeId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -116,6 +124,14 @@ void ScillApiChallengesApi::CancelPersonalChallengeRequest::SetupHttpRequest(con
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -158,7 +174,7 @@ FString ScillApiChallengesApi::ClaimPersonalChallengeRewardRequest::ComputePath(
 	{ TEXT("challengeId"), ToStringFormatArg(ChallengeId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/claim/{appId}/{challengeId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -180,6 +196,14 @@ void ScillApiChallengesApi::ClaimPersonalChallengeRewardRequest::SetupHttpReques
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -231,6 +255,14 @@ void ScillApiChallengesApi::GenerateWebsocketAccessTokenRequest::SetupHttpReques
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -272,7 +304,7 @@ FString ScillApiChallengesApi::GetActivePersonalChallengesRequest::ComputePath()
 	{ TEXT("appId"), ToStringFormatArg(AppId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/get-in-progress-challenges/{appId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -294,6 +326,14 @@ void ScillApiChallengesApi::GetActivePersonalChallengesRequest::SetupHttpRequest
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -335,7 +375,7 @@ FString ScillApiChallengesApi::GetAllPersonalChallengesRequest::ComputePath() co
 	{ TEXT("appId"), ToStringFormatArg(AppId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/all/{appId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(IncludeCategories.IsSet())
 	{
@@ -365,6 +405,14 @@ void ScillApiChallengesApi::GetAllPersonalChallengesRequest::SetupHttpRequest(co
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -407,7 +455,7 @@ FString ScillApiChallengesApi::GetPersonalChallengeByIdRequest::ComputePath() co
 	{ TEXT("challengeId"), ToStringFormatArg(ChallengeId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/get/{appId}/{challengeId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -429,6 +477,14 @@ void ScillApiChallengesApi::GetPersonalChallengeByIdRequest::SetupHttpRequest(co
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -470,7 +526,7 @@ FString ScillApiChallengesApi::GetPersonalChallengesRequest::ComputePath() const
 	{ TEXT("appId"), ToStringFormatArg(AppId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/get/{appId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(IncludeCategories.IsSet())
 	{
@@ -500,6 +556,14 @@ void ScillApiChallengesApi::GetPersonalChallengesRequest::SetupHttpRequest(const
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -541,7 +605,7 @@ FString ScillApiChallengesApi::GetUnresolvedPersonalChallengesRequest::ComputePa
 	{ TEXT("appId"), ToStringFormatArg(AppId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/unresolved/{appId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(IncludeCategories.IsSet())
 	{
@@ -571,6 +635,14 @@ void ScillApiChallengesApi::GetUnresolvedPersonalChallengesRequest::SetupHttpReq
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -606,6 +678,70 @@ bool ScillApiChallengesApi::GetUnresolvedPersonalChallengesResponse::FromJson(co
 	return TryGetJsonValue(JsonValue, Content);
 }
 
+FString ScillApiChallengesApi::ResetUserAppChallengesRequest::ComputePath() const
+{
+	TMap<FString, FStringFormatArg> PathParams = { 
+	{ TEXT("appId"), ToStringFormatArg(AppId) },
+	{ TEXT("userId"), ToStringFormatArg(UserId) } };
+
+	FString Path = FString::Format(TEXT("/api/v1/reset-challenges/{appId}/{userId}"), PathParams);
+
+	return Path;
+}
+
+void ScillApiChallengesApi::ResetUserAppChallengesRequest::SetupHttpRequest(const FHttpRequestRef& HttpRequest) const
+{
+	static const TArray<FString> Consumes = {  };
+	//static const TArray<FString> Produces = { TEXT("application/json") };
+
+	HttpRequest->SetVerb(TEXT("POST"));
+
+	// Default to Json Body request
+	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
+	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
+	}
+	else if (Consumes.Contains(TEXT("multipart/form-data")))
+	{
+	}
+	else if (Consumes.Contains(TEXT("application/x-www-form-urlencoded")))
+	{
+	}
+	else
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Request ContentType not supported (%s)"), *FString::Join(Consumes, TEXT(",")));
+	}
+}
+
+void ScillApiChallengesApi::ResetUserAppChallengesResponse::SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode)
+{
+	Response::SetHttpResponseCode(InHttpResponseCode);
+	switch ((int)InHttpResponseCode)
+	{
+	case 200:
+		SetResponseString(TEXT("The action has been successful"));
+		break;
+	case 403:
+		SetResponseString(TEXT("Unauthorized"));
+		break;
+	case 404:
+		SetResponseString(TEXT("The specified resource was not found"));
+		break;
+	}
+}
+
+bool ScillApiChallengesApi::ResetUserAppChallengesResponse::FromJson(const TSharedPtr<FJsonValue>& JsonValue)
+{
+	return TryGetJsonValue(JsonValue, Content);
+}
+
 FString ScillApiChallengesApi::UnlockPersonalChallengeRequest::ComputePath() const
 {
 	TMap<FString, FStringFormatArg> PathParams = { 
@@ -613,7 +749,7 @@ FString ScillApiChallengesApi::UnlockPersonalChallengeRequest::ComputePath() con
 	{ TEXT("challengeId"), ToStringFormatArg(ChallengeId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/challenges/personal/unlock/{appId}/{challengeId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -635,6 +771,14 @@ void ScillApiChallengesApi::UnlockPersonalChallengeRequest::SetupHttpRequest(con
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{

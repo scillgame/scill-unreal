@@ -19,7 +19,7 @@
 #include "HttpRetrySystem.h"
 #include "Containers/Ticker.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 typedef TSharedRef<TJsonWriter<>> JsonWriter;
@@ -50,7 +50,7 @@ struct SCILLSDK_API HttpRetryParams
 };
 
 class SCILLSDK_API Model
-{ 
+{
 public:
 	virtual ~Model() {}
 	virtual void WriteJson(JsonWriter& Writer) const = 0;

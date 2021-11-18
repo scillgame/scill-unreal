@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "ScillApiBaseModel.h"
+#include "ScillApiWrapper/ScillApiBaseModel.h"
 #include "ScillApiWrapper/ScillApiLeaderboardRanking.h"
 
 namespace ScillSDK
@@ -38,6 +38,10 @@ public:
 	TOptional<TArray<ScillApiLeaderboardRanking>> GroupedByUsers;
 	/* An array of LeaderboardRanking Items for teams. Provide a team_id in the event payload to also create leaderboards for teams */
 	TOptional<TArray<ScillApiLeaderboardRanking>> GroupedByTeams;
+	/* The total number of team rankings available in the leaderboard */
+	TOptional<double> NumTeams;
+	/* The total number of user rankings available in the leaderboard */
+	TOptional<double> NumUsers;
 };
 
 }

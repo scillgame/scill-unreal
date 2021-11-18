@@ -21,7 +21,7 @@
 
 class IHttpRequest;
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 typedef TSharedRef<TJsonWriter<>> JsonWriter;
@@ -31,8 +31,8 @@ typedef TSharedRef<TJsonWriter<>> JsonWriter;
 class SCILLSDK_API HttpFileInput
 {
 public:
-	HttpFileInput(const TCHAR* InFilePath);
-	HttpFileInput(const FString& InFilePath);
+	explicit HttpFileInput(const TCHAR* InFilePath);
+	explicit HttpFileInput(const FString& InFilePath);
 
 	// This will automatically set the content type if not already set
     void SetFilePath(const TCHAR* InFilePath);
@@ -114,6 +114,11 @@ inline FStringFormatArg ToStringFormatArg(const FDateTime& Value)
 	return FStringFormatArg(Value.ToIso8601());
 }
 
+inline FStringFormatArg ToStringFormatArg(const FGuid& Value)
+{
+	return FStringFormatArg(Value.ToString(EGuidFormats::DigitsWithHyphens));
+}
+
 inline FStringFormatArg ToStringFormatArg(const TArray<uint8>& Value)
 {
 	return FStringFormatArg(Base64UrlEncode(Value));
@@ -128,6 +133,16 @@ inline FString ToString(const T& Value)
 inline FString ToString(const FString& Value)
 {
 	return Value;
+}
+
+inline FString ToString(bool Value)
+{
+	return Value ? TEXT("true") : TEXT("false");
+}
+
+inline FStringFormatArg ToStringFormatArg(bool Value)
+{
+	return FStringFormatArg(ToString(Value));
 }
 
 inline FString ToString(const TArray<uint8>& Value)
@@ -206,6 +221,19 @@ inline FString CollectionToUrlString_multi(const TArray<T>& Collection, const TC
 
 //////////////////////////////////////////////////////////////////////////
 
+inline void WriteJsonValue(JsonWriter& Writer, const TSharedPtr<FJsonValue>& Value)
+{
+	if (Value.IsValid())
+	{
+		FJsonSerializer::Serialize(Value.ToSharedRef(), "", Writer, false);
+	}
+	else
+	{
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+	}
+}
+
 inline void WriteJsonValue(JsonWriter& Writer, const TSharedPtr<FJsonObject>& Value)
 {
 	if (Value.IsValid())
@@ -227,6 +255,11 @@ inline void WriteJsonValue(JsonWriter& Writer, const TArray<uint8>& Value)
 inline void WriteJsonValue(JsonWriter& Writer, const FDateTime& Value)
 {
 	Writer->WriteValue(Value.ToIso8601());
+}
+
+inline void WriteJsonValue(JsonWriter& Writer, const FGuid& Value)
+{
+	Writer->WriteValue(Value.ToString(EGuidFormats::DigitsWithHyphens));
 }
 
 inline void WriteJsonValue(JsonWriter& Writer, const Model& Value)
@@ -268,16 +301,35 @@ inline void WriteJsonValue(JsonWriter& Writer, const TMap<FString, T>& Value)
 inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, FString& Value)
 {
 	FString TmpValue;
-	JsonValue->TryGetString(TmpValue);
-	Value = TmpValue;
-	return true;
+	if (JsonValue->TryGetString(TmpValue))
+	{
+		Value = TmpValue;
+		return true;
+	}
+	else
+		return false;
 }
+
+SCILLSDK_API bool ParseDateTime(const FString& DateTimeString, FDateTime& OutDateTime);
 
 inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, FDateTime& Value)
 {
 	FString TmpValue;
 	if (JsonValue->TryGetString(TmpValue))
-		return FDateTime::Parse(TmpValue, Value);
+	{
+		return ParseDateTime(TmpValue, Value);
+	}
+	else
+		return false;
+}
+
+inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, FGuid& Value)
+{
+	FString TmpValue;
+	if (JsonValue->TryGetString(TmpValue))
+	{
+		return FGuid::Parse(TmpValue, Value);
+	}
 	else
 		return false;
 }
@@ -292,6 +344,12 @@ inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, bool& Value
 	}
 	else
 		return false;
+}
+
+inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, TSharedPtr<FJsonValue>& JsonObjectValue)
+{
+	JsonObjectValue = JsonValue;
+	return true;
 }
 
 inline bool TryGetJsonValue(const TSharedPtr<FJsonValue>& JsonValue, TSharedPtr<FJsonObject>& JsonObjectValue)
@@ -378,11 +436,11 @@ template<typename T>
 inline bool TryGetJsonValue(const TSharedPtr<FJsonObject>& JsonObject, const FString& Key, T& Value)
 {
 	const TSharedPtr<FJsonValue> JsonValue = JsonObject->TryGetField(Key);
-	if (JsonValue)
+	if (JsonValue.IsValid() && !JsonValue->IsNull())
 	{
 		return TryGetJsonValue(JsonValue, Value);
 	}
-	return false; // TryGetJsonValue(JsonValue, Value);
+	return false;
 }
 
 template<typename T>
@@ -397,7 +455,7 @@ inline bool TryGetJsonValue(const TSharedPtr<FJsonObject>& JsonObject, const FSt
 			return true;
 		}
 		else
-			return true; // Optional value might also be null
+			return false;
 	}
 	return true; // Absence of optional value is not a parsing error
 }

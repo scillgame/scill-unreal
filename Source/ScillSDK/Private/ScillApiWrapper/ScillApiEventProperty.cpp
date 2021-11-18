@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiEventProperty::WriteJson(JsonWriter& Writer) const
@@ -25,11 +25,11 @@ void ScillApiEventProperty::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (PropertyName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("property_name")); WriteJsonValue(Writer, PropertyName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("property_name")); WriteJsonValue(Writer, PropertyName.GetValue());
 	}
 	if (PropertyType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("property_type")); WriteJsonValue(Writer, PropertyType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("property_type")); WriteJsonValue(Writer, PropertyType.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

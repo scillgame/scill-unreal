@@ -21,7 +21,7 @@
 namespace ScillSDK
 {
 
-ScillApiLeaderboardsApi::ScillApiLeaderboardsApi() 
+ScillApiLeaderboardsApi::ScillApiLeaderboardsApi()
 : Url(TEXT("https://virtserver.swaggerhub.com/4Players-GmbH/scill-gaas/1.0.0"))
 {
 }
@@ -65,6 +65,7 @@ void ScillApiLeaderboardsApi::SetHttpRetryManager(FHttpRetrySystem::FManager& In
 
 FHttpRetrySystem::FManager& ScillApiLeaderboardsApi::GetHttpRetryManager()
 {
+	checkf(RetryManager, TEXT("ScillApiLeaderboardsApi: RetryManager is null.  You may have meant to set it with SetHttpRetryManager first, or you may not be using a custom RetryManager at all."))
 	return *RetryManager;
 }
 
@@ -132,10 +133,10 @@ void ScillApiLeaderboardsApi::HandleResponse(FHttpResponsePtr HttpResponse, bool
 	InOutResponse.SetHttpResponseCode(EHttpResponseCodes::RequestTimeout);
 }
 
-bool ScillApiLeaderboardsApi::GetLeaderboard(const GetLeaderboardRequest& Request, const FGetLeaderboardDelegate& Delegate /*= FGetLeaderboardDelegate()*/) const
+FHttpRequestPtr ScillApiLeaderboardsApi::GetLeaderboard(const GetLeaderboardRequest& Request, const FGetLeaderboardDelegate& Delegate /*= FGetLeaderboardDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -146,9 +147,10 @@ bool ScillApiLeaderboardsApi::GetLeaderboard(const GetLeaderboardRequest& Reques
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiLeaderboardsApi::OnGetLeaderboardResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiLeaderboardsApi::OnGetLeaderboardResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardDelegate Delegate) const
@@ -158,10 +160,10 @@ void ScillApiLeaderboardsApi::OnGetLeaderboardResponse(FHttpRequestPtr HttpReque
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiLeaderboardsApi::GetLeaderboardRanking(const GetLeaderboardRankingRequest& Request, const FGetLeaderboardRankingDelegate& Delegate /*= FGetLeaderboardRankingDelegate()*/) const
+FHttpRequestPtr ScillApiLeaderboardsApi::GetLeaderboardRanking(const GetLeaderboardRankingRequest& Request, const FGetLeaderboardRankingDelegate& Delegate /*= FGetLeaderboardRankingDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -172,9 +174,10 @@ bool ScillApiLeaderboardsApi::GetLeaderboardRanking(const GetLeaderboardRankingR
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiLeaderboardsApi::OnGetLeaderboardRankingResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiLeaderboardsApi::OnGetLeaderboardRankingResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardRankingDelegate Delegate) const
@@ -184,10 +187,10 @@ void ScillApiLeaderboardsApi::OnGetLeaderboardRankingResponse(FHttpRequestPtr Ht
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiLeaderboardsApi::GetLeaderboardRankings(const GetLeaderboardRankingsRequest& Request, const FGetLeaderboardRankingsDelegate& Delegate /*= FGetLeaderboardRankingsDelegate()*/) const
+FHttpRequestPtr ScillApiLeaderboardsApi::GetLeaderboardRankings(const GetLeaderboardRankingsRequest& Request, const FGetLeaderboardRankingsDelegate& Delegate /*= FGetLeaderboardRankingsDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -198,9 +201,10 @@ bool ScillApiLeaderboardsApi::GetLeaderboardRankings(const GetLeaderboardRanking
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiLeaderboardsApi::OnGetLeaderboardRankingsResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiLeaderboardsApi::OnGetLeaderboardRankingsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardRankingsDelegate Delegate) const
@@ -210,10 +214,10 @@ void ScillApiLeaderboardsApi::OnGetLeaderboardRankingsResponse(FHttpRequestPtr H
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiLeaderboardsApi::GetLeaderboards(const GetLeaderboardsRequest& Request, const FGetLeaderboardsDelegate& Delegate /*= FGetLeaderboardsDelegate()*/) const
+FHttpRequestPtr ScillApiLeaderboardsApi::GetLeaderboards(const GetLeaderboardsRequest& Request, const FGetLeaderboardsDelegate& Delegate /*= FGetLeaderboardsDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -224,14 +228,42 @@ bool ScillApiLeaderboardsApi::GetLeaderboards(const GetLeaderboardsRequest& Requ
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiLeaderboardsApi::OnGetLeaderboardsResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiLeaderboardsApi::OnGetLeaderboardsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardsDelegate Delegate) const
 {
 	GetLeaderboardsResponse Response;
+	HandleResponse(HttpResponse, bSucceeded, Response);
+	Delegate.ExecuteIfBound(Response);
+}
+
+FHttpRequestPtr ScillApiLeaderboardsApi::ResetLeaderboardRankings(const ResetLeaderboardRankingsRequest& Request, const FResetLeaderboardRankingsDelegate& Delegate /*= FResetLeaderboardRankingsDelegate()*/) const
+{
+	if (!IsValid())
+		return nullptr;
+
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
+	HttpRequest->SetURL(*(Url + Request.ComputePath()));
+
+	for(const auto& It : AdditionalHeaderParams)
+	{
+		HttpRequest->SetHeader(It.Key, It.Value);
+	}
+
+	Request.SetupHttpRequest(HttpRequest);
+
+	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiLeaderboardsApi::OnResetLeaderboardRankingsResponse, Delegate);
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
+}
+
+void ScillApiLeaderboardsApi::OnResetLeaderboardRankingsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FResetLeaderboardRankingsDelegate Delegate) const
+{
+	ResetLeaderboardRankingsResponse Response;
 	HandleResponse(HttpResponse, bSucceeded, Response);
 	Delegate.ExecuteIfBound(Response);
 }

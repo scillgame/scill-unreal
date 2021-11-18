@@ -17,7 +17,7 @@
 #include "ScillApiWrapper/ScillApiLeaderboardRanking.h"
 #include "ScillApiWrapper/ScillApiLeaderboardScore.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 /*

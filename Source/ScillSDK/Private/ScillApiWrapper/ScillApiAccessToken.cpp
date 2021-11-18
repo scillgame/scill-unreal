@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiAccessToken::WriteJson(JsonWriter& Writer) const
@@ -25,7 +25,7 @@ void ScillApiAccessToken::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (Token.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("token")); WriteJsonValue(Writer, Token.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("token")); WriteJsonValue(Writer, Token.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

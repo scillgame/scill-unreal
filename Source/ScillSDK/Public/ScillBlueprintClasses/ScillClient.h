@@ -174,17 +174,17 @@ public:
 	// ----------------------------------------------------
 	// Leaderboards
 
-	
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (DeprecatedFunction, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions.", DisplayName = "GetLeaderboardV1"))
 		void GetLeaderboard(FString BoardId, int CurrentPage, int PageSize, FString Language, FLeaderboardReceived responseReceived);
-		
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (DeprecatedFunction, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions.", DisplayName = "GetLeaderboardRankingV1"))
 		void GetLeaderboardRanking(FString MemberType, FString MemberId, FString LeaderboardId, FString Language, FLeaderboardRankingReceived responseReceived);
-	
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (DeprecatedFunction, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions.", DisplayName = "GetLeaderboardRankingsV1"))
 		void GetLeaderboardRankings(FString MemberType, FString MemberId, FString Language, FLeaderboardRankingsReceived responseReceived);
-	
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (DeprecatedFunction, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions.", DisplayName = "GetLeaderboardsV1"))
 		void GetLeaderboards(int CurrentPage, int PageSize, FString Language, FLeaderboardsReceived responseReceived);
 
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
@@ -195,6 +195,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		FUserInfo CurrentUserInfo;
+
+	// ----------------------------------------------------
+	// Leaderboards V2
+
+	/*UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardV2(FString BoardId, int CurrentPage, int PageSize, FString Language, FLeaderboardReceived responseReceived);*/
 
 	// ----------------------------------------------------------------------------------
 	// User Info Helpers

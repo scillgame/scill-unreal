@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiBattlePassLevelClaimedPayload::WriteJson(JsonWriter& Writer) const
@@ -25,11 +25,11 @@ void ScillApiBattlePassLevelClaimedPayload::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (WebhookType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());
 	}
 	if (BattlePassLevelRewardClaimed.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("battle_pass_level_reward_claimed")); WriteJsonValue(Writer, BattlePassLevelRewardClaimed.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("battle_pass_level_reward_claimed")); WriteJsonValue(Writer, BattlePassLevelRewardClaimed.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }
