@@ -12,6 +12,7 @@ void UScillClientBackend::SetApiKey(FString apiKey)
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + apiKey);
 	this->ApiKey = apiKey;
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
+	this->leaderboardsApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
 	//UE_LOG(LogScillSDK, Log, TEXT("API Key Created: %s"), *apiKey);
 }
 
@@ -131,6 +132,31 @@ void UScillClientBackend::SendEvent(FScillEventPayload payload, FResponseReceive
 void UScillClientBackend::ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::SendEventResponse& Response, FGuid guid) const
 {
 	auto callback = callbackMapResponseReceived.FindRef(guid);
+	callback.ExecuteIfBound(Response.IsSuccessful());
+
+	callbackMapResponseReceived.Remove(guid);
+}
+
+void UScillClientBackend::ResetLeaderboardRankingsV2(FString ApplicationId, FString LeaderboardId, FResponseReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsV2Api::ResetLeaderboardV2RankingsRequest();
+
+	request.AppId = ApplicationId;
+	request.LeaderboardId = LeaderboardId;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapResponseReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FResetLeaderboardV2RankingsDelegate::CreateUObject(this, &UScillClientBackend::ReceiveResetLeaderboardRankingsResponseV2, guid);
+
+	leaderboardsApi.ResetLeaderboardV2Rankings(request, delegate);
+}
+
+void UScillClientBackend::ReceiveResetLeaderboardRankingsResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::ResetLeaderboardV2RankingsResponse& Response, FGuid guid) const
+{
+	auto callback = callbackMapResponseReceived.FindRef(guid);
+
 	callback.ExecuteIfBound(Response.IsSuccessful());
 
 	callbackMapResponseReceived.Remove(guid);

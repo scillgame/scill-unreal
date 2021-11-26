@@ -192,6 +192,41 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (DeprecatedFunction, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions.", DisplayName = "GetLeaderboardsV1"))
 		void GetLeaderboards(int CurrentPage, int PageSize, FString Language, FLeaderboardsReceived responseReceived);
 
+	// ----------------------------------------------------
+	// Leaderboards V2
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardV2(FString BoardId, FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardReceivedV2 responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardRankingV2(FString MemberType, FString MemberId, FString LeaderboardId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingReceivedV2 responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardRankingsV2(FString MemberType, FString MemberId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingsReceivedV2 responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardsV2( FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardsReceivedV2 responseReceived);
+	
+	
+
+	// ----------------------------------------------------
+	// Leaderboards Version Agnostic
+
+	/*UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardV2(FString BoardId, FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardReceivedV2 responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardRankingV2(FString MemberType, FString MemberId, FString LeaderboardId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingReceivedV2 responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardRankingsV2(FString MemberType, FString MemberId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingsReceivedV2 responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void GetLeaderboardsV2(FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardsReceivedV2 responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void ResetLeaderboardRankingsV2(FString ApplicationId, FString LeaderboardId, FHttpResponseReceived responseReceived);*/
+
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void SetUserData(FUserInfo UserInfo, FUserInfoReceived responseReceived);
 
@@ -209,24 +244,6 @@ public:
 	{
 		return this->LeaderboardVersionNumber;
 	};
-
-	// ----------------------------------------------------
-	// Leaderboards V2
-
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
-		void GetLeaderboardV2(FString BoardId, FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardReceivedV2 responseReceived);
-
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
-		void GetLeaderboardRankingV2(FString MemberType, FString MemberId, FString LeaderboardId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingReceivedV2 responseReceived);
-
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
-		void GetLeaderboardRankingsV2(FString MemberType, FString MemberId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingsReceivedV2 responseReceived);
-
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
-		void GetLeaderboardsV2( FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardsReceivedV2 responseReceived);
-	
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
-		void ResetLeaderboardRankingsV2(FString ApplicationId, FString LeaderboardId, FHttpResponseReceived responseReceived);
 
 	// ----------------------------------------------------------------------------------
 	// User Info Helpers
@@ -359,7 +376,6 @@ private:
 	void ReceiveGetLeaderboardRankingResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingResponse& Response, FGuid guid) const;
 	void ReceiveGetLeaderboardRankingsResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingsResponse& Response, FGuid guid) const;
 	void ReceiveGetLeaderboardsResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardsV2Response& Response, FGuid guid) const;
-	void ReceiveResetLeaderboardRankingsResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::ResetLeaderboardV2RankingsResponse& Response, FGuid guid) const;
 
 	// ----------------------------------------------------------------------------------
 	// Events Handlers

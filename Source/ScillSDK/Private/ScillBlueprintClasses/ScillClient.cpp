@@ -613,22 +613,6 @@ void UScillClient::GetLeaderboardsV2(FString StartDate, FString EndDate, FString
 	leaderboardsApiV2.GetLeaderboardsV2(request, delegate);
 }
 
-void UScillClient::ResetLeaderboardRankingsV2(FString ApplicationId, FString LeaderboardId, FHttpResponseReceived responseReceived)
-{
-	auto request = ScillSDK::ScillApiLeaderboardsV2Api::ResetLeaderboardV2RankingsRequest();
-
-	request.AppId = AppId;
-	request.LeaderboardId = LeaderboardId;
-
-	FGuid guid = FGuid::NewGuid();
-
-	callbackMapResponseReceived.Add(guid, responseReceived);
-
-	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FResetLeaderboardV2RankingsDelegate::CreateUObject(this, &UScillClient::ReceiveResetLeaderboardRankingsResponseV2, guid);
-
-	leaderboardsApiV2.ResetLeaderboardV2Rankings(request, delegate);
-}
-
 // ----------------------------------------------------------------------------------------------------------------------------
 // Events
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -1163,15 +1147,6 @@ void UScillClient::ReceiveGetLeaderboardsResponseV2(const ScillSDK::ScillApiLead
 	callback.ExecuteIfBound(Result, Response.IsSuccessful());
 
 	callbackMapLeaderboardRankingsReceivedV2.Remove(guid);
-}
-
-void UScillClient::ReceiveResetLeaderboardRankingsResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::ResetLeaderboardV2RankingsResponse& Response, FGuid guid) const
-{
-	auto callback = callbackMapResponseReceived.FindRef(guid);
-
-	callback.ExecuteIfBound(Response.IsSuccessful());
-
-	callbackMapResponseReceived.Remove(guid);
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------
