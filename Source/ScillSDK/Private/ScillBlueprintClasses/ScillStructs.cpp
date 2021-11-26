@@ -494,13 +494,13 @@ FLeaderboardV2MemberRanking FLeaderboardV2MemberRanking::FromScillApiLeaderboard
 	n.LeaderboardName = o.LeaderboardName.Get("");
 	n.LeaderboardSortOrderAscending = o.LeaderboardSortOrderAscending.Get(false);
 
-	TArray<FLeaderboardV2Member> members = TArray<FLeaderboardV2Member>();
+	/*TArray<FLeaderboardV2Member> members = TArray<FLeaderboardV2Member>();
 	if (o.LeaderboardMember.IsSet())
 		for (auto& c : o.LeaderboardMember.GetValue())
 		{
 			members.Add(FLeaderboardV2Member::FromScillApiLeaderboardV2Member(c));
-		}
-	n.LeaderboardMember = members;
+		}*/
+	n.LeaderboardMember = FLeaderboardV2Member::FromScillApiLeaderboardV2Member(o.LeaderboardMember.Get(ScillSDK::ScillApiLeaderboardV2Member()));
 
 	return n;
 }

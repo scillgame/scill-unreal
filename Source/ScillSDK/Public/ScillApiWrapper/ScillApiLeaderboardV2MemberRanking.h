@@ -37,7 +37,7 @@ public:
 	/* Determines the results sort order. If true, the order is ascending, otherwise, it's descending. */
 	TOptional<bool> LeaderboardSortOrderAscending;
 	/* Returns the LeaderboardMember object containing user ranking information */
-	TOptional<TArray<ScillApiLeaderboardV2Member>> LeaderboardMember;
+	TOptional<ScillApiLeaderboardV2Member> LeaderboardMember;
 };
 
 }

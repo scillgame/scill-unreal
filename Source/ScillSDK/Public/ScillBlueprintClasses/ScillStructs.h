@@ -1096,7 +1096,7 @@ public:
 		bool LeaderboardSortOrderAscending;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<FLeaderboardV2Member> LeaderboardMember;
+		FLeaderboardV2Member LeaderboardMember;
 
 	static FLeaderboardV2MemberRanking FromScillApiLeaderboardV2MemberRanking(const ScillSDK::ScillApiLeaderboardV2MemberRanking o);
 };
