@@ -1196,7 +1196,7 @@ public:
 	static FLeaderboardV2Changed FromScillApiLeaderboardV2Changed(const ScillSDK::ScillApiLeaderboardV2Changed o);
 };
 
-/* This object is sent via Webhook or notifications of type leaderboard-changed.
+/* The payload used for realtime updates and webhooks if a leaderboard is updated.
 */
 USTRUCT(BlueprintType, Category = "ScillSDK")
 struct SCILLSDK_API FLeaderboardV2UpdatePayload
@@ -1204,7 +1204,7 @@ struct SCILLSDK_API FLeaderboardV2UpdatePayload
 	GENERATED_USTRUCT_BODY()
 public:
 
-	/* The type of the notification. If you receive this payload, it's most likely leaderboard-changed. */
+	/* The type of the webhook, in this case it is leaderboard-ranking-changed */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString WebhookType;
 

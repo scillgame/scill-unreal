@@ -379,7 +379,7 @@ void UScillClient::UnlockPersonalChallenge(FString challengeId, FChallengeReceiv
 // Leaderboards (Deprecated)
 // ----------------------------------------------------------------------------------------------------------------------------
 
-void UScillClient::GetLeaderboard(FString BoardId, int CurrentPage, int PageSize, FString Language, FLeaderboardReceived responseReceived)
+void UScillClient::GetLeaderboardV1(FString BoardId, int CurrentPage, int PageSize, FString Language, FLeaderboardReceived responseReceived)
 {
 	auto request = ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRequest();
 
@@ -399,7 +399,7 @@ void UScillClient::GetLeaderboard(FString BoardId, int CurrentPage, int PageSize
 	leaderboardsApi.GetLeaderboard(request, delegate);
 }
 
-void UScillClient::GetLeaderboards(int CurrentPage, int PageSize, FString Language, FLeaderboardsReceived responseReceived)
+void UScillClient::GetLeaderboardsV1(int CurrentPage, int PageSize, FString Language, FLeaderboardsReceived responseReceived)
 {
 	auto request = ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardsRequest();
 
@@ -418,7 +418,7 @@ void UScillClient::GetLeaderboards(int CurrentPage, int PageSize, FString Langua
 	leaderboardsApi.GetLeaderboards(request, delegate);
 }
 
-void UScillClient::GetLeaderboardRanking(FString MemberType, FString MemberId, FString LeaderboardId, FString Language, FLeaderboardRankingReceived responseReceived)
+void UScillClient::GetLeaderboardRankingV1(FString MemberType, FString MemberId, FString LeaderboardId, FString Language, FLeaderboardRankingReceived responseReceived)
 {
 	auto request = ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingRequest();
 
@@ -438,7 +438,7 @@ void UScillClient::GetLeaderboardRanking(FString MemberType, FString MemberId, F
 	leaderboardsApi.GetLeaderboardRanking(request, delegate);
 }
 
-void UScillClient::GetLeaderboardRankings(FString MemberType, FString MemberId, FString Language, FLeaderboardRankingsReceived responseReceived)
+void UScillClient::GetLeaderboardRankingsV1(FString MemberType, FString MemberId, FString Language, FLeaderboardRankingsReceived responseReceived)
 {
 	auto request = ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingsRequest();
 
@@ -455,6 +455,186 @@ void UScillClient::GetLeaderboardRankings(FString MemberType, FString MemberId, 
 	auto delegate = ScillSDK::ScillApiLeaderboardsApi::FGetLeaderboardRankingsDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardRankingsResponse, guid);
 
 	leaderboardsApi.GetLeaderboardRankings(request, delegate);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// Leaderboards V2
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::GetLeaderboardV2(FString BoardId, FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2Request();
+
+	request.LeaderboardId = BoardId;
+	request.CurrentPage = CurrentPage;
+	if (PageSize != 0)
+		request.PageSize = PageSize;
+	if (!Language.IsEmpty())
+		request.Language = Language;
+
+	request.StartDate = StartDate;
+	request.EndDate = EndDate;
+	if (!Aggregate.IsEmpty())
+	{
+		request.Aggregate = "SUM";
+	}
+	else
+	{
+		request.Aggregate = Aggregate;
+	}
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FGetLeaderboardV2Delegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardResponseV2, guid);
+
+	leaderboardsApiV2.GetLeaderboardV2(request, delegate);
+}
+
+void UScillClient::GetLeaderboardRankingV2(FString MemberType, FString MemberId, FString LeaderboardId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingRequest();
+
+	request.MemberType = MemberType;
+	request.MemberId = MemberId;
+	request.LeaderboardId = LeaderboardId;
+
+	request.StartDate = StartDate;
+	request.EndDate = EndDate;
+	if (!Aggregate.IsEmpty())
+	{
+		request.Aggregate = "SUM";
+	}
+	else
+	{
+		request.Aggregate = Aggregate;
+	}
+
+
+	if (!Language.IsEmpty())
+		request.Language = Language;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardRankingReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FGetLeaderboardV2RankingDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardRankingResponseV2, guid);
+
+	leaderboardsApiV2.GetLeaderboardV2Ranking(request, delegate);
+}
+
+void UScillClient::GetLeaderboardRankingsV2(FString MemberType, FString MemberId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingsReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingsRequest();
+
+	request.MemberType = MemberType;
+	request.MemberId = MemberId;
+
+	request.StartDate = StartDate;
+	request.EndDate = EndDate;
+	if (!Aggregate.IsEmpty())
+	{
+		request.Aggregate = "SUM";
+	}
+	else
+	{
+		request.Aggregate = Aggregate;
+	}
+
+
+	if (!Language.IsEmpty())
+		request.Language = Language;
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardRankingsReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FGetLeaderboardV2RankingsDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardRankingsResponseV2, guid);
+
+	leaderboardsApiV2.GetLeaderboardV2Rankings(request, delegate);
+}
+
+void UScillClient::GetLeaderboardsV2(FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardsReceived responseReceived)
+{
+	auto request = ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardsV2Request();
+
+	request.CurrentPage = CurrentPage;
+	if (PageSize != 0)
+		request.PageSize = PageSize;
+	if (!Language.IsEmpty())
+		request.Language = Language;
+
+	request.StartDate = StartDate;
+	request.EndDate = EndDate;
+	if (!Aggregate.IsEmpty())
+	{
+		request.Aggregate = "SUM";
+	}
+	else
+	{
+		request.Aggregate = Aggregate;
+	}
+
+	FGuid guid = FGuid::NewGuid();
+
+	callbackMapLeaderboardsReceived.Add(guid, responseReceived);
+
+	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FGetLeaderboardsV2Delegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardsResponseV2, guid);
+
+	leaderboardsApiV2.GetLeaderboardsV2(request, delegate);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// Leaderboards Version Agnostic
+// ----------------------------------------------------------------------------------------------------------------------------
+
+void UScillClient::GetLeaderboard(FString BoardId, FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardReceived responseReceived)
+{
+	if (this->LeaderboardVersionNumber == 1)
+	{
+		this->GetLeaderboardV1(BoardId, CurrentPage, PageSize, Language, responseReceived);
+	}
+	else
+	{
+		this->GetLeaderboardV2(BoardId, StartDate, EndDate, Aggregate, CurrentPage, CurrentPosition, PageSize, Language, responseReceived);
+	}
+}
+
+void UScillClient::GetLeaderboardRanking(FString MemberType, FString MemberId, FString LeaderboardId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingReceived responseReceived)
+{
+	if (this->LeaderboardVersionNumber == 1)
+	{
+		this->GetLeaderboardRankingV1(MemberType, MemberId, LeaderboardId, Language, responseReceived);
+	}
+	else
+	{
+		this->GetLeaderboardRankingV2(MemberType, MemberId, LeaderboardId, StartDate, EndDate, Aggregate, Language, responseReceived);
+	}
+}
+
+void UScillClient::GetLeaderboardRankings(FString MemberType, FString MemberId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingsReceived responseReceived)
+{
+	if (this->LeaderboardVersionNumber == 1)
+	{
+		this->GetLeaderboardRankingsV1(MemberType, MemberId, Language, responseReceived);
+	}
+	else
+	{
+		this->GetLeaderboardRankingsV2(MemberType, MemberId, StartDate, EndDate, Aggregate, Language, responseReceived);
+	}
+}
+
+void UScillClient::GetLeaderboards(FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardsReceived responseReceived)
+{
+	if (this->LeaderboardVersionNumber == 1)
+	{
+		this->GetLeaderboardsV1(CurrentPage, PageSize, Language, responseReceived);
+	}
+	else
+	{
+		this->GetLeaderboardsV2(StartDate, EndDate, Aggregate, CurrentPage, CurrentPosition, PageSize, Language, responseReceived);
+	}
 }
 
 void UScillClient::SetUserData(FUserInfo UserInfo, FUserInfoReceived responseReceived)
@@ -483,134 +663,6 @@ void UScillClient::GetUserData(FUserInfoReceived responseReceived)
 	auto delegate = ScillSDK::ScillApiAuthApi::FGetUserInfoDelegate::CreateUObject(this, &UScillClient::ReceiveGetUserInfoResponse, guid);
 
 	authApi.GetUserInfo(request, delegate);
-}
-
-// ----------------------------------------------------------------------------------------------------------------------------
-// Leaderboards V2
-// ----------------------------------------------------------------------------------------------------------------------------
-
-void UScillClient::GetLeaderboardV2(FString BoardId, FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardReceivedV2 responseReceived)
-{
-	auto request = ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2Request();
-
-	request.LeaderboardId = BoardId;
-	request.CurrentPage = CurrentPage;
-	if (PageSize != 0)
-		request.PageSize = PageSize;
-	if (!Language.IsEmpty())
-		request.Language = Language;
-
-	request.StartDate = StartDate;
-	request.EndDate = EndDate;
-	if (!Aggregate.IsEmpty())
-	{
-		request.Aggregate = "SUM";
-	}
-	else
-	{
-		request.Aggregate = Aggregate;
-	}
-
-	FGuid guid = FGuid::NewGuid();
-
-	callbackMapLeaderboardReceivedV2.Add(guid, responseReceived);
-
-	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FGetLeaderboardV2Delegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardResponseV2, guid);
-
-	leaderboardsApiV2.GetLeaderboardV2(request, delegate);
-}
-
-void UScillClient::GetLeaderboardRankingV2(FString MemberType, FString MemberId, FString LeaderboardId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingReceivedV2 responseReceived)
-{
-	auto request = ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingRequest();
-
-	request.MemberType = MemberType;
-	request.MemberId = MemberId;
-	request.LeaderboardId = LeaderboardId;
-
-	request.StartDate = StartDate;
-	request.EndDate = EndDate;
-	if (!Aggregate.IsEmpty())
-	{
-		request.Aggregate = "SUM";
-	}
-	else
-	{
-		request.Aggregate = Aggregate;
-	}
-
-
-	if (!Language.IsEmpty())
-		request.Language = Language;
-
-	FGuid guid = FGuid::NewGuid();
-
-	callbackMapLeaderboardRankingReceivedV2.Add(guid, responseReceived);
-
-	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FGetLeaderboardV2RankingDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardRankingResponseV2, guid);
-
-	leaderboardsApiV2.GetLeaderboardV2Ranking(request, delegate);
-}
-
-void UScillClient::GetLeaderboardRankingsV2(FString MemberType, FString MemberId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingsReceivedV2 responseReceived)
-{
-	auto request = ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingsRequest();
-
-	request.MemberType = MemberType;
-	request.MemberId = MemberId;
-
-	request.StartDate = StartDate;
-	request.EndDate = EndDate;
-	if (!Aggregate.IsEmpty())
-	{
-		request.Aggregate = "SUM";
-	}
-	else
-	{
-		request.Aggregate = Aggregate;
-	}
-
-
-	if (!Language.IsEmpty())
-		request.Language = Language;
-
-	FGuid guid = FGuid::NewGuid();
-
-	callbackMapLeaderboardRankingsReceivedV2.Add(guid, responseReceived);
-
-	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FGetLeaderboardV2RankingsDelegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardRankingsResponseV2, guid);
-
-	leaderboardsApiV2.GetLeaderboardV2Rankings(request, delegate);
-}
-
-void UScillClient::GetLeaderboardsV2(FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardsReceivedV2 responseReceived)
-{
-	auto request = ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardsV2Request();
-
-	request.CurrentPage = CurrentPage;
-	if (PageSize != 0)
-		request.PageSize = PageSize;
-	if (!Language.IsEmpty())
-		request.Language = Language;
-
-	request.StartDate = StartDate;
-	request.EndDate = EndDate;
-	if (!Aggregate.IsEmpty())
-	{
-		request.Aggregate = "SUM";
-	}
-	else
-	{
-		request.Aggregate = Aggregate;
-	}
-
-	FGuid guid = FGuid::NewGuid();
-
-	callbackMapLeaderboardsReceivedV2.Add(guid, responseReceived);
-
-	auto delegate = ScillSDK::ScillApiLeaderboardsV2Api::FGetLeaderboardsV2Delegate::CreateUObject(this, &UScillClient::ReceiveGetLeaderboardsResponseV2, guid);
-
-	leaderboardsApiV2.GetLeaderboardsV2(request, delegate);
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -1028,7 +1080,7 @@ void UScillClient::ReceiveUnlockPersonalChallengeResponse(const ScillSDK::ScillA
 void UScillClient::ReceiveGetLeaderboardResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardResponse& Response, FGuid guid) const
 {
 	auto callback = callbackMapLeaderboardReceived.FindRef(guid);
-	callback.ExecuteIfBound(FLeaderboard::FromScillApiLeaderboard(Response.Content), Response.IsSuccessful());
+	callback.ExecuteIfBound(FLeaderboard::FromScillApiLeaderboard(Response.Content), FLeaderboardV2Results(), Response.IsSuccessful());
 
 	callbackMapLeaderboardReceived.Remove(guid);
 }
@@ -1036,7 +1088,7 @@ void UScillClient::ReceiveGetLeaderboardResponse(const ScillSDK::ScillApiLeaderb
 void UScillClient::ReceiveGetLeaderboardRankingResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingResponse& Response, FGuid guid) const
 {
 	auto callback = callbackMapLeaderboardRankingReceived.FindRef(guid);
-	callback.ExecuteIfBound(FLeaderboardMemberRanking::FromScillApiLeaderboardMemberRanking(Response.Content), Response.IsSuccessful());
+	callback.ExecuteIfBound(FLeaderboardMemberRanking::FromScillApiLeaderboardMemberRanking(Response.Content), FLeaderboardV2MemberRanking(), Response.IsSuccessful());
 
 	callbackMapLeaderboardRankingReceived.Remove(guid);
 }
@@ -1054,7 +1106,7 @@ void UScillClient::ReceiveGetLeaderboardRankingsResponse(const ScillSDK::ScillAp
 		}
 	}
 
-	callback.ExecuteIfBound(Result, Response.IsSuccessful());
+	callback.ExecuteIfBound(Result, TArray<FLeaderboardV2MemberRanking>(), Response.IsSuccessful());
 
 	callbackMapLeaderboardRankingsReceived.Remove(guid);
 }
@@ -1072,7 +1124,7 @@ void UScillClient::ReceiveGetLeaderboardsResponse(const ScillSDK::ScillApiLeader
 		}
 	}
 
-	callback.ExecuteIfBound(Result, Response.IsSuccessful());
+	callback.ExecuteIfBound(Result, TArray<FLeaderboardV2Results>(), Response.IsSuccessful());
 
 	callbackMapLeaderboardsReceived.Remove(guid);
 }
@@ -1099,23 +1151,23 @@ void UScillClient::ReceiveGetUserInfoResponse(const ScillSDK::ScillApiAuthApi::G
 
 void UScillClient::ReceiveGetLeaderboardResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2Response& Response, FGuid guid) const
 {
-	auto callback = callbackMapLeaderboardReceivedV2.FindRef(guid);
-	callback.ExecuteIfBound(FLeaderboardV2Results::FromScillApiLeaderboardV2Results(Response.Content), Response.IsSuccessful());
+	auto callback = callbackMapLeaderboardReceived.FindRef(guid);
+	callback.ExecuteIfBound(FLeaderboard(), FLeaderboardV2Results::FromScillApiLeaderboardV2Results(Response.Content), Response.IsSuccessful());
 
-	callbackMapLeaderboardReceivedV2.Remove(guid);
+	callbackMapLeaderboardReceived.Remove(guid);
 }
 
 void UScillClient::ReceiveGetLeaderboardRankingResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingResponse& Response, FGuid guid) const
 {
-	auto callback = callbackMapLeaderboardRankingReceivedV2.FindRef(guid);
-	callback.ExecuteIfBound(FLeaderboardV2MemberRanking::FromScillApiLeaderboardV2MemberRanking(Response.Content), Response.IsSuccessful());
+	auto callback = callbackMapLeaderboardRankingReceived.FindRef(guid);
+	callback.ExecuteIfBound(FLeaderboardMemberRanking(), FLeaderboardV2MemberRanking::FromScillApiLeaderboardV2MemberRanking(Response.Content), Response.IsSuccessful());
 
-	callbackMapLeaderboardRankingReceivedV2.Remove(guid);
+	callbackMapLeaderboardRankingReceived.Remove(guid);
 }
 
 void UScillClient::ReceiveGetLeaderboardRankingsResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingsResponse& Response, FGuid guid) const
 {
-	auto callback = callbackMapLeaderboardRankingsReceivedV2.FindRef(guid);
+	auto callback = callbackMapLeaderboardRankingsReceived.FindRef(guid);
 
 	auto Result = TArray<FLeaderboardV2MemberRanking>();
 	if (Response.IsSuccessful())
@@ -1126,14 +1178,14 @@ void UScillClient::ReceiveGetLeaderboardRankingsResponseV2(const ScillSDK::Scill
 		}
 	}
 
-	callback.ExecuteIfBound(Result, Response.IsSuccessful());
+	callback.ExecuteIfBound(TArray<FLeaderboardMemberRanking>(), Result, Response.IsSuccessful());
 
-	callbackMapLeaderboardRankingsReceivedV2.Remove(guid);
+	callbackMapLeaderboardRankingsReceived.Remove(guid);
 }
 
 void UScillClient::ReceiveGetLeaderboardsResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardsV2Response& Response, FGuid guid) const
 {
-	auto callback = callbackMapLeaderboardsReceivedV2.FindRef(guid);
+	auto callback = callbackMapLeaderboardsReceived.FindRef(guid);
 
 	auto Result = TArray<FLeaderboardV2Results>();
 	if (Response.IsSuccessful())
@@ -1144,9 +1196,9 @@ void UScillClient::ReceiveGetLeaderboardsResponseV2(const ScillSDK::ScillApiLead
 		}
 	}
 
-	callback.ExecuteIfBound(Result, Response.IsSuccessful());
+	callback.ExecuteIfBound(TArray<FLeaderboard>(), Result, Response.IsSuccessful());
 
-	callbackMapLeaderboardRankingsReceivedV2.Remove(guid);
+	callbackMapLeaderboardRankingsReceived.Remove(guid);
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------

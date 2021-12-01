@@ -29,4 +29,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FLeaderboardRanking CurrentRanking;
+
+	FLeaderboardV2Member CurrentRankingV2;
 };
