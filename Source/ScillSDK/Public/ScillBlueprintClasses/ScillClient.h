@@ -194,16 +194,16 @@ public:
 	// ----------------------------------------------------
 	// Leaderboards V2
 
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (BlueprintInternalUseOnly))
 		void GetLeaderboardV2(FString BoardId, FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardReceived responseReceived);
 
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (BlueprintInternalUseOnly))
 		void GetLeaderboardRankingV2(FString MemberType, FString MemberId, FString LeaderboardId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingReceived responseReceived);
 
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (BlueprintInternalUseOnly))
 		void GetLeaderboardRankingsV2(FString MemberType, FString MemberId, FString StartDate, FString EndDate, FString Aggregate, FString Language, FLeaderboardRankingsReceived responseReceived);
 
-	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (BlueprintInternalUseOnly))
 		void GetLeaderboardsV2( FString StartDate, FString EndDate, FString Aggregate, int CurrentPage, int CurrentPosition, int PageSize, FString Language, FLeaderboardsReceived responseReceived);
 	
 
