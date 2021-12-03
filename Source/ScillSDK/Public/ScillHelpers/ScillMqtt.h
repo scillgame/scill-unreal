@@ -45,6 +45,8 @@ public:
 	void Destroy();
 
 	FMqttConnectionEstablished MqttConnectionEstablishedDelegate;
+
+	int leaderboardVersion = 2;
 private:
 	void OnConnect();
 	void OnConnectionError(const FString& Error);

@@ -112,10 +112,20 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 				auto callback = this->callbacksLeaderboardChanges.FindRef(pubPacket->TopicName);
 				if (webhookType == TEXT("leaderboard-ranking-changed"))
 				{
-					auto leaderboardUpdate = ScillSDK::ScillApiLeaderboardV2UpdatePayload();
-					leaderboardUpdate.FromJson(ValueObject);
+					if (leaderboardVersion == 2)
+					{
+						auto leaderboardUpdate = ScillSDK::ScillApiLeaderboardV2UpdatePayload();
+						leaderboardUpdate.FromJson(ValueObject);
 
-					callback.ExecuteIfBound(FLeaderboardV2UpdatePayload::FromScillApiLeaderboardV2UpdatePayload(leaderboardUpdate), FLeaderboardV2Changed());
+						callback.ExecuteIfBound(FLeaderboardV2UpdatePayload::FromScillApiLeaderboardV2UpdatePayload(leaderboardUpdate), FLeaderboardV2Changed());
+					}
+					else
+					{
+						auto leaderboardUpdate = ScillSDK::ScillApiLeaderboardUpdatePayload();
+						leaderboardUpdate.FromJson(ValueObject);
+
+						callback.ExecuteIfBound(FLeaderboardV2UpdatePayload::FromScillApiLeaderboardUpdatePayload(leaderboardUpdate), FLeaderboardV2Changed());
+					}
 				}
 				if (webhookType == TEXT("leaderboard-changed"))
 				{

@@ -742,6 +742,7 @@ void UScillClient::BeginPlay()
 	Super::BeginPlay();
 	
 	mqtt = NewObject<UScillMqtt>();
+	mqtt->leaderboardVersion = this->LeaderboardVersionNumber;
 
 	auto accessToken = FString();
 	auto userId = FString();
@@ -1080,7 +1081,7 @@ void UScillClient::ReceiveUnlockPersonalChallengeResponse(const ScillSDK::ScillA
 void UScillClient::ReceiveGetLeaderboardResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardResponse& Response, FGuid guid) const
 {
 	auto callback = callbackMapLeaderboardReceived.FindRef(guid);
-	callback.ExecuteIfBound(FLeaderboard::FromScillApiLeaderboard(Response.Content), FLeaderboardV2Results(), Response.IsSuccessful());
+	callback.ExecuteIfBound(FLeaderboardV2Results::FromScillApiLeaderboard(Response.Content), Response.IsSuccessful());
 
 	callbackMapLeaderboardReceived.Remove(guid);
 }
@@ -1088,7 +1089,7 @@ void UScillClient::ReceiveGetLeaderboardResponse(const ScillSDK::ScillApiLeaderb
 void UScillClient::ReceiveGetLeaderboardRankingResponse(const ScillSDK::ScillApiLeaderboardsApi::GetLeaderboardRankingResponse& Response, FGuid guid) const
 {
 	auto callback = callbackMapLeaderboardRankingReceived.FindRef(guid);
-	callback.ExecuteIfBound(FLeaderboardMemberRanking::FromScillApiLeaderboardMemberRanking(Response.Content), FLeaderboardV2MemberRanking(), Response.IsSuccessful());
+	callback.ExecuteIfBound(FLeaderboardV2MemberRanking::FromScillApiLeaderboardMemberRanking(Response.Content), Response.IsSuccessful());
 
 	callbackMapLeaderboardRankingReceived.Remove(guid);
 }
@@ -1097,16 +1098,16 @@ void UScillClient::ReceiveGetLeaderboardRankingsResponse(const ScillSDK::ScillAp
 {
 	auto callback = callbackMapLeaderboardRankingsReceived.FindRef(guid);
 
-	auto Result = TArray<FLeaderboardMemberRanking>();
+	auto Result = TArray<FLeaderboardV2MemberRanking>();
 	if (Response.IsSuccessful())
 	{
 		for(ScillSDK::ScillApiLeaderboardMemberRanking r : Response.Content)
 		{
-			Result.Add(FLeaderboardMemberRanking::FromScillApiLeaderboardMemberRanking(r));
+			Result.Add(FLeaderboardV2MemberRanking::FromScillApiLeaderboardMemberRanking(r));
 		}
 	}
 
-	callback.ExecuteIfBound(Result, TArray<FLeaderboardV2MemberRanking>(), Response.IsSuccessful());
+	callback.ExecuteIfBound(Result, Response.IsSuccessful());
 
 	callbackMapLeaderboardRankingsReceived.Remove(guid);
 }
@@ -1115,16 +1116,16 @@ void UScillClient::ReceiveGetLeaderboardsResponse(const ScillSDK::ScillApiLeader
 {
 	auto callback = callbackMapLeaderboardsReceived.FindRef(guid);
 
-	auto Result = TArray<FLeaderboard>();
+	auto Result = TArray<FLeaderboardV2Results>();
 	if (Response.IsSuccessful())
 	{
 		for (ScillSDK::ScillApiLeaderboard r : Response.Content)
 		{
-			Result.Add(FLeaderboard::FromScillApiLeaderboard(r));
+			Result.Add(FLeaderboardV2Results::FromScillApiLeaderboard(r));
 		}
 	}
 
-	callback.ExecuteIfBound(Result, TArray<FLeaderboardV2Results>(), Response.IsSuccessful());
+	callback.ExecuteIfBound(Result, Response.IsSuccessful());
 
 	callbackMapLeaderboardsReceived.Remove(guid);
 }
@@ -1152,7 +1153,7 @@ void UScillClient::ReceiveGetUserInfoResponse(const ScillSDK::ScillApiAuthApi::G
 void UScillClient::ReceiveGetLeaderboardResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2Response& Response, FGuid guid) const
 {
 	auto callback = callbackMapLeaderboardReceived.FindRef(guid);
-	callback.ExecuteIfBound(FLeaderboard(), FLeaderboardV2Results::FromScillApiLeaderboardV2Results(Response.Content), Response.IsSuccessful());
+	callback.ExecuteIfBound(FLeaderboardV2Results::FromScillApiLeaderboardV2Results(Response.Content), Response.IsSuccessful());
 
 	callbackMapLeaderboardReceived.Remove(guid);
 }
@@ -1160,7 +1161,7 @@ void UScillClient::ReceiveGetLeaderboardResponseV2(const ScillSDK::ScillApiLeade
 void UScillClient::ReceiveGetLeaderboardRankingResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::GetLeaderboardV2RankingResponse& Response, FGuid guid) const
 {
 	auto callback = callbackMapLeaderboardRankingReceived.FindRef(guid);
-	callback.ExecuteIfBound(FLeaderboardMemberRanking(), FLeaderboardV2MemberRanking::FromScillApiLeaderboardV2MemberRanking(Response.Content), Response.IsSuccessful());
+	callback.ExecuteIfBound(FLeaderboardV2MemberRanking::FromScillApiLeaderboardV2MemberRanking(Response.Content), Response.IsSuccessful());
 
 	callbackMapLeaderboardRankingReceived.Remove(guid);
 }
@@ -1178,7 +1179,7 @@ void UScillClient::ReceiveGetLeaderboardRankingsResponseV2(const ScillSDK::Scill
 		}
 	}
 
-	callback.ExecuteIfBound(TArray<FLeaderboardMemberRanking>(), Result, Response.IsSuccessful());
+	callback.ExecuteIfBound(Result, Response.IsSuccessful());
 
 	callbackMapLeaderboardRankingsReceived.Remove(guid);
 }
@@ -1196,7 +1197,7 @@ void UScillClient::ReceiveGetLeaderboardsResponseV2(const ScillSDK::ScillApiLead
 		}
 	}
 
-	callback.ExecuteIfBound(TArray<FLeaderboard>(), Result, Response.IsSuccessful());
+	callback.ExecuteIfBound(Result, Response.IsSuccessful());
 
 	callbackMapLeaderboardRankingsReceived.Remove(guid);
 }

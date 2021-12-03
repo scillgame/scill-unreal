@@ -25,10 +25,10 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassUnlockInfoReceived, const FBattleP
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBattlePassLevelArrayReceived, const TArray<FBattlePassLevel>&, BattlePasses, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeReceived, const FChallenge&, Challenge, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FChallengeCategoryArrayReceived, const TArray<FChallengeCategory>&, ChallengeCategories, bool, Success); 
-DECLARE_DYNAMIC_DELEGATE_ThreeParams(FLeaderboardReceived, const FLeaderboard&, LeaderboardV1, const FLeaderboardV2Results&, Leaderboard, bool, Success);
-DECLARE_DYNAMIC_DELEGATE_ThreeParams(FLeaderboardsReceived, const TArray<FLeaderboard>&, LeaderboardsV1, const TArray<FLeaderboardV2Results>&, Leaderboards, bool, Success);
-DECLARE_DYNAMIC_DELEGATE_ThreeParams(FLeaderboardRankingReceived, const FLeaderboardMemberRanking&, RankingV1, const FLeaderboardV2MemberRanking&, Ranking, bool, Success);
-DECLARE_DYNAMIC_DELEGATE_ThreeParams(FLeaderboardRankingsReceived, const TArray<FLeaderboardMemberRanking>&, RankingsV1, const TArray<FLeaderboardV2MemberRanking>&, Rankings, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardReceived, const FLeaderboardV2Results&, Leaderboard, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardsReceived, const TArray<FLeaderboardV2Results>&, Leaderboards, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardRankingReceived, const FLeaderboardV2MemberRanking&, Ranking, bool, Success);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardRankingsReceived, const TArray<FLeaderboardV2MemberRanking>&, Rankings, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FUserInfoReceived, const FUserInfo&, UserInfo, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardReceivedV2, const FLeaderboardV2Results&, Leaderboard, bool, Success);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardRankingReceivedV2, const FLeaderboardV2MemberRanking&, Ranking, bool, Success);
@@ -233,7 +233,7 @@ public:
 		FUserInfo CurrentUserInfo;
 
 	UPROPERTY(Config)
-		int LeaderboardVersionNumber = 1;
+		int LeaderboardVersionNumber = 2;
 
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		int GetLeaderboardVersionNumber()

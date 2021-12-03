@@ -51,49 +51,31 @@ void UWidgetLeaderboard::QueryLeaderboards()
     }
 }
 
-void UWidgetLeaderboard::ReceiveLeaderboardsResponse(const TArray<FLeaderboard>& Leaderboards, const TArray<FLeaderboardV2Results>& LeaderboardsV2, bool Success)
+void UWidgetLeaderboard::ReceiveLeaderboardsResponse(const TArray<FLeaderboardV2Results>& Leaderboards, bool Success)
 {
     if (Success)
     {
-        if (!Leaderboards.Num() == 0)
-            PopulateLeaderboardsData(Leaderboards);
-        else if (!LeaderboardsV2.Num() == 0)
-            PopulateLeaderboardsDataV2(LeaderboardsV2);
-
+        PopulateLeaderboardsData(Leaderboards);
     }
-        
-
 }
 
-void UWidgetLeaderboard::PopulateLeaderboardsData(const TArray<FLeaderboard>& Leaderboards)
+void UWidgetLeaderboard::PopulateLeaderboardsData(const TArray<FLeaderboardV2Results>& Leaderboards)
 {
     CurrentLeaderboards = Leaderboards;
 
     if (LeaderboardIndex >= Leaderboards.Num())
         LeaderboardIndex = Leaderboards.Num() - 1;
 
-    LeaderboardName->SetText(FText::FromString(CurrentLeaderboards[LeaderboardIndex].Name));
+    LeaderboardName->SetText(FText::FromString(CurrentLeaderboards[LeaderboardIndex].LeaderboardName));
 
     PopulateLeaderboardDataToChildrenWidgets();
-}
-
-void UWidgetLeaderboard::PopulateLeaderboardsDataV2(const TArray<FLeaderboardV2Results>& Leaderboards)
-{
-    CurrentLeaderboardsV2 = Leaderboards;
-
-    if (LeaderboardIndex >= Leaderboards.Num())
-        LeaderboardIndex = Leaderboards.Num() - 1;
-
-    LeaderboardName->SetText(FText::FromString(CurrentLeaderboardsV2[LeaderboardIndex].LeaderboardName));
-
-    PopulateLeaderboardDataToChildrenWidgetsV2();
 }
 
 void UWidgetLeaderboard::PopulateLeaderboardDataToChildrenWidgets()
 {
     RankingsPanel->ClearChildren();
 
-    for (auto ranking : CurrentLeaderboards[LeaderboardIndex].GroupedByUsers)
+    for (auto ranking : CurrentLeaderboards[LeaderboardIndex].LeaderboardResultsByMemberType.User.Members)
     {
         UWidgetLeaderboardUserRank* RankingWidget = CreateWidget<UWidgetLeaderboardUserRank>(this, RankingWidgetType);
 
@@ -101,23 +83,6 @@ void UWidgetLeaderboard::PopulateLeaderboardDataToChildrenWidgets()
         RankingWidget->UserScore->SetText(FText::AsNumber(ranking.Score));
 
         RankingWidget->CurrentRanking = ranking;
-
-        RankingsPanel->AddChild(RankingWidget);
-    }
-}
-
-void UWidgetLeaderboard::PopulateLeaderboardDataToChildrenWidgetsV2()
-{
-    RankingsPanel->ClearChildren();
-
-    for (auto ranking : CurrentLeaderboardsV2[LeaderboardIndex].LeaderboardResultsByMemberType.User.Members)
-    {
-        UWidgetLeaderboardUserRank* RankingWidget = CreateWidget<UWidgetLeaderboardUserRank>(this, RankingWidgetType);
-
-        RankingWidget->UserName->SetText(FText::AsCultureInvariant(ranking.AdditionalInfo.Username));
-        RankingWidget->UserScore->SetText(FText::AsNumber(ranking.Score));
-
-        RankingWidget->CurrentRankingV2 = ranking;
 
         RankingsPanel->AddChild(RankingWidget);
     }

@@ -1055,6 +1055,7 @@ public:
 		FUserInfo AdditionalInfo;
 
 	static FLeaderboardV2Member FromScillApiLeaderboardV2Member(const ScillSDK::ScillApiLeaderboardV2Member o);
+	static FLeaderboardV2Member FromScillApiLeaderboardRanking(const ScillSDK::ScillApiLeaderboardRanking o);
 };
 
 /* The payload used for realtime updates and webhooks if a leaderboard is updated.
@@ -1099,6 +1100,7 @@ public:
 		FLeaderboardV2Member LeaderboardMember;
 
 	static FLeaderboardV2MemberRanking FromScillApiLeaderboardV2MemberRanking(const ScillSDK::ScillApiLeaderboardV2MemberRanking o);
+	static FLeaderboardV2MemberRanking FromScillApiLeaderboardMemberRanking(const ScillSDK::ScillApiLeaderboardMemberRanking o);
 };
 
 /* This object uses two keys - "user" and "team", both of which contain ranking info
@@ -1142,6 +1144,7 @@ public:
 		bool LeaderboardSortOrderAscending;
 
 	static FLeaderboardV2Results FromScillApiLeaderboardV2Results(const ScillSDK::ScillApiLeaderboardV2Results o);
+	static FLeaderboardV2Results FromScillApiLeaderboard(const ScillSDK::ScillApiLeaderboard o);
 };
 
 /* The Leaderboard object contains information about the leaderboard itself like the name and the id
@@ -1173,6 +1176,7 @@ public:
 		bool SortOrderAscending;
 
 	static FLeaderboardV2Info FromScillApiLeaderboardV2Info(const ScillSDK::ScillApiLeaderboardV2Info o);
+	static FLeaderboardV2Info FromScillApiLeaderboardInfo(const ScillSDK::ScillApiLeaderboardInfo o);
 };
 
 /* This object is sent via Webhook or notifications of type leaderboard-changed.
@@ -1221,4 +1225,5 @@ public:
 		FLeaderboardScore NewLeaderboardRanking;
 
 	static FLeaderboardV2UpdatePayload FromScillApiLeaderboardV2UpdatePayload(const ScillSDK::ScillApiLeaderboardV2UpdatePayload o);
+	static FLeaderboardV2UpdatePayload FromScillApiLeaderboardUpdatePayload(const ScillSDK::ScillApiLeaderboardUpdatePayload o);
 };
