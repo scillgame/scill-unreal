@@ -112,7 +112,7 @@ Afterwards you can use it to call the [Generate Access Token](#generate-access-t
 
 After retrieving and saving the access token to your Scill Client Component on your Player Controller on the Client side, you can call any other method on your Scill Client to communicate with the Scill API.
 
-#### Generate Access Token
+### Generate Access Token
 
 To generate an access token you will need to call the `Generate Access Token` function on the Scill Client Backend component. This should be initiated by a client and then, using replication, passed to be processed on the server. Use the callback to pass the access token back to the client. Below you can see an illustration of what the blueprint would look like roughly.
 
