@@ -94,7 +94,11 @@ To access its functionality on your game client it is best to add it as an inter
 
 ![GameInstanceInterface.png](/Documentation/attachments/GameInstanceInterface.png)
 
-Now you will need to implement the interface's functions. To do so go to the Game Instance's members view (usually on the left side of the Blueprint Window) and expand the Interfaces entry. Double-click each entry under _Scill SDK_ to create a corresponding Event (for `Set User Id` and `Set Access Token`) or Function (for `Get User Id` and `Get Access Token`). Drag off the `User Id` or `Token` Key from the new Event Nodes in the Event Graph and click "Promote to Instance Variable" and then Drag and Drop the newly created Instance Variables on the respective pins of the return nodes inside the `Get User Id` and `Get Access Token` functions.
+Now you will need to implement the interface's functions. To do so go to the Game Instance's members view (usually on the left side of the Blueprint Window) and expand the Interfaces entry. Double-click each entry under _Scill SDK_ to create a corresponding Event (for `Set User Id` and `Set Access Token`) or Function (for `Get User Id` and `Get Access Token`). 
+
+![UserIdPersistence.png](/Documentation/attachments/UserIdPersistence.png)
+
+Drag off the `User Id` or `Token` Key from the new Event Nodes in the Event Graph and click "Promote to Instance Variable" and then Drag and Drop the newly created Instance Variables on the respective pins of the return nodes inside the `Get User Id` and `Get Access Token` functions.
 
 ![PromoteVariable.png](/Documentation/attachments/PromoteVariable.png)
 
