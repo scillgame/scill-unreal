@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiLeaderboardInfo::WriteJson(JsonWriter& Writer) const
@@ -25,23 +25,23 @@ void ScillApiLeaderboardInfo::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (AppId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("app_id")); WriteJsonValue(Writer, AppId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("app_id")); WriteJsonValue(Writer, AppId.GetValue());
 	}
 	if (LeaderboardId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("leaderboard_id")); WriteJsonValue(Writer, LeaderboardId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("leaderboard_id")); WriteJsonValue(Writer, LeaderboardId.GetValue());
 	}
 	if (Name.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("name")); WriteJsonValue(Writer, Name.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("name")); WriteJsonValue(Writer, Name.GetValue());
 	}
 	if (EventType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("event_type")); WriteJsonValue(Writer, EventType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("event_type")); WriteJsonValue(Writer, EventType.GetValue());
 	}
 	if (SortOrderAscending.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("sort_order_ascending")); WriteJsonValue(Writer, SortOrderAscending.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("sort_order_ascending")); WriteJsonValue(Writer, SortOrderAscending.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiSocketToken::WriteJson(JsonWriter& Writer) const

@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiBattlePassTranslation::WriteJson(JsonWriter& Writer) const
@@ -25,23 +25,23 @@ void ScillApiBattlePassTranslation::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (LanguageId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("language_id")); WriteJsonValue(Writer, LanguageId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("language_id")); WriteJsonValue(Writer, LanguageId.GetValue());
 	}
 	if (Name.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("name")); WriteJsonValue(Writer, Name.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("name")); WriteJsonValue(Writer, Name.GetValue());
 	}
 	if (Description.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("description")); WriteJsonValue(Writer, Description.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("description")); WriteJsonValue(Writer, Description.GetValue());
 	}
 	if (ShortDescription.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("short_description")); WriteJsonValue(Writer, ShortDescription.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("short_description")); WriteJsonValue(Writer, ShortDescription.GetValue());
 	}
 	if (Disclaimer.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("disclaimer")); WriteJsonValue(Writer, Disclaimer.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("disclaimer")); WriteJsonValue(Writer, Disclaimer.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

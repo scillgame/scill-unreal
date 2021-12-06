@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiBattlePassState::WriteJson(JsonWriter& Writer) const
@@ -25,27 +25,27 @@ void ScillApiBattlePassState::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (BattlePassId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("battle_pass_id")); WriteJsonValue(Writer, BattlePassId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("battle_pass_id")); WriteJsonValue(Writer, BattlePassId.GetValue());
 	}
 	if (AppId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("app_id")); WriteJsonValue(Writer, AppId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("app_id")); WriteJsonValue(Writer, AppId.GetValue());
 	}
 	if (BattlePassPriority.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("battle_pass_priority")); WriteJsonValue(Writer, BattlePassPriority.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("battle_pass_priority")); WriteJsonValue(Writer, BattlePassPriority.GetValue());
 	}
 	if (StartDate.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("start_date")); WriteJsonValue(Writer, StartDate.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("start_date")); WriteJsonValue(Writer, StartDate.GetValue());
 	}
 	if (EndDate.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("end_date")); WriteJsonValue(Writer, EndDate.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("end_date")); WriteJsonValue(Writer, EndDate.GetValue());
 	}
 	if (IsActive.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("is_active")); WriteJsonValue(Writer, IsActive.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("is_active")); WriteJsonValue(Writer, IsActive.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

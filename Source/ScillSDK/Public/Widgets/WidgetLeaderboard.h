@@ -42,10 +42,10 @@ public:
 	FLeaderboardsReceived LeaderboardsReceivedDelegate;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FLeaderboard> CurrentLeaderboards;
+	TArray<FLeaderboardV2Results> CurrentLeaderboards;
 
 	UFUNCTION(BlueprintCallable)
-		void PopulateLeaderboardsData(const TArray<FLeaderboard>& Leaderboards);
+		void PopulateLeaderboardsData(const TArray<FLeaderboardV2Results>& Leaderboards);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<class UWidgetLeaderboardUserRank> RankingWidgetType;
@@ -54,7 +54,7 @@ private:
 	APlayerController* Controller;
 
 	UFUNCTION()
-		void ReceiveLeaderboardsResponse(const TArray<FLeaderboard>& Leaderboards, bool Success);
+		void ReceiveLeaderboardsResponse(const TArray<FLeaderboardV2Results>& Leaderboards, bool Success);
 
 	void QueryLeaderboards();
 
@@ -63,5 +63,5 @@ private:
 	void SubscribeToLeaderboardChanges();
 
 	UFUNCTION()
-		void ReceiveLeaderboardUpdate(FLeaderboardUpdatePayload LeaderboardChanged);
+		void ReceiveLeaderboardUpdate(FLeaderboardV2UpdatePayload LeaderboardChanged, FLeaderboardV2Changed LeaderboardInfoChanged);
 };

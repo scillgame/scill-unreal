@@ -28,5 +28,5 @@ public:
 		UTextBlock* UserScore;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FLeaderboardRanking CurrentRanking;
+		FLeaderboardV2Member CurrentRanking;
 };

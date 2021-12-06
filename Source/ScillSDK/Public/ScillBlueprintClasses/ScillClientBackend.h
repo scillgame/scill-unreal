@@ -4,6 +4,7 @@
 #include "Containers/Map.h"
 #include "ScillSDK.h"
 #include "ScillApiWrapper/ScillApiAuthApi.h"
+#include "ScillApiWrapper/ScillApiLeaderboardsV2Api.h"
 #include "ScillApiWrapper/ScillApiAuthApiOperations.h"
 #include "ScillBlueprintClasses/ScillStructs.h"
 #include "ScillHelpers/ScillMqtt.h"
@@ -53,9 +54,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
 		void SendEvent(FScillEventPayload payload, FResponseReceived responseReceived);
 
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void ResetLeaderboardRankingsV2(FString ApplicationId, FString LeaderboardId, FResponseReceived responseReceived);
+
 private:
 	ScillSDK::ScillApiAuthApi authApi;
 	ScillSDK::ScillApiEventsApi eventsApi;
+	ScillSDK::ScillApiLeaderboardsV2Api leaderboardsApi;
 
 	mutable TMap<FGuid, FReceiveAccessToken> callbackMapReceiveAccessToken;
 
@@ -73,5 +78,7 @@ private:
 	void ReceiveStringMessageFromBattlepassTopic(const FString& Message, FGuid guid) const;
 
 	void ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::SendEventResponse& Response, FGuid guid) const;
+
+	void ReceiveResetLeaderboardRankingsResponseV2(const ScillSDK::ScillApiLeaderboardsV2Api::ResetLeaderboardV2RankingsResponse& Response, FGuid guid) const;
 };
 

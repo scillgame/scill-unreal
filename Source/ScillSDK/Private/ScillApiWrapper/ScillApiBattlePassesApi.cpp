@@ -18,10 +18,10 @@
 #include "HttpModule.h"
 #include "Serialization/JsonSerializer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
-ScillApiBattlePassesApi::ScillApiBattlePassesApi() 
+ScillApiBattlePassesApi::ScillApiBattlePassesApi()
 : Url(TEXT("https://virtserver.swaggerhub.com/4Players-GmbH/scill-gaas/1.0.0"))
 {
 }
@@ -65,6 +65,7 @@ void ScillApiBattlePassesApi::SetHttpRetryManager(FHttpRetrySystem::FManager& In
 
 FHttpRetrySystem::FManager& ScillApiBattlePassesApi::GetHttpRetryManager()
 {
+	checkf(RetryManager, TEXT("ScillApiBattlePassesApi: RetryManager is null.  You may have meant to set it with SetHttpRetryManager first, or you may not be using a custom RetryManager at all."))
 	return *RetryManager;
 }
 
@@ -132,10 +133,10 @@ void ScillApiBattlePassesApi::HandleResponse(FHttpResponsePtr HttpResponse, bool
 	InOutResponse.SetHttpResponseCode(EHttpResponseCodes::RequestTimeout);
 }
 
-bool ScillApiBattlePassesApi::ActivateBattlePassLevel(const ActivateBattlePassLevelRequest& Request, const FActivateBattlePassLevelDelegate& Delegate /*= FActivateBattlePassLevelDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::ActivateBattlePassLevel(const ActivateBattlePassLevelRequest& Request, const FActivateBattlePassLevelDelegate& Delegate /*= FActivateBattlePassLevelDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -146,9 +147,10 @@ bool ScillApiBattlePassesApi::ActivateBattlePassLevel(const ActivateBattlePassLe
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnActivateBattlePassLevelResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnActivateBattlePassLevelResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FActivateBattlePassLevelDelegate Delegate) const
@@ -158,10 +160,10 @@ void ScillApiBattlePassesApi::OnActivateBattlePassLevelResponse(FHttpRequestPtr 
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiBattlePassesApi::ClaimBattlePassLevelReward(const ClaimBattlePassLevelRewardRequest& Request, const FClaimBattlePassLevelRewardDelegate& Delegate /*= FClaimBattlePassLevelRewardDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::ClaimBattlePassLevelReward(const ClaimBattlePassLevelRewardRequest& Request, const FClaimBattlePassLevelRewardDelegate& Delegate /*= FClaimBattlePassLevelRewardDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -172,9 +174,10 @@ bool ScillApiBattlePassesApi::ClaimBattlePassLevelReward(const ClaimBattlePassLe
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnClaimBattlePassLevelRewardResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnClaimBattlePassLevelRewardResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FClaimBattlePassLevelRewardDelegate Delegate) const
@@ -184,10 +187,10 @@ void ScillApiBattlePassesApi::OnClaimBattlePassLevelRewardResponse(FHttpRequestP
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiBattlePassesApi::GetActiveBattlePasses(const GetActiveBattlePassesRequest& Request, const FGetActiveBattlePassesDelegate& Delegate /*= FGetActiveBattlePassesDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::GetActiveBattlePasses(const GetActiveBattlePassesRequest& Request, const FGetActiveBattlePassesDelegate& Delegate /*= FGetActiveBattlePassesDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -198,9 +201,10 @@ bool ScillApiBattlePassesApi::GetActiveBattlePasses(const GetActiveBattlePassesR
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnGetActiveBattlePassesResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnGetActiveBattlePassesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetActiveBattlePassesDelegate Delegate) const
@@ -210,10 +214,10 @@ void ScillApiBattlePassesApi::OnGetActiveBattlePassesResponse(FHttpRequestPtr Ht
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiBattlePassesApi::GetAllBattlePassLevels(const GetAllBattlePassLevelsRequest& Request, const FGetAllBattlePassLevelsDelegate& Delegate /*= FGetAllBattlePassLevelsDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::GetAllBattlePassLevels(const GetAllBattlePassLevelsRequest& Request, const FGetAllBattlePassLevelsDelegate& Delegate /*= FGetAllBattlePassLevelsDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -224,9 +228,10 @@ bool ScillApiBattlePassesApi::GetAllBattlePassLevels(const GetAllBattlePassLevel
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnGetAllBattlePassLevelsResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnGetAllBattlePassLevelsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetAllBattlePassLevelsDelegate Delegate) const
@@ -236,10 +241,10 @@ void ScillApiBattlePassesApi::OnGetAllBattlePassLevelsResponse(FHttpRequestPtr H
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiBattlePassesApi::GetBattlePass(const GetBattlePassRequest& Request, const FGetBattlePassDelegate& Delegate /*= FGetBattlePassDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::GetBattlePass(const GetBattlePassRequest& Request, const FGetBattlePassDelegate& Delegate /*= FGetBattlePassDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -250,9 +255,10 @@ bool ScillApiBattlePassesApi::GetBattlePass(const GetBattlePassRequest& Request,
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnGetBattlePassResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnGetBattlePassResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetBattlePassDelegate Delegate) const
@@ -262,10 +268,10 @@ void ScillApiBattlePassesApi::OnGetBattlePassResponse(FHttpRequestPtr HttpReques
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiBattlePassesApi::GetBattlePassLevels(const GetBattlePassLevelsRequest& Request, const FGetBattlePassLevelsDelegate& Delegate /*= FGetBattlePassLevelsDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::GetBattlePassLevels(const GetBattlePassLevelsRequest& Request, const FGetBattlePassLevelsDelegate& Delegate /*= FGetBattlePassLevelsDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -276,9 +282,10 @@ bool ScillApiBattlePassesApi::GetBattlePassLevels(const GetBattlePassLevelsReque
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnGetBattlePassLevelsResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnGetBattlePassLevelsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetBattlePassLevelsDelegate Delegate) const
@@ -288,10 +295,10 @@ void ScillApiBattlePassesApi::OnGetBattlePassLevelsResponse(FHttpRequestPtr Http
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiBattlePassesApi::GetBattlePasses(const GetBattlePassesRequest& Request, const FGetBattlePassesDelegate& Delegate /*= FGetBattlePassesDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::GetBattlePasses(const GetBattlePassesRequest& Request, const FGetBattlePassesDelegate& Delegate /*= FGetBattlePassesDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -302,9 +309,10 @@ bool ScillApiBattlePassesApi::GetBattlePasses(const GetBattlePassesRequest& Requ
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnGetBattlePassesResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnGetBattlePassesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetBattlePassesDelegate Delegate) const
@@ -314,10 +322,10 @@ void ScillApiBattlePassesApi::OnGetBattlePassesResponse(FHttpRequestPtr HttpRequ
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiBattlePassesApi::GetUnlockedBattlePasses(const GetUnlockedBattlePassesRequest& Request, const FGetUnlockedBattlePassesDelegate& Delegate /*= FGetUnlockedBattlePassesDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::GetUnlockedBattlePasses(const GetUnlockedBattlePassesRequest& Request, const FGetUnlockedBattlePassesDelegate& Delegate /*= FGetUnlockedBattlePassesDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -328,9 +336,10 @@ bool ScillApiBattlePassesApi::GetUnlockedBattlePasses(const GetUnlockedBattlePas
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnGetUnlockedBattlePassesResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnGetUnlockedBattlePassesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUnlockedBattlePassesDelegate Delegate) const
@@ -340,10 +349,10 @@ void ScillApiBattlePassesApi::OnGetUnlockedBattlePassesResponse(FHttpRequestPtr 
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiBattlePassesApi::UnlockBattlePass(const UnlockBattlePassRequest& Request, const FUnlockBattlePassDelegate& Delegate /*= FUnlockBattlePassDelegate()*/) const
+FHttpRequestPtr ScillApiBattlePassesApi::UnlockBattlePass(const UnlockBattlePassRequest& Request, const FUnlockBattlePassDelegate& Delegate /*= FUnlockBattlePassDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -354,9 +363,10 @@ bool ScillApiBattlePassesApi::UnlockBattlePass(const UnlockBattlePassRequest& Re
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiBattlePassesApi::OnUnlockBattlePassResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiBattlePassesApi::OnUnlockBattlePassResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FUnlockBattlePassDelegate Delegate) const

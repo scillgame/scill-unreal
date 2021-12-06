@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiChallengeWebhookPayload::WriteJson(JsonWriter& Writer) const
@@ -25,23 +25,23 @@ void ScillApiChallengeWebhookPayload::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (WebhookType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("webhook_type")); WriteJsonValue(Writer, WebhookType.GetValue());
 	}
 	if (CategoryPosition.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("category_position")); WriteJsonValue(Writer, CategoryPosition.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("category_position")); WriteJsonValue(Writer, CategoryPosition.GetValue());
 	}
 	if (UserToken.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_token")); WriteJsonValue(Writer, UserToken.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_token")); WriteJsonValue(Writer, UserToken.GetValue());
 	}
 	if (NewChallenge.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("new_challenge")); WriteJsonValue(Writer, NewChallenge.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("new_challenge")); WriteJsonValue(Writer, NewChallenge.GetValue());
 	}
 	if (OldChallenge.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("old_challenge")); WriteJsonValue(Writer, OldChallenge.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("old_challenge")); WriteJsonValue(Writer, OldChallenge.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

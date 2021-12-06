@@ -15,7 +15,7 @@
 #include "CoreMinimal.h"
 #include "ScillApiWrapper/ScillApiBaseModel.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 class SCILLSDK_API ScillApiEventsApi
@@ -24,16 +24,16 @@ public:
 	ScillApiEventsApi();
 	~ScillApiEventsApi();
 
-	/* Sets the URL Endpoint. 
+	/* Sets the URL Endpoint.
 	* Note: several fallback endpoints can be configured in request retry policies, see Request::SetShouldRetry */
 	void SetURL(const FString& Url);
 
 	/* Adds global header params to all requests */
 	void AddHeaderParam(const FString& Key, const FString& Value);
 	void ClearHeaderParams();
-	
+
 	/* Sets the retry manager to the user-defined retry manager. User must manage the lifetime of the retry manager.
-	* If no retry manager is specified and a request needs retries, a default retry manager will be used. 
+	* If no retry manager is specified and a request needs retries, a default retry manager will be used.
 	* See also: Request::SetShouldRetry */
 	void SetHttpRetryManager(FHttpRetrySystem::FManager& RetryManager);
 	FHttpRetrySystem::FManager& GetHttpRetryManager();
@@ -46,8 +46,8 @@ public:
     DECLARE_DELEGATE_OneParam(FGetAvailableEventsDelegate, const GetAvailableEventsResponse&);
     DECLARE_DELEGATE_OneParam(FSendEventDelegate, const SendEventResponse&);
     
-    bool GetAvailableEvents(const GetAvailableEventsRequest& Request, const FGetAvailableEventsDelegate& Delegate = FGetAvailableEventsDelegate()) const;
-    bool SendEvent(const SendEventRequest& Request, const FSendEventDelegate& Delegate = FSendEventDelegate()) const;
+    FHttpRequestPtr GetAvailableEvents(const GetAvailableEventsRequest& Request, const FGetAvailableEventsDelegate& Delegate = FGetAvailableEventsDelegate()) const;
+    FHttpRequestPtr SendEvent(const SendEventRequest& Request, const FSendEventDelegate& Delegate = FSendEventDelegate()) const;
     
 private:
     void OnGetAvailableEventsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetAvailableEventsDelegate Delegate) const;
@@ -62,5 +62,5 @@ private:
 	mutable FHttpRetrySystem::FManager* RetryManager = nullptr;
 	mutable TUniquePtr<HttpRetryManager> DefaultRetryManager;
 };
-	
+
 }

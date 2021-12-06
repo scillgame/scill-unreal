@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiEventDescription::WriteJson(JsonWriter& Writer) const
@@ -25,15 +25,15 @@ void ScillApiEventDescription::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (EventName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("event_name")); WriteJsonValue(Writer, EventName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("event_name")); WriteJsonValue(Writer, EventName.GetValue());
 	}
 	if (RequiredProperties.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("required_properties")); WriteJsonValue(Writer, RequiredProperties.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("required_properties")); WriteJsonValue(Writer, RequiredProperties.GetValue());
 	}
 	if (OptionalProperties.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("optional_properties")); WriteJsonValue(Writer, OptionalProperties.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("optional_properties")); WriteJsonValue(Writer, OptionalProperties.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

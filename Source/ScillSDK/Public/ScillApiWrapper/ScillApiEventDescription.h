@@ -15,7 +15,7 @@
 #include "ScillApiWrapper/ScillApiBaseModel.h"
 #include "ScillApiWrapper/ScillApiEventProperty.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 /*

@@ -18,10 +18,10 @@
 #include "HttpModule.h"
 #include "Serialization/JsonSerializer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
-ScillApiChallengesApi::ScillApiChallengesApi() 
+ScillApiChallengesApi::ScillApiChallengesApi()
 : Url(TEXT("https://virtserver.swaggerhub.com/4Players-GmbH/scill-gaas/1.0.0"))
 {
 }
@@ -65,6 +65,7 @@ void ScillApiChallengesApi::SetHttpRetryManager(FHttpRetrySystem::FManager& InRe
 
 FHttpRetrySystem::FManager& ScillApiChallengesApi::GetHttpRetryManager()
 {
+	checkf(RetryManager, TEXT("ScillApiChallengesApi: RetryManager is null.  You may have meant to set it with SetHttpRetryManager first, or you may not be using a custom RetryManager at all."))
 	return *RetryManager;
 }
 
@@ -132,10 +133,10 @@ void ScillApiChallengesApi::HandleResponse(FHttpResponsePtr HttpResponse, bool b
 	InOutResponse.SetHttpResponseCode(EHttpResponseCodes::RequestTimeout);
 }
 
-bool ScillApiChallengesApi::ActivatePersonalChallenge(const ActivatePersonalChallengeRequest& Request, const FActivatePersonalChallengeDelegate& Delegate /*= FActivatePersonalChallengeDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::ActivatePersonalChallenge(const ActivatePersonalChallengeRequest& Request, const FActivatePersonalChallengeDelegate& Delegate /*= FActivatePersonalChallengeDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -146,9 +147,10 @@ bool ScillApiChallengesApi::ActivatePersonalChallenge(const ActivatePersonalChal
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnActivatePersonalChallengeResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnActivatePersonalChallengeResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FActivatePersonalChallengeDelegate Delegate) const
@@ -158,10 +160,10 @@ void ScillApiChallengesApi::OnActivatePersonalChallengeResponse(FHttpRequestPtr 
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::CancelPersonalChallenge(const CancelPersonalChallengeRequest& Request, const FCancelPersonalChallengeDelegate& Delegate /*= FCancelPersonalChallengeDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::CancelPersonalChallenge(const CancelPersonalChallengeRequest& Request, const FCancelPersonalChallengeDelegate& Delegate /*= FCancelPersonalChallengeDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -172,9 +174,10 @@ bool ScillApiChallengesApi::CancelPersonalChallenge(const CancelPersonalChalleng
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnCancelPersonalChallengeResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnCancelPersonalChallengeResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FCancelPersonalChallengeDelegate Delegate) const
@@ -184,10 +187,10 @@ void ScillApiChallengesApi::OnCancelPersonalChallengeResponse(FHttpRequestPtr Ht
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::ClaimPersonalChallengeReward(const ClaimPersonalChallengeRewardRequest& Request, const FClaimPersonalChallengeRewardDelegate& Delegate /*= FClaimPersonalChallengeRewardDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::ClaimPersonalChallengeReward(const ClaimPersonalChallengeRewardRequest& Request, const FClaimPersonalChallengeRewardDelegate& Delegate /*= FClaimPersonalChallengeRewardDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -198,9 +201,10 @@ bool ScillApiChallengesApi::ClaimPersonalChallengeReward(const ClaimPersonalChal
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnClaimPersonalChallengeRewardResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnClaimPersonalChallengeRewardResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FClaimPersonalChallengeRewardDelegate Delegate) const
@@ -210,10 +214,10 @@ void ScillApiChallengesApi::OnClaimPersonalChallengeRewardResponse(FHttpRequestP
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::GenerateWebsocketAccessToken(const GenerateWebsocketAccessTokenRequest& Request, const FGenerateWebsocketAccessTokenDelegate& Delegate /*= FGenerateWebsocketAccessTokenDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::GenerateWebsocketAccessToken(const GenerateWebsocketAccessTokenRequest& Request, const FGenerateWebsocketAccessTokenDelegate& Delegate /*= FGenerateWebsocketAccessTokenDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -224,9 +228,10 @@ bool ScillApiChallengesApi::GenerateWebsocketAccessToken(const GenerateWebsocket
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnGenerateWebsocketAccessTokenResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnGenerateWebsocketAccessTokenResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGenerateWebsocketAccessTokenDelegate Delegate) const
@@ -236,10 +241,10 @@ void ScillApiChallengesApi::OnGenerateWebsocketAccessTokenResponse(FHttpRequestP
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::GetActivePersonalChallenges(const GetActivePersonalChallengesRequest& Request, const FGetActivePersonalChallengesDelegate& Delegate /*= FGetActivePersonalChallengesDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::GetActivePersonalChallenges(const GetActivePersonalChallengesRequest& Request, const FGetActivePersonalChallengesDelegate& Delegate /*= FGetActivePersonalChallengesDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -250,9 +255,10 @@ bool ScillApiChallengesApi::GetActivePersonalChallenges(const GetActivePersonalC
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnGetActivePersonalChallengesResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnGetActivePersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetActivePersonalChallengesDelegate Delegate) const
@@ -262,10 +268,10 @@ void ScillApiChallengesApi::OnGetActivePersonalChallengesResponse(FHttpRequestPt
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::GetAllPersonalChallenges(const GetAllPersonalChallengesRequest& Request, const FGetAllPersonalChallengesDelegate& Delegate /*= FGetAllPersonalChallengesDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::GetAllPersonalChallenges(const GetAllPersonalChallengesRequest& Request, const FGetAllPersonalChallengesDelegate& Delegate /*= FGetAllPersonalChallengesDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -276,9 +282,10 @@ bool ScillApiChallengesApi::GetAllPersonalChallenges(const GetAllPersonalChallen
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnGetAllPersonalChallengesResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnGetAllPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetAllPersonalChallengesDelegate Delegate) const
@@ -288,10 +295,10 @@ void ScillApiChallengesApi::OnGetAllPersonalChallengesResponse(FHttpRequestPtr H
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::GetPersonalChallengeById(const GetPersonalChallengeByIdRequest& Request, const FGetPersonalChallengeByIdDelegate& Delegate /*= FGetPersonalChallengeByIdDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::GetPersonalChallengeById(const GetPersonalChallengeByIdRequest& Request, const FGetPersonalChallengeByIdDelegate& Delegate /*= FGetPersonalChallengeByIdDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -302,9 +309,10 @@ bool ScillApiChallengesApi::GetPersonalChallengeById(const GetPersonalChallengeB
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnGetPersonalChallengeByIdResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnGetPersonalChallengeByIdResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetPersonalChallengeByIdDelegate Delegate) const
@@ -314,10 +322,10 @@ void ScillApiChallengesApi::OnGetPersonalChallengeByIdResponse(FHttpRequestPtr H
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::GetPersonalChallenges(const GetPersonalChallengesRequest& Request, const FGetPersonalChallengesDelegate& Delegate /*= FGetPersonalChallengesDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::GetPersonalChallenges(const GetPersonalChallengesRequest& Request, const FGetPersonalChallengesDelegate& Delegate /*= FGetPersonalChallengesDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -328,9 +336,10 @@ bool ScillApiChallengesApi::GetPersonalChallenges(const GetPersonalChallengesReq
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnGetPersonalChallengesResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnGetPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetPersonalChallengesDelegate Delegate) const
@@ -340,10 +349,10 @@ void ScillApiChallengesApi::OnGetPersonalChallengesResponse(FHttpRequestPtr Http
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::GetUnresolvedPersonalChallenges(const GetUnresolvedPersonalChallengesRequest& Request, const FGetUnresolvedPersonalChallengesDelegate& Delegate /*= FGetUnresolvedPersonalChallengesDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::GetUnresolvedPersonalChallenges(const GetUnresolvedPersonalChallengesRequest& Request, const FGetUnresolvedPersonalChallengesDelegate& Delegate /*= FGetUnresolvedPersonalChallengesDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -354,9 +363,10 @@ bool ScillApiChallengesApi::GetUnresolvedPersonalChallenges(const GetUnresolvedP
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnGetUnresolvedPersonalChallengesResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnGetUnresolvedPersonalChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetUnresolvedPersonalChallengesDelegate Delegate) const
@@ -366,10 +376,10 @@ void ScillApiChallengesApi::OnGetUnresolvedPersonalChallengesResponse(FHttpReque
 	Delegate.ExecuteIfBound(Response);
 }
 
-bool ScillApiChallengesApi::UnlockPersonalChallenge(const UnlockPersonalChallengeRequest& Request, const FUnlockPersonalChallengeDelegate& Delegate /*= FUnlockPersonalChallengeDelegate()*/) const
+FHttpRequestPtr ScillApiChallengesApi::ResetUserAppChallenges(const ResetUserAppChallengesRequest& Request, const FResetUserAppChallengesDelegate& Delegate /*= FResetUserAppChallengesDelegate()*/) const
 {
 	if (!IsValid())
-		return false;
+		return nullptr;
 
 	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
 	HttpRequest->SetURL(*(Url + Request.ComputePath()));
@@ -380,9 +390,37 @@ bool ScillApiChallengesApi::UnlockPersonalChallenge(const UnlockPersonalChalleng
 	}
 
 	Request.SetupHttpRequest(HttpRequest);
-	
+
+	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnResetUserAppChallengesResponse, Delegate);
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
+}
+
+void ScillApiChallengesApi::OnResetUserAppChallengesResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FResetUserAppChallengesDelegate Delegate) const
+{
+	ResetUserAppChallengesResponse Response;
+	HandleResponse(HttpResponse, bSucceeded, Response);
+	Delegate.ExecuteIfBound(Response);
+}
+
+FHttpRequestPtr ScillApiChallengesApi::UnlockPersonalChallenge(const UnlockPersonalChallengeRequest& Request, const FUnlockPersonalChallengeDelegate& Delegate /*= FUnlockPersonalChallengeDelegate()*/) const
+{
+	if (!IsValid())
+		return nullptr;
+
+	FHttpRequestRef HttpRequest = CreateHttpRequest(Request);
+	HttpRequest->SetURL(*(Url + Request.ComputePath()));
+
+	for(const auto& It : AdditionalHeaderParams)
+	{
+		HttpRequest->SetHeader(It.Key, It.Value);
+	}
+
+	Request.SetupHttpRequest(HttpRequest);
+
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &ScillApiChallengesApi::OnUnlockPersonalChallengeResponse, Delegate);
-	return HttpRequest->ProcessRequest();
+	HttpRequest->ProcessRequest();
+	return HttpRequest;
 }
 
 void ScillApiChallengesApi::OnUnlockPersonalChallengeResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FUnlockPersonalChallengeDelegate Delegate) const

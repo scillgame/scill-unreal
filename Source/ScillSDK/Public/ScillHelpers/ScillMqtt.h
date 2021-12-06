@@ -20,7 +20,7 @@ enum BattlePassPayloadType
 
 DECLARE_DYNAMIC_DELEGATE_FourParams(FBattlePassChangeReceived, BattlePassPayloadType, Type, FBattlePassChanged, BattlePassChanged, FBattlePassLevelClaimed, BattlePassLevelClaimed, FBattlePassExpired, BattlePassExpired);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FChallengeChangeReceived, FChallengeChanged, Payload);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FLeaderboardChangeReceived, FLeaderboardUpdatePayload, Payload);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardChangeReceived, FLeaderboardV2UpdatePayload, UpdatePayload, FLeaderboardV2Changed, ChangedPayload);
 DECLARE_MULTICAST_DELEGATE(FMqttConnectionEstablished);
 
 /**
@@ -45,6 +45,8 @@ public:
 	void Destroy();
 
 	FMqttConnectionEstablished MqttConnectionEstablishedDelegate;
+
+	int leaderboardVersion = 2;
 private:
 	void OnConnect();
 	void OnConnectionError(const FString& Error);

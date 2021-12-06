@@ -36,7 +36,7 @@ void UWidgetLeaderboard::SubscribeToLeaderboardChanges()
     }
 }
 
-void UWidgetLeaderboard::ReceiveLeaderboardUpdate(FLeaderboardUpdatePayload LeaderboardChanged)
+void UWidgetLeaderboard::ReceiveLeaderboardUpdate(FLeaderboardV2UpdatePayload LeaderboardChanged, FLeaderboardV2Changed LeaderboardInfoChanged)
 {
     QueryLeaderboards();
 }
@@ -47,25 +47,26 @@ void UWidgetLeaderboard::QueryLeaderboards()
     {
         LeaderboardsReceivedDelegate.BindDynamic(this, &UWidgetLeaderboard::ReceiveLeaderboardsResponse);
 
-        ScillClient->GetLeaderboards(1, 25, TEXT("en"), LeaderboardsReceivedDelegate);
+        ScillClient->GetLeaderboards("", "", "", 1, 0, 25, TEXT("en"), LeaderboardsReceivedDelegate);
     }
 }
 
-void UWidgetLeaderboard::ReceiveLeaderboardsResponse(const TArray<FLeaderboard>& Leaderboards, bool Success)
+void UWidgetLeaderboard::ReceiveLeaderboardsResponse(const TArray<FLeaderboardV2Results>& Leaderboards, bool Success)
 {
     if (Success)
+    {
         PopulateLeaderboardsData(Leaderboards);
-
+    }
 }
 
-void UWidgetLeaderboard::PopulateLeaderboardsData(const TArray<FLeaderboard>& Leaderboards)
+void UWidgetLeaderboard::PopulateLeaderboardsData(const TArray<FLeaderboardV2Results>& Leaderboards)
 {
     CurrentLeaderboards = Leaderboards;
 
     if (LeaderboardIndex >= Leaderboards.Num())
         LeaderboardIndex = Leaderboards.Num() - 1;
 
-    LeaderboardName->SetText(FText::FromString(CurrentLeaderboards[LeaderboardIndex].Name));
+    LeaderboardName->SetText(FText::FromString(CurrentLeaderboards[LeaderboardIndex].LeaderboardName));
 
     PopulateLeaderboardDataToChildrenWidgets();
 }
@@ -74,7 +75,7 @@ void UWidgetLeaderboard::PopulateLeaderboardDataToChildrenWidgets()
 {
     RankingsPanel->ClearChildren();
 
-    for (auto ranking : CurrentLeaderboards[LeaderboardIndex].GroupedByUsers)
+    for (auto ranking : CurrentLeaderboards[LeaderboardIndex].LeaderboardResultsByMemberType.User.Members)
     {
         UWidgetLeaderboardUserRank* RankingWidget = CreateWidget<UWidgetLeaderboardUserRank>(this, RankingWidgetType);
 

@@ -20,7 +20,7 @@
 #include "ScillApiWrapper/ScillApiEventPayload.h"
 #include "ScillApiWrapper/ScillApiUnknownChallengeError.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 /* Get all available events and required and optional properties
@@ -33,7 +33,7 @@ public:
     virtual ~GetAvailableEventsRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 };
 
 class SCILLSDK_API ScillApiEventsApi::GetAvailableEventsResponse : public Response
@@ -42,7 +42,7 @@ public:
     virtual ~GetAvailableEventsResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiEventDescription> Content;
 };
 
@@ -56,7 +56,7 @@ public:
     virtual ~SendEventRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* Event payload or team event payload */
 	ScillApiEventPayload ScillApiEventPayload;
 };
@@ -67,7 +67,7 @@ public:
     virtual ~SendEventResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiActionResponse Content;
 };
 

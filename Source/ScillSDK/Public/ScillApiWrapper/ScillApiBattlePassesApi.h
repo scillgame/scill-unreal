@@ -15,7 +15,7 @@
 #include "CoreMinimal.h"
 #include "ScillApiWrapper/ScillApiBaseModel.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 class SCILLSDK_API ScillApiBattlePassesApi
@@ -24,16 +24,16 @@ public:
 	ScillApiBattlePassesApi();
 	~ScillApiBattlePassesApi();
 
-	/* Sets the URL Endpoint. 
+	/* Sets the URL Endpoint.
 	* Note: several fallback endpoints can be configured in request retry policies, see Request::SetShouldRetry */
 	void SetURL(const FString& Url);
 
 	/* Adds global header params to all requests */
 	void AddHeaderParam(const FString& Key, const FString& Value);
 	void ClearHeaderParams();
-	
+
 	/* Sets the retry manager to the user-defined retry manager. User must manage the lifetime of the retry manager.
-	* If no retry manager is specified and a request needs retries, a default retry manager will be used. 
+	* If no retry manager is specified and a request needs retries, a default retry manager will be used.
 	* See also: Request::SetShouldRetry */
 	void SetHttpRetryManager(FHttpRetrySystem::FManager& RetryManager);
 	FHttpRetrySystem::FManager& GetHttpRetryManager();
@@ -67,15 +67,15 @@ public:
     DECLARE_DELEGATE_OneParam(FGetUnlockedBattlePassesDelegate, const GetUnlockedBattlePassesResponse&);
     DECLARE_DELEGATE_OneParam(FUnlockBattlePassDelegate, const UnlockBattlePassResponse&);
     
-    bool ActivateBattlePassLevel(const ActivateBattlePassLevelRequest& Request, const FActivateBattlePassLevelDelegate& Delegate = FActivateBattlePassLevelDelegate()) const;
-    bool ClaimBattlePassLevelReward(const ClaimBattlePassLevelRewardRequest& Request, const FClaimBattlePassLevelRewardDelegate& Delegate = FClaimBattlePassLevelRewardDelegate()) const;
-    bool GetActiveBattlePasses(const GetActiveBattlePassesRequest& Request, const FGetActiveBattlePassesDelegate& Delegate = FGetActiveBattlePassesDelegate()) const;
-    bool GetAllBattlePassLevels(const GetAllBattlePassLevelsRequest& Request, const FGetAllBattlePassLevelsDelegate& Delegate = FGetAllBattlePassLevelsDelegate()) const;
-    bool GetBattlePass(const GetBattlePassRequest& Request, const FGetBattlePassDelegate& Delegate = FGetBattlePassDelegate()) const;
-    bool GetBattlePassLevels(const GetBattlePassLevelsRequest& Request, const FGetBattlePassLevelsDelegate& Delegate = FGetBattlePassLevelsDelegate()) const;
-    bool GetBattlePasses(const GetBattlePassesRequest& Request, const FGetBattlePassesDelegate& Delegate = FGetBattlePassesDelegate()) const;
-    bool GetUnlockedBattlePasses(const GetUnlockedBattlePassesRequest& Request, const FGetUnlockedBattlePassesDelegate& Delegate = FGetUnlockedBattlePassesDelegate()) const;
-    bool UnlockBattlePass(const UnlockBattlePassRequest& Request, const FUnlockBattlePassDelegate& Delegate = FUnlockBattlePassDelegate()) const;
+    FHttpRequestPtr ActivateBattlePassLevel(const ActivateBattlePassLevelRequest& Request, const FActivateBattlePassLevelDelegate& Delegate = FActivateBattlePassLevelDelegate()) const;
+    FHttpRequestPtr ClaimBattlePassLevelReward(const ClaimBattlePassLevelRewardRequest& Request, const FClaimBattlePassLevelRewardDelegate& Delegate = FClaimBattlePassLevelRewardDelegate()) const;
+    FHttpRequestPtr GetActiveBattlePasses(const GetActiveBattlePassesRequest& Request, const FGetActiveBattlePassesDelegate& Delegate = FGetActiveBattlePassesDelegate()) const;
+    FHttpRequestPtr GetAllBattlePassLevels(const GetAllBattlePassLevelsRequest& Request, const FGetAllBattlePassLevelsDelegate& Delegate = FGetAllBattlePassLevelsDelegate()) const;
+    FHttpRequestPtr GetBattlePass(const GetBattlePassRequest& Request, const FGetBattlePassDelegate& Delegate = FGetBattlePassDelegate()) const;
+    FHttpRequestPtr GetBattlePassLevels(const GetBattlePassLevelsRequest& Request, const FGetBattlePassLevelsDelegate& Delegate = FGetBattlePassLevelsDelegate()) const;
+    FHttpRequestPtr GetBattlePasses(const GetBattlePassesRequest& Request, const FGetBattlePassesDelegate& Delegate = FGetBattlePassesDelegate()) const;
+    FHttpRequestPtr GetUnlockedBattlePasses(const GetUnlockedBattlePassesRequest& Request, const FGetUnlockedBattlePassesDelegate& Delegate = FGetUnlockedBattlePassesDelegate()) const;
+    FHttpRequestPtr UnlockBattlePass(const UnlockBattlePassRequest& Request, const FUnlockBattlePassDelegate& Delegate = FUnlockBattlePassDelegate()) const;
     
 private:
     void OnActivateBattlePassLevelResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FActivateBattlePassLevelDelegate Delegate) const;
@@ -97,5 +97,5 @@ private:
 	mutable FHttpRetrySystem::FManager* RetryManager = nullptr;
 	mutable TUniquePtr<HttpRetryManager> DefaultRetryManager;
 };
-	
+
 }

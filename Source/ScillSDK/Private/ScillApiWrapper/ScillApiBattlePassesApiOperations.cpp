@@ -20,7 +20,7 @@
 #include "HttpModule.h"
 #include "PlatformHttp.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 FString ScillApiBattlePassesApi::ActivateBattlePassLevelRequest::ComputePath() const
@@ -30,7 +30,7 @@ FString ScillApiBattlePassesApi::ActivateBattlePassLevelRequest::ComputePath() c
 	{ TEXT("levelId"), ToStringFormatArg(LevelId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-pass-levels/{appId}/activate/{levelId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -52,6 +52,14 @@ void ScillApiBattlePassesApi::ActivateBattlePassLevelRequest::SetupHttpRequest(c
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -94,7 +102,7 @@ FString ScillApiBattlePassesApi::ClaimBattlePassLevelRewardRequest::ComputePath(
 	{ TEXT("levelId"), ToStringFormatArg(LevelId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-pass-levels/{appId}/claim/{levelId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -116,6 +124,14 @@ void ScillApiBattlePassesApi::ClaimBattlePassLevelRewardRequest::SetupHttpReques
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -157,7 +173,7 @@ FString ScillApiBattlePassesApi::GetActiveBattlePassesRequest::ComputePath() con
 	{ TEXT("appId"), ToStringFormatArg(AppId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}/active"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -179,6 +195,14 @@ void ScillApiBattlePassesApi::GetActiveBattlePassesRequest::SetupHttpRequest(con
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -220,7 +244,7 @@ FString ScillApiBattlePassesApi::GetAllBattlePassLevelsRequest::ComputePath() co
 	{ TEXT("appId"), ToStringFormatArg(AppId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-pass-levels/{appId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -242,6 +266,14 @@ void ScillApiBattlePassesApi::GetAllBattlePassLevelsRequest::SetupHttpRequest(co
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -284,7 +316,7 @@ FString ScillApiBattlePassesApi::GetBattlePassRequest::ComputePath() const
 	{ TEXT("battlePassId"), ToStringFormatArg(BattlePassId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}/single/{battlePassId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -306,6 +338,14 @@ void ScillApiBattlePassesApi::GetBattlePassRequest::SetupHttpRequest(const FHttp
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -348,7 +388,7 @@ FString ScillApiBattlePassesApi::GetBattlePassLevelsRequest::ComputePath() const
 	{ TEXT("battlePassId"), ToStringFormatArg(BattlePassId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-pass-levels/{appId}/{battlePassId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -370,6 +410,14 @@ void ScillApiBattlePassesApi::GetBattlePassLevelsRequest::SetupHttpRequest(const
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -411,7 +459,7 @@ FString ScillApiBattlePassesApi::GetBattlePassesRequest::ComputePath() const
 	{ TEXT("appId"), ToStringFormatArg(AppId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -433,6 +481,14 @@ void ScillApiBattlePassesApi::GetBattlePassesRequest::SetupHttpRequest(const FHt
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -474,7 +530,7 @@ FString ScillApiBattlePassesApi::GetUnlockedBattlePassesRequest::ComputePath() c
 	{ TEXT("appId"), ToStringFormatArg(AppId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}/unlocked"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{
@@ -496,6 +552,14 @@ void ScillApiBattlePassesApi::GetUnlockedBattlePassesRequest::SetupHttpRequest(c
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
+		// Form parameters
+		FString JsonBody;
+		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
+		Writer->WriteObjectStart();
+		Writer->WriteObjectEnd();
+		Writer->Close();
+		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
+		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -538,7 +602,7 @@ FString ScillApiBattlePassesApi::UnlockBattlePassRequest::ComputePath() const
 	{ TEXT("battlePassId"), ToStringFormatArg(BattlePassId) } };
 
 	FString Path = FString::Format(TEXT("/api/v1/battle-passes/{appId}/unlock/{battlePassId}"), PathParams);
-	
+
 	TArray<FString> QueryParams;
 	if(Language.IsSet())
 	{

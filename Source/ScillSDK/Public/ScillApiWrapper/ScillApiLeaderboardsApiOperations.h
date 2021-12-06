@@ -12,10 +12,11 @@
 
 #pragma once
 
-#include "ScillApiBaseModel.h"
+#include "ScillApiWrapper/ScillApiBaseModel.h"
 #include "ScillApiWrapper/ScillApiLeaderboardsApi.h"
 
-#include "ScillApiError.h"
+#include "ScillApiWrapper/ScillApiActionResponse.h"
+#include "ScillApiWrapper/ScillApiError.h"
 #include "ScillApiWrapper/ScillApiLeaderboard.h"
 #include "ScillApiWrapper/ScillApiLeaderboardMemberRanking.h"
 
@@ -32,13 +33,17 @@ public:
     virtual ~GetLeaderboardRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The id of the leaderboard */
 	FString LeaderboardId;
 	/* The page index starting at 1. The number of pageSize elements are returned for each page. Default value is 1 */
 	TOptional<int32> CurrentPage;
 	/* The number of elements per page. Default is 25. */
 	TOptional<int32> PageSize;
+	/* The starting date for fetching results. */
+	TOptional<FString> StartDate;
+	/* The ending date for fetching results. */
+	TOptional<FString> EndDate;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
 	TOptional<FString> Language;
 };
@@ -49,7 +54,7 @@ public:
     virtual ~GetLeaderboardResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiLeaderboard Content;
 };
 
@@ -63,13 +68,17 @@ public:
     virtual ~GetLeaderboardRankingRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The member type, can be user or team (right now) and sets which leaderboards should be selected. */
 	FString MemberType;
 	/* Either the user_id or team_id you used when sending the events. The memberType flag identifies which one is used. */
 	FString MemberId;
 	/* The id of the leaderboard */
 	FString LeaderboardId;
+	/* The starting date for fetching results. */
+	TOptional<FString> StartDate;
+	/* The ending date for fetching results. */
+	TOptional<FString> EndDate;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
 	TOptional<FString> Language;
 };
@@ -80,13 +89,13 @@ public:
     virtual ~GetLeaderboardRankingResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     ScillApiLeaderboardMemberRanking Content;
 };
 
 /* Retrieve User Rankings
  *
- * Returns an array of LeaderboardRanking items defined for all leaderboards in the application specified for the user.
+ * Returns an array of LeaderboardRanking items defined for all leaderboards in the application specified for the user. If the member is not in the leaderboard, the rank will be -1 in the LeaderboardRanking object.
 */
 class SCILLSDK_API ScillApiLeaderboardsApi::GetLeaderboardRankingsRequest : public Request
 {
@@ -94,11 +103,15 @@ public:
     virtual ~GetLeaderboardRankingsRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The member type, can be user or team (right now) and sets which leaderboards should be selected. */
 	FString MemberType;
 	/* Either the user_id or team_id you used when sending the events. The memberType flag identifies which one is used. */
 	FString MemberId;
+	/* The starting date for fetching results. */
+	TOptional<FString> StartDate;
+	/* The ending date for fetching results. */
+	TOptional<FString> EndDate;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
 	TOptional<FString> Language;
 };
@@ -109,7 +122,7 @@ public:
     virtual ~GetLeaderboardRankingsResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiLeaderboardMemberRanking> Content;
 };
 
@@ -123,11 +136,15 @@ public:
     virtual ~GetLeaderboardsRequest() {}
 	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
 	FString ComputePath() const final;
-    
+
 	/* The page index starting at 1. The number of pageSize elements are returned for each page. Default value is 1 */
 	TOptional<int32> CurrentPage;
 	/* The number of elements per page. Default is 25. */
 	TOptional<int32> PageSize;
+	/* The starting date for fetching results. */
+	TOptional<FString> StartDate;
+	/* The ending date for fetching results. */
+	TOptional<FString> EndDate;
 	/* Set the language. Content can be translated in the Admin Panel. Values can be international language codes like de, en, fr, it, ... */
 	TOptional<FString> Language;
 };
@@ -138,8 +155,37 @@ public:
     virtual ~GetLeaderboardsResponse() {}
 	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
 	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
-    
+
     TArray<ScillApiLeaderboard> Content;
+};
+
+/* Delete all leaderboard data, i.e. reset the leaderboard for the specified member.
+ *
+ * Delete all leaderboard data, i.e. reset the leaderboard for the specified member.
+*/
+class SCILLSDK_API ScillApiLeaderboardsApi::ResetLeaderboardRankingsRequest : public Request
+{
+public:
+    virtual ~ResetLeaderboardRankingsRequest() {}
+	void SetupHttpRequest(const FHttpRequestRef& HttpRequest) const final;
+	FString ComputePath() const final;
+
+	/* The member type, can be user or team (right now) and sets which leaderboards should be selected. */
+	FString MemberType;
+	/* The application ID */
+	FString AppId;
+	/* Either the user_id or team_id you used when sending the events. The memberType flag identifies which one is used. */
+	FString MemberId;
+};
+
+class SCILLSDK_API ScillApiLeaderboardsApi::ResetLeaderboardRankingsResponse : public Response
+{
+public:
+    virtual ~ResetLeaderboardRankingsResponse() {}
+	void SetHttpResponseCode(EHttpResponseCodes::Type InHttpResponseCode) final;
+	bool FromJson(const TSharedPtr<FJsonValue>& JsonValue) final;
+
+    ScillApiActionResponse Content;
 };
 
 }

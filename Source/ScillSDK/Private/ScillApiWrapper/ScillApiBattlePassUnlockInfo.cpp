@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiBattlePassUnlockInfo::WriteJson(JsonWriter& Writer) const
@@ -25,31 +25,31 @@ void ScillApiBattlePassUnlockInfo::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (PurchaseId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("purchase_id")); WriteJsonValue(Writer, PurchaseId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("purchase_id")); WriteJsonValue(Writer, PurchaseId.GetValue());
 	}
 	if (BattlePassId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("battle_pass_id")); WriteJsonValue(Writer, BattlePassId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("battle_pass_id")); WriteJsonValue(Writer, BattlePassId.GetValue());
 	}
 	if (UserId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_id")); WriteJsonValue(Writer, UserId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_id")); WriteJsonValue(Writer, UserId.GetValue());
 	}
 	if (PurchasePrice.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("purchase_price")); WriteJsonValue(Writer, PurchasePrice.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("purchase_price")); WriteJsonValue(Writer, PurchasePrice.GetValue());
 	}
 	if (PurchaseCurrency.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("purchase_currency")); WriteJsonValue(Writer, PurchaseCurrency.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("purchase_currency")); WriteJsonValue(Writer, PurchaseCurrency.GetValue());
 	}
 	if (PurchasedAt.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("purchased_at")); WriteJsonValue(Writer, PurchasedAt.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("purchased_at")); WriteJsonValue(Writer, PurchasedAt.GetValue());
 	}
 	if (BattlePassCompleted.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("battle_pass_completed")); WriteJsonValue(Writer, BattlePassCompleted.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("battle_pass_completed")); WriteJsonValue(Writer, BattlePassCompleted.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

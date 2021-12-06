@@ -12,9 +12,10 @@
 
 #pragma once
 
+
 #include "ScillApiWrapper/ScillApiBaseModel.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 /*

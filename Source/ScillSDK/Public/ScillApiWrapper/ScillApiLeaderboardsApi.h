@@ -13,7 +13,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ScillApiBaseModel.h"
+#include "ScillApiWrapper/ScillApiBaseModel.h"
 
 namespace ScillSDK
 {
@@ -24,16 +24,16 @@ public:
 	ScillApiLeaderboardsApi();
 	~ScillApiLeaderboardsApi();
 
-	/* Sets the URL Endpoint. 
+	/* Sets the URL Endpoint.
 	* Note: several fallback endpoints can be configured in request retry policies, see Request::SetShouldRetry */
 	void SetURL(const FString& Url);
 
 	/* Adds global header params to all requests */
 	void AddHeaderParam(const FString& Key, const FString& Value);
 	void ClearHeaderParams();
-	
+
 	/* Sets the retry manager to the user-defined retry manager. User must manage the lifetime of the retry manager.
-	* If no retry manager is specified and a request needs retries, a default retry manager will be used. 
+	* If no retry manager is specified and a request needs retries, a default retry manager will be used.
 	* See also: Request::SetShouldRetry */
 	void SetHttpRetryManager(FHttpRetrySystem::FManager& RetryManager);
 	FHttpRetrySystem::FManager& GetHttpRetryManager();
@@ -46,22 +46,27 @@ public:
 	class GetLeaderboardRankingsResponse;
 	class GetLeaderboardsRequest;
 	class GetLeaderboardsResponse;
+	class ResetLeaderboardRankingsRequest;
+	class ResetLeaderboardRankingsResponse;
 	
     DECLARE_DELEGATE_OneParam(FGetLeaderboardDelegate, const GetLeaderboardResponse&);
     DECLARE_DELEGATE_OneParam(FGetLeaderboardRankingDelegate, const GetLeaderboardRankingResponse&);
     DECLARE_DELEGATE_OneParam(FGetLeaderboardRankingsDelegate, const GetLeaderboardRankingsResponse&);
     DECLARE_DELEGATE_OneParam(FGetLeaderboardsDelegate, const GetLeaderboardsResponse&);
+    DECLARE_DELEGATE_OneParam(FResetLeaderboardRankingsDelegate, const ResetLeaderboardRankingsResponse&);
     
-    bool GetLeaderboard(const GetLeaderboardRequest& Request, const FGetLeaderboardDelegate& Delegate = FGetLeaderboardDelegate()) const;
-    bool GetLeaderboardRanking(const GetLeaderboardRankingRequest& Request, const FGetLeaderboardRankingDelegate& Delegate = FGetLeaderboardRankingDelegate()) const;
-    bool GetLeaderboardRankings(const GetLeaderboardRankingsRequest& Request, const FGetLeaderboardRankingsDelegate& Delegate = FGetLeaderboardRankingsDelegate()) const;
-    bool GetLeaderboards(const GetLeaderboardsRequest& Request, const FGetLeaderboardsDelegate& Delegate = FGetLeaderboardsDelegate()) const;
+    FHttpRequestPtr GetLeaderboard(const GetLeaderboardRequest& Request, const FGetLeaderboardDelegate& Delegate = FGetLeaderboardDelegate()) const;
+    FHttpRequestPtr GetLeaderboardRanking(const GetLeaderboardRankingRequest& Request, const FGetLeaderboardRankingDelegate& Delegate = FGetLeaderboardRankingDelegate()) const;
+    FHttpRequestPtr GetLeaderboardRankings(const GetLeaderboardRankingsRequest& Request, const FGetLeaderboardRankingsDelegate& Delegate = FGetLeaderboardRankingsDelegate()) const;
+    FHttpRequestPtr GetLeaderboards(const GetLeaderboardsRequest& Request, const FGetLeaderboardsDelegate& Delegate = FGetLeaderboardsDelegate()) const;
+    FHttpRequestPtr ResetLeaderboardRankings(const ResetLeaderboardRankingsRequest& Request, const FResetLeaderboardRankingsDelegate& Delegate = FResetLeaderboardRankingsDelegate()) const;
     
 private:
     void OnGetLeaderboardResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardDelegate Delegate) const;
     void OnGetLeaderboardRankingResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardRankingDelegate Delegate) const;
     void OnGetLeaderboardRankingsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardRankingsDelegate Delegate) const;
     void OnGetLeaderboardsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FGetLeaderboardsDelegate Delegate) const;
+    void OnResetLeaderboardRankingsResponse(FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded, FResetLeaderboardRankingsDelegate Delegate) const;
     
 	FHttpRequestRef CreateHttpRequest(const Request& Request) const;
 	bool IsValid() const;
@@ -72,5 +77,5 @@ private:
 	mutable FHttpRetrySystem::FManager* RetryManager = nullptr;
 	mutable TUniquePtr<HttpRetryManager> DefaultRetryManager;
 };
-	
+
 }

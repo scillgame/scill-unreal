@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiEventMetaData::WriteJson(JsonWriter& Writer) const
@@ -25,259 +25,259 @@ void ScillApiEventMetaData::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (ActionObject.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("action_object")); WriteJsonValue(Writer, ActionObject.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("action_object")); WriteJsonValue(Writer, ActionObject.GetValue());
 	}
 	if (ActionSubject.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("action_subject")); WriteJsonValue(Writer, ActionSubject.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("action_subject")); WriteJsonValue(Writer, ActionSubject.GetValue());
 	}
 	if (ActionType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("action_type")); WriteJsonValue(Writer, ActionType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("action_type")); WriteJsonValue(Writer, ActionType.GetValue());
 	}
 	if (AmmoUsed.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("ammo_used")); WriteJsonValue(Writer, AmmoUsed.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("ammo_used")); WriteJsonValue(Writer, AmmoUsed.GetValue());
 	}
 	if (Amount.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("amount")); WriteJsonValue(Writer, Amount.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("amount")); WriteJsonValue(Writer, Amount.GetValue());
 	}
 	if (AmountGained.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("amount_gained")); WriteJsonValue(Writer, AmountGained.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("amount_gained")); WriteJsonValue(Writer, AmountGained.GetValue());
 	}
 	if (AmountGiven.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("amount_given")); WriteJsonValue(Writer, AmountGiven.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("amount_given")); WriteJsonValue(Writer, AmountGiven.GetValue());
 	}
 	if (AnimalName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("animal_name")); WriteJsonValue(Writer, AnimalName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("animal_name")); WriteJsonValue(Writer, AnimalName.GetValue());
 	}
 	if (Armor.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("armor")); WriteJsonValue(Writer, Armor.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("armor")); WriteJsonValue(Writer, Armor.GetValue());
 	}
 	if (AwayTeamId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("away_team_id")); WriteJsonValue(Writer, AwayTeamId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("away_team_id")); WriteJsonValue(Writer, AwayTeamId.GetValue());
 	}
 	if (AwayScore.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("away_score")); WriteJsonValue(Writer, AwayScore.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("away_score")); WriteJsonValue(Writer, AwayScore.GetValue());
 	}
 	if (BattleStatus.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("battle_status")); WriteJsonValue(Writer, BattleStatus.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("battle_status")); WriteJsonValue(Writer, BattleStatus.GetValue());
 	}
 	if (BountyName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("bounty_name")); WriteJsonValue(Writer, BountyName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("bounty_name")); WriteJsonValue(Writer, BountyName.GetValue());
 	}
 	if (BuildingId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("building_id")); WriteJsonValue(Writer, BuildingId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("building_id")); WriteJsonValue(Writer, BuildingId.GetValue());
 	}
 	if (BuildingLevel.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("building_level")); WriteJsonValue(Writer, BuildingLevel.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("building_level")); WriteJsonValue(Writer, BuildingLevel.GetValue());
 	}
 	if (CardType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("card_type")); WriteJsonValue(Writer, CardType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("card_type")); WriteJsonValue(Writer, CardType.GetValue());
 	}
 	if (CharacterName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("character_name")); WriteJsonValue(Writer, CharacterName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("character_name")); WriteJsonValue(Writer, CharacterName.GetValue());
 	}
 	if (CheckpointId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("checkpoint_id")); WriteJsonValue(Writer, CheckpointId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("checkpoint_id")); WriteJsonValue(Writer, CheckpointId.GetValue());
 	}
 	if (CoordinateX.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("coordinate_x")); WriteJsonValue(Writer, CoordinateX.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("coordinate_x")); WriteJsonValue(Writer, CoordinateX.GetValue());
 	}
 	if (CoordinateY.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("coordinate_y")); WriteJsonValue(Writer, CoordinateY.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("coordinate_y")); WriteJsonValue(Writer, CoordinateY.GetValue());
 	}
 	if (CrewName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("crew_name")); WriteJsonValue(Writer, CrewName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("crew_name")); WriteJsonValue(Writer, CrewName.GetValue());
 	}
 	if (DamageAmount.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("damage_amount")); WriteJsonValue(Writer, DamageAmount.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("damage_amount")); WriteJsonValue(Writer, DamageAmount.GetValue());
 	}
 	if (Distance.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("distance")); WriteJsonValue(Writer, Distance.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("distance")); WriteJsonValue(Writer, Distance.GetValue());
 	}
 	if (Duration.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("duration")); WriteJsonValue(Writer, Duration.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("duration")); WriteJsonValue(Writer, Duration.GetValue());
 	}
 	if (EffectId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("effect_id")); WriteJsonValue(Writer, EffectId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("effect_id")); WriteJsonValue(Writer, EffectId.GetValue());
 	}
 	if (EnemyCharacter.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("enemy_character")); WriteJsonValue(Writer, EnemyCharacter.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("enemy_character")); WriteJsonValue(Writer, EnemyCharacter.GetValue());
 	}
 	if (EnemyType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("enemy_type")); WriteJsonValue(Writer, EnemyType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("enemy_type")); WriteJsonValue(Writer, EnemyType.GetValue());
 	}
 	if (EventType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("event_type")); WriteJsonValue(Writer, EventType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("event_type")); WriteJsonValue(Writer, EventType.GetValue());
 	}
 	if (FuelConsumed.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("fuel_consumed")); WriteJsonValue(Writer, FuelConsumed.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("fuel_consumed")); WriteJsonValue(Writer, FuelConsumed.GetValue());
 	}
 	if (Health.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("health")); WriteJsonValue(Writer, Health.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("health")); WriteJsonValue(Writer, Health.GetValue());
 	}
 	if (HitType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("hit_type")); WriteJsonValue(Writer, HitType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("hit_type")); WriteJsonValue(Writer, HitType.GetValue());
 	}
 	if (HomeTeamId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("home_team_id")); WriteJsonValue(Writer, HomeTeamId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("home_team_id")); WriteJsonValue(Writer, HomeTeamId.GetValue());
 	}
 	if (HomeScore.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("home_score")); WriteJsonValue(Writer, HomeScore.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("home_score")); WriteJsonValue(Writer, HomeScore.GetValue());
 	}
 	if (ItemId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("item_id")); WriteJsonValue(Writer, ItemId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("item_id")); WriteJsonValue(Writer, ItemId.GetValue());
 	}
 	if (ItemName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("item_name")); WriteJsonValue(Writer, ItemName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("item_name")); WriteJsonValue(Writer, ItemName.GetValue());
 	}
 	if (ItemType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("item_type")); WriteJsonValue(Writer, ItemType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("item_type")); WriteJsonValue(Writer, ItemType.GetValue());
 	}
 	if (KillType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("kill_type")); WriteJsonValue(Writer, KillType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("kill_type")); WriteJsonValue(Writer, KillType.GetValue());
 	}
 	if (LapPosition.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("lap_position")); WriteJsonValue(Writer, LapPosition.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("lap_position")); WriteJsonValue(Writer, LapPosition.GetValue());
 	}
 	if (LevelId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("level_id")); WriteJsonValue(Writer, LevelId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("level_id")); WriteJsonValue(Writer, LevelId.GetValue());
 	}
 	if (MapName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("map_name")); WriteJsonValue(Writer, MapName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("map_name")); WriteJsonValue(Writer, MapName.GetValue());
 	}
 	if (MapSectionName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("map_section_name")); WriteJsonValue(Writer, MapSectionName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("map_section_name")); WriteJsonValue(Writer, MapSectionName.GetValue());
 	}
 	if (MissionId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("mission_id")); WriteJsonValue(Writer, MissionId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("mission_id")); WriteJsonValue(Writer, MissionId.GetValue());
 	}
 	if (PlayerCharacter.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("player_character")); WriteJsonValue(Writer, PlayerCharacter.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("player_character")); WriteJsonValue(Writer, PlayerCharacter.GetValue());
 	}
 	if (PuzzleId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("puzzle_id")); WriteJsonValue(Writer, PuzzleId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("puzzle_id")); WriteJsonValue(Writer, PuzzleId.GetValue());
 	}
 	if (RacePosition.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("race_position")); WriteJsonValue(Writer, RacePosition.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("race_position")); WriteJsonValue(Writer, RacePosition.GetValue());
 	}
 	if (Realm.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("realm")); WriteJsonValue(Writer, Realm.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("realm")); WriteJsonValue(Writer, Realm.GetValue());
 	}
 	if (RequiredTime.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("required_time")); WriteJsonValue(Writer, RequiredTime.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("required_time")); WriteJsonValue(Writer, RequiredTime.GetValue());
 	}
 	if (ResourceGained.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("resource_gained")); WriteJsonValue(Writer, ResourceGained.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("resource_gained")); WriteJsonValue(Writer, ResourceGained.GetValue());
 	}
 	if (ResourceGiven.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("resource_given")); WriteJsonValue(Writer, ResourceGiven.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("resource_given")); WriteJsonValue(Writer, ResourceGiven.GetValue());
 	}
 	if (ResourceName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("resource_name")); WriteJsonValue(Writer, ResourceName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("resource_name")); WriteJsonValue(Writer, ResourceName.GetValue());
 	}
 	if (RoundId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("round_id")); WriteJsonValue(Writer, RoundId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("round_id")); WriteJsonValue(Writer, RoundId.GetValue());
 	}
 	if (RoundType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("round_type")); WriteJsonValue(Writer, RoundType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("round_type")); WriteJsonValue(Writer, RoundType.GetValue());
 	}
 	if (Score.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("score")); WriteJsonValue(Writer, Score.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("score")); WriteJsonValue(Writer, Score.GetValue());
 	}
 	if (StatType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("stat_type")); WriteJsonValue(Writer, StatType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("stat_type")); WriteJsonValue(Writer, StatType.GetValue());
 	}
 	if (TimeCondition.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("time_condition")); WriteJsonValue(Writer, TimeCondition.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("time_condition")); WriteJsonValue(Writer, TimeCondition.GetValue());
 	}
 	if (TransportId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("transport_id")); WriteJsonValue(Writer, TransportId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("transport_id")); WriteJsonValue(Writer, TransportId.GetValue());
 	}
 	if (Type.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("type")); WriteJsonValue(Writer, Type.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("type")); WriteJsonValue(Writer, Type.GetValue());
 	}
 	if (UnitType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("unit_type")); WriteJsonValue(Writer, UnitType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("unit_type")); WriteJsonValue(Writer, UnitType.GetValue());
 	}
 	if (UpgradeType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("upgrade_type")); WriteJsonValue(Writer, UpgradeType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("upgrade_type")); WriteJsonValue(Writer, UpgradeType.GetValue());
 	}
 	if (WeaponAction.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("weapon_action")); WriteJsonValue(Writer, WeaponAction.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("weapon_action")); WriteJsonValue(Writer, WeaponAction.GetValue());
 	}
 	if (WeaponId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("weapon_id")); WriteJsonValue(Writer, WeaponId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("weapon_id")); WriteJsonValue(Writer, WeaponId.GetValue());
 	}
 	if (WeaponType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("weapon_type")); WriteJsonValue(Writer, WeaponType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("weapon_type")); WriteJsonValue(Writer, WeaponType.GetValue());
 	}
 	if (WeaponUsed.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("weapon_used")); WriteJsonValue(Writer, WeaponUsed.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("weapon_used")); WriteJsonValue(Writer, WeaponUsed.GetValue());
 	}
 	if (ZoneName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("zone_name")); WriteJsonValue(Writer, ZoneName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("zone_name")); WriteJsonValue(Writer, ZoneName.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

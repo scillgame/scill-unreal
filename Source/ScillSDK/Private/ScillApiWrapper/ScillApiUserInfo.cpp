@@ -25,11 +25,11 @@ void ScillApiUserInfo::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (Username.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("username")); WriteJsonValue(Writer, Username.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("username")); WriteJsonValue(Writer, Username.GetValue());
 	}
 	if (AvatarImage.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("avatarImage")); WriteJsonValue(Writer, AvatarImage.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("avatarImage")); WriteJsonValue(Writer, AvatarImage.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

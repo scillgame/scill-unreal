@@ -281,16 +281,30 @@ This object is returned once a challenge of a [monitoring](#receive-personal-cha
 
 - **New Challenge**: [Challenge](#challenge). The new state of the personal challenge.
 
-#### Leaderboard
+#### Leaderboard V2 Results
 
 This object contains information about a leaderboard - like the name and the id, but also contains all rankings, sorted by users and teams.
 
 - **LeaderboardId**: String. The id of the leaderboard.
-- **Name**: String. The display name of the leaderboard.
-- **Grouped By Users**: [LeaderboardRanking[]](#leaderboard-ranking). An array of LeaderboardRanking Items for individual users.
-- **Grouped By Teams**: [LeaderboardRanking[]](#leaderboard-ranking). An array of LeaderboardRanking Items for teams. Provide a team_id in the event payload to also create leaderboards for teams.
+- **LeaderboardName**: String. The display name of the leaderboard.
+- **Leaderboard Results By Member Type**: [Leaderboard V2 Results Leaderboard Results By Member Type](#leaderboard-v2-results-leaderboard-results-by-member-type). Contains a list of leaderboard rankings for all different types of member types - currently users and teams.
+- **Leaderboard Sort Order Ascending**: Boolean. If true the order of the results is ascending, if false it is descending.
 
-#### Leaderboard Ranking
+#### Leaderboard V2 Results Leaderboard Results By Member Type
+
+This object holds arrays for each different type of members in a leaderboard with rankings of these members.
+
+- **User**: [Leaderboard V2 Member Type Ranking](#leaderboard-v2-member-type-ranking). An array of LeaderboardRanking Items for users.
+- **Team**: [Leaderboard V2 Member Type Ranking](#leaderboard-v2-member-type-ranking). An array of LeaderboardRanking Items for teams. Provide a team_id in the event payload to also create leaderboards for teams.
+
+#### Leaderboard V2 Member Type Ranking
+
+This object holds a Count and an array of rankings of a specified member type.
+
+- **Count**: int. Number of entries.
+- **Members**: [Leaderboard V2 Member[]](#leaderboard-v2-member). A list of members' rankings on the leaderboard.
+
+#### Leaderboard V2 Member
 
 This is the ranking for the user or team in the leaderboard.
 
@@ -298,25 +312,44 @@ This is the ranking for the user or team in the leaderboard.
 - **Member Type**: String: Indicates what type this entry is, it's either user or team.
 - **Score**: int. The score achieved as an integer value. If you want to store floats, for example laptimes you need to convert them into an int before (i.e. multiply by 100 to get hundreds of seconds and format back to float in UI)
 - **Rank**: int. The position within the leaderboard.
+- **Metadata Results**: [Leaderboard V2 MemberMetadata[]](#leaderboard-v2-member-metadata). Holds a list of found metadata of the member on that leaderboard.
 - **Additional Info**: [UserInfo](#user-info). Info about the user.
 
-#### Leaderboard Member Ranking
+#### Leaderboard V2 Member Metadata
+
+This is an object holding information about a member on a leaderboard.
+
+- **Key**: String. The event type of the leaderboard.
+- **Ranked**: Boolean. Determines if the member is ranked for that event type. If false no score and rank is provided.
+- **Score**: int. The achieved score of the member as an integer value.
+- **Rank**: int. The rank of the user in the leaderboard.
+
+#### Leaderboard V2 Member Ranking
 
 You get these object if you query the leaderboard ranking for a specific user. Only rankings for the requested user will be returned.
 
 - **Leaderboard Id**: String. The id of the leaderboard this ranking is in.
-- **Name**: String. The name of the leaderboard.
-- **Mebmer**: [LeaderboardRanking](#leaderboard-ranking). Info about the user and their ranking.
+- **LeaderboardName**: String. The name of the leaderboard.
+- **LeaderboardMember**: [Leaderboard V2 Member](#leaderboard-v2-member). Info about the user and their ranking.
+- **Sort Order Ascending**: bool. True if this leaderboard sorts the score ascending or false if the ranking is defined by a descending score.
 
-#### Leaderboard Update Payload
+#### Leaderboard V2 Update Payload
+
+The payload used for [realtime updates](#receive-leaderboard-updates) if a leaderboard's ranking is updated.
+
+- **Webhook Type**: String. The type of the webhook, in this case it is leaderboard-ranking-changed.
+- **Leaderboard Data**: [Leaderboard V2 Info](#leaderboard-v2-info). Info about the changed leaderboard.
+- **Member Data**: [Leaderboard V2 Member](#leaderboard-v2-member). Info about the ranking that has changed.
+- **Old Leaderboard Ranking**: [LeaderboardScore](#leaderboard-score). The old score of the user in this leaderboard.
+- **New Leaderboard Ranking**: [LeaderboardScore](#leaderboard-score). The new score of the user in this leaderboard.
+
+#### Leaderboard V2 Changed
 
 The payload used for [realtime updates](#receive-leaderboard-updates) if a leaderboard is updated.
 
-- **Webhook Type**: String. The type of the webhook, in this case it is leaderboard-ranking-changed.
-- **Leaderboard Data**: [LeaderboardData](#leaderboard-info). Info about the changed leaderboard.
-- **Member Data**: [LeaderboardRanking](#leaderboard-ranking). Info about the ranking that has changed.
-- **Old Leaderboard Ranking**: [LeaderboardScore](#leaderboard-score). The old score of the user in this leaderboard.
-- **New Leaderboard Ranking**: [LeaderboardScore](#leaderboard-score). The new score of the user in this leaderboard.
+- **Webhook Type**: String. The type of the webhook, in this case it is leaderboard-changed.
+- **Old Leaderboard**: [Leaderboard V2 Info](#leaderboard-v2-info). Old data of the leaderboard.
+- **New Leaderboard**: [Leaderboard V2 Info](#leaderboard-v2-info). New data of the leaderboard.
 
 #### Leaderboard Score
 
@@ -325,13 +358,13 @@ Contains info about rank and score of a member in a leaderboard.
 - **Score**: int. The score achieved as an integer value. If you want to store floats, for example laptimes you need to convert them into an int before (i.e. multiply by 100 to get hundreds of seconds and format back to float in UI).
 - **Rank**: int. The position within the leaderboard.
 
-#### Leaderboard Info
+#### Leaderboard V2 Info
 
 The Leaderboard Info object contains information about the leaderboard itself like the name and the id.
 
 - **App Id**: String. The id of the app.
 - **Leaderboard Id**: String. The id of the leaderboard.
-- **Name**: String. The display name of the leaderboard.
+- **LeaderboardName**: String. The display name of the leaderboard.
 - **Event Type**: String. The event type that triggers this leaderboard.
 - **Sort Order Ascending**: bool. True if this leaderboard sorts the score ascending or false if the ranking is defined by a descending score.
 
@@ -942,7 +975,8 @@ Unlike the other functions on these classes, the callback function here will be 
 
 **Callback Signature:**
 
-- Payload: [LeaderboardUpdatePayload](#leaderboard-update-payload). Provides details about what has changed in the leaderboard.
+- UpdatePayload: [LeaderboardV2UpdatePayload](#leaderboard-v2-update-payload). Provides details about what has changed in the leaderboard rankings.
+- ChangedPayload: [LeaderboardV2Changed](#leaderboard-v2-changed). Provides details about what has changed in the leaderboard.
 
 ##### On Realtime Connection Open
 
@@ -972,7 +1006,7 @@ This can be used to send an event to the SCILL Api that will process the corresp
 
 #### Generate Access Token
 
-Generates an access token. Should be initiated by a client and then, using replication, passed to be processed on the server. Use the callback to pass the access token back to the client. Below you can see an illustration of what the blueprint would look like roughly.
+Generates an access token. Should be initiated by a client and then, using replication, passed to be processed on the server. Use the callback to pass the access token back to the client. In the [Getting Started Guide](Index/#generate-access-token) you can see an illustration of what the blueprint would look like roughly.
 
 **Inputs:**
 
@@ -983,15 +1017,3 @@ Generates an access token. Should be initiated by a client and then, using repli
 - **Token**: String. The generated access token
 
 - Success: boolean. whether the request was processed successfully
-
-_Scill Client/Player Controller - Call the generate access token function on your game mode. The input of the client's player controller is passed to the Server together with the saved user id from the Scill Client Component and then on the server you can access the game mode:_
-
-![GenerateAccessTokenClient1.png](/Documentation/attachments/GenerateAccessTokenClient1.png)
-
-_Scill Client Backend/Game Mode - Here you can simply call the Generate Access Token function with the passed User Id and the event callback reference. When executed the event is automatically replicated to the client again._
-
-![GenerateAccessTokenServer.png](/Documentation/attachments/GenerateAccessTokenServer.png)
-
-_Scill Client/Player Controller - Called once the access token was generated. This passes the access token back to the client's player controller. We just need to save it now:_
-
-![GenerateAccessTokenClient2.png](/Documentation/attachments/GenerateAccessTokenClient2.png)

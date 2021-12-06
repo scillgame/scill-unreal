@@ -25,23 +25,23 @@ void ScillApiLeaderboardRanking::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (MemberId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("member_id")); WriteJsonValue(Writer, MemberId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("member_id")); WriteJsonValue(Writer, MemberId.GetValue());
 	}
 	if (MemberType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("member_type")); WriteJsonValue(Writer, MemberType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("member_type")); WriteJsonValue(Writer, MemberType.GetValue());
 	}
 	if (Score.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("score")); WriteJsonValue(Writer, Score.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("score")); WriteJsonValue(Writer, Score.GetValue());
 	}
 	if (Rank.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("rank")); WriteJsonValue(Writer, Rank.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("rank")); WriteJsonValue(Writer, Rank.GetValue());
 	}
 	if (AdditionalInfo.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("additional_info")); WriteJsonValue(Writer, AdditionalInfo.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("additional_info")); WriteJsonValue(Writer, AdditionalInfo.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

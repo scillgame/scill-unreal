@@ -107,12 +107,33 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 			}
 			if (callbacksLeaderboardChanges.Contains(pubPacket->TopicName))
 			{
+				FString webhookType = JsonObject->GetStringField("webhook_type");
+
 				auto callback = this->callbacksLeaderboardChanges.FindRef(pubPacket->TopicName);
+				if (webhookType == TEXT("leaderboard-ranking-changed"))
+				{
+					if (leaderboardVersion == 2)
+					{
+						auto leaderboardUpdate = ScillSDK::ScillApiLeaderboardV2UpdatePayload();
+						leaderboardUpdate.FromJson(ValueObject);
 
-				auto leaderboardUpdate = ScillSDK::ScillApiLeaderboardUpdatePayload();
-				leaderboardUpdate.FromJson(ValueObject);
+						callback.ExecuteIfBound(FLeaderboardV2UpdatePayload::FromScillApiLeaderboardV2UpdatePayload(leaderboardUpdate), FLeaderboardV2Changed());
+					}
+					else
+					{
+						auto leaderboardUpdate = ScillSDK::ScillApiLeaderboardUpdatePayload();
+						leaderboardUpdate.FromJson(ValueObject);
 
-				callback.ExecuteIfBound(FLeaderboardUpdatePayload::FromScillApiLeaderboardUpdatePayload(leaderboardUpdate));
+						callback.ExecuteIfBound(FLeaderboardV2UpdatePayload::FromScillApiLeaderboardUpdatePayload(leaderboardUpdate), FLeaderboardV2Changed());
+					}
+				}
+				if (webhookType == TEXT("leaderboard-changed"))
+				{
+					auto leaderboardUpdate = ScillSDK::ScillApiLeaderboardV2Changed();
+					leaderboardUpdate.FromJson(ValueObject);
+
+					callback.ExecuteIfBound(FLeaderboardV2UpdatePayload(), FLeaderboardV2Changed::FromScillApiLeaderboardV2Changed(leaderboardUpdate));
+				}
 			}
 		}
 	}

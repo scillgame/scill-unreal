@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiError::WriteJson(JsonWriter& Writer) const
@@ -25,7 +25,7 @@ void ScillApiError::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (Code.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("code")); WriteJsonValue(Writer, Code.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("code")); WriteJsonValue(Writer, Code.GetValue());
 	}
 	Writer->WriteIdentifierPrefix(TEXT("message")); WriteJsonValue(Writer, Message);
 	Writer->WriteObjectEnd();

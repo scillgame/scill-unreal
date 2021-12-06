@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiEventPayload::WriteJson(JsonWriter& Writer) const
@@ -25,27 +25,27 @@ void ScillApiEventPayload::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (UserId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_id")); WriteJsonValue(Writer, UserId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_id")); WriteJsonValue(Writer, UserId.GetValue());
 	}
 	if (SessionId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("session_id")); WriteJsonValue(Writer, SessionId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("session_id")); WriteJsonValue(Writer, SessionId.GetValue());
 	}
 	if (EventName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("event_name")); WriteJsonValue(Writer, EventName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("event_name")); WriteJsonValue(Writer, EventName.GetValue());
 	}
 	if (EventType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("event_type")); WriteJsonValue(Writer, EventType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("event_type")); WriteJsonValue(Writer, EventType.GetValue());
 	}
 	if (MetaData.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("meta_data")); WriteJsonValue(Writer, MetaData.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("meta_data")); WriteJsonValue(Writer, MetaData.GetValue());
 	}
 	if (TeamId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("team_id")); WriteJsonValue(Writer, TeamId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("team_id")); WriteJsonValue(Writer, TeamId.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

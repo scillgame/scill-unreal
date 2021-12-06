@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiLeaderboardScore::WriteJson(JsonWriter& Writer) const
@@ -25,11 +25,11 @@ void ScillApiLeaderboardScore::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (Score.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("score")); WriteJsonValue(Writer, Score.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("score")); WriteJsonValue(Writer, Score.GetValue());
 	}
 	if (Rank.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("rank")); WriteJsonValue(Writer, Rank.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("rank")); WriteJsonValue(Writer, Rank.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

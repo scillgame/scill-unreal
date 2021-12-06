@@ -34,6 +34,12 @@ This section gives you an overview of the steps to start integrating this plugin
 
 ### C++
 
+If you work in a Blueprint-only project you can skip this section.
+
+In order to build your project in Visual Studio you will need to make sure that the _Game Development with C++_ package is installed in your instance of Visual Studio.
+
+![VisualStudioInstaller.png](/Documentation/attachments/VisualStudioInstaller.png)
+
 To enable the usage of the plugin's components and functions in your game's module inside your C++ Unreal Project, you first need to add it to your module's public dependencies. In your `Build.cs` file (located in your project in `Source/[YourGame]/[YourGame].Build.cs`) you need to add the `ScillSDK` module to the Public Dependency Module Names:
 
 ```C#
@@ -88,6 +94,16 @@ To access its functionality on your game client it is best to add it as an inter
 
 ![GameInstanceInterface.png](/Documentation/attachments/GameInstanceInterface.png)
 
+Now you will need to implement the interface's functions. To do so go to the Game Instance's members view (usually on the left side of the Blueprint Window) and expand the Interfaces entry. Double-click each entry under _Scill SDK_ to create a corresponding Event (for `Set User Id` and `Set Access Token`) or Function (for `Get User Id` and `Get Access Token`). 
+
+![Interfaces.png](/Documentation/attachments/Interfaces.png)
+
+Drag off the `User Id` or `Token` Key from the new Event Nodes in the Event Graph and click "Promote to Instance Variable" and then Drag and Drop the newly created Instance Variables on the respective pins of the return nodes inside the `Get User Id` and `Get Access Token` functions.
+
+![PromoteVariable.png](/Documentation/attachments/PromoteVariable.png)
+
+![ConnectInstanceVaraible.png](/Documentation/attachments/ConnectInstanceVaraible.png)
+
 ### User ID and Access Token
 
 To properly generate an access token you need to follow several steps. First is to authenticate the player with your game's backend. Since this is no part of the Scill API and it even wants to be agnostic of your users, you can just do this the way that you prefer. It is just important to return a player-unique id in this process to your game client.
@@ -96,9 +112,25 @@ Save this User ID on your game client by calling the respective setter on the Sc
 
 ![UserIdPersistence.png](/Documentation/attachments/UserIdPersistence.png)
 
-Afterwards you can use it to call the [Generate Access Token](#generate-access-token) function on your [Scill Client Backend](#scill-client-backend) inside the Game Mode. Make sure that your game client is already connected to a Game Server before calling this, so that the scill client backend already exists and is reachable, or has the correct API Key, respectively. Follow the steps in [Generate Access Token](#generate-access-token) to properly incorporate this mechanic into your project.
+Afterwards you can use it to call the [Generate Access Token](#generate-access-token) function on your [Scill Client Backend](/Reference/#scill-client-backend) inside the Game Mode. Make sure that your game client is already connected to a Game Server before calling this, so that the scill client backend already exists and is reachable, or has the correct API Key, respectively. Follow the steps in [Generate Access Token](#generate-access-token) to properly incorporate this mechanic into your project.
 
 After retrieving and saving the access token to your Scill Client Component on your Player Controller on the Client side, you can call any other method on your Scill Client to communicate with the Scill API.
+
+### Generate Access Token
+
+To generate an access token you will need to call the `Generate Access Token` function on the Scill Client Backend component. This should be initiated by a client and then, using replication, passed to be processed on the server. Use the callback to pass the access token back to the client. Below you can see an illustration of what the blueprint would look like roughly.
+
+Scill Client/Player Controller - Call the generate access token function on your game mode. The input of the client's player controller is passed to the Server together with the saved user id from the Scill Client Component and then on the server you can access the game mode:
+
+![GenerateAccessTokenClient1.png](/Documentation/attachments/GenerateAccessTokenClient1.png)
+
+Scill Client Backend/Game Mode - Here you can simply call the Generate Access Token function with the passed User Id and the event callback reference. When executed the event is automatically replicated to the client again.
+
+![GenerateAccessTokenServer.png](/Documentation/attachments/GenerateAccessTokenServer.png)
+
+Scill Client/Player Controller - Called once the access token was generated. This passes the access token back to the client's player controller. We just need to save it now:
+
+![GenerateAccessTokenClient2.png](/Documentation/attachments/GenerateAccessTokenClient2.png)
 
 ### Remarks
 
@@ -113,3 +145,22 @@ To get an overview of all Classes and Structs that are present in this plugin, s
 ## User Widgets
 
 To learn how to use the included User Widgets in your project, refer to the [User Widgets Guide](/Documentation/UserWidgets.md).
+
+## Upgrade from Version 1.x.x
+
+If you have worked with version 1.x.x before you might need to adjust your project a little bit in order to update to version 2.0.0 and above.
+
+As you can see in the release notes of version 2.0.0 the handling of leaderboards has changed a little bit. So if you use leaderboards in your Scill Application you will need to adjust two things in your project.
+First check which version of leaderboards you use:
+
+- if you already use version 2 leaderboards you do not need to change anything in your project - it is configured by default to use version 2 endpoints.
+
+- if you use version 1 leaderboards you will need to change or add a line in the Config/DefaultGame.ini file of your project. Make sure it includes the following lines:
+  
+  ```[/Script/ScillSDK.ScillClient]
+  LeaderboardVersionNumber=1```
+  ```
+
+Second you might have to adjust your callbacks in your Classes that initate the requests to Scill. The returned structure has changed a bit and you might need to adjust to that, depending on which parts of the leaderboard structs you use.
+
+Also note that the Realtime Update callback now has distinct structs for a change in the Leaderboard's Metadata and the Leaderboard's Ranking.

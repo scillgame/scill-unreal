@@ -17,7 +17,7 @@
 
 #include "Templates/SharedPointer.h"
 
-namespace ScillSDK 
+namespace ScillSDK
 {
 
 void ScillApiChallenge::WriteJson(JsonWriter& Writer) const
@@ -25,91 +25,91 @@ void ScillApiChallenge::WriteJson(JsonWriter& Writer) const
 	Writer->WriteObjectStart();
 	if (ChallengeId.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_id")); WriteJsonValue(Writer, ChallengeId.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_id")); WriteJsonValue(Writer, ChallengeId.GetValue());
 	}
 	if (ChallengeName.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_name")); WriteJsonValue(Writer, ChallengeName.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_name")); WriteJsonValue(Writer, ChallengeName.GetValue());
 	}
 	if (ChallengeDescription.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_description")); WriteJsonValue(Writer, ChallengeDescription.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_description")); WriteJsonValue(Writer, ChallengeDescription.GetValue());
 	}
 	if (ChallengeDurationTime.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_duration_time")); WriteJsonValue(Writer, ChallengeDurationTime.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_duration_time")); WriteJsonValue(Writer, ChallengeDurationTime.GetValue());
 	}
 	if (LiveDate.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("live_date")); WriteJsonValue(Writer, LiveDate.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("live_date")); WriteJsonValue(Writer, LiveDate.GetValue());
 	}
 	if (ChallengeGoal.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_goal")); WriteJsonValue(Writer, ChallengeGoal.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_goal")); WriteJsonValue(Writer, ChallengeGoal.GetValue());
 	}
 	if (UserChallengeCurrentScore.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_challenge_current_score")); WriteJsonValue(Writer, UserChallengeCurrentScore.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_challenge_current_score")); WriteJsonValue(Writer, UserChallengeCurrentScore.GetValue());
 	}
 	if (ChallengeIcon.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_icon")); WriteJsonValue(Writer, ChallengeIcon.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_icon")); WriteJsonValue(Writer, ChallengeIcon.GetValue());
 	}
 	if (ChallengeIconHd.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_icon_hd")); WriteJsonValue(Writer, ChallengeIconHd.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_icon_hd")); WriteJsonValue(Writer, ChallengeIconHd.GetValue());
 	}
 	if (ChallengePrice.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_price")); WriteJsonValue(Writer, ChallengePrice.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_price")); WriteJsonValue(Writer, ChallengePrice.GetValue());
 	}
 	if (ChallengeReward.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_reward")); WriteJsonValue(Writer, ChallengeReward.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_reward")); WriteJsonValue(Writer, ChallengeReward.GetValue());
 	}
 	if (ChallengeRewardType.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_reward_type")); WriteJsonValue(Writer, ChallengeRewardType.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_reward_type")); WriteJsonValue(Writer, ChallengeRewardType.GetValue());
 	}
 	if (ChallengeGoalCondition.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_goal_condition")); WriteJsonValue(Writer, ChallengeGoalCondition.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_goal_condition")); WriteJsonValue(Writer, ChallengeGoalCondition.GetValue());
 	}
 	if (ChallengeXp.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_xp")); WriteJsonValue(Writer, ChallengeXp.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_xp")); WriteJsonValue(Writer, ChallengeXp.GetValue());
 	}
 	if (Repeatable.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("repeatable")); WriteJsonValue(Writer, Repeatable.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("repeatable")); WriteJsonValue(Writer, Repeatable.GetValue());
 	}
 	if (Type.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("type")); WriteJsonValue(Writer, Type.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("type")); WriteJsonValue(Writer, Type.GetValue());
 	}
 	if (ChallengeAutoActivated.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("challenge_auto_activated")); WriteJsonValue(Writer, ChallengeAutoActivated.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("challenge_auto_activated")); WriteJsonValue(Writer, ChallengeAutoActivated.GetValue());
 	}
 	if (IsClaimed.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("is_claimed")); WriteJsonValue(Writer, IsClaimed.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("is_claimed")); WriteJsonValue(Writer, IsClaimed.GetValue());
 	}
 	if (UserChallengeUnlockedAt.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_challenge_unlocked_at")); WriteJsonValue(Writer, UserChallengeUnlockedAt.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_challenge_unlocked_at")); WriteJsonValue(Writer, UserChallengeUnlockedAt.GetValue());
 	}
 	if (UserChallengeActivatedAt.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_challenge_activated_at")); WriteJsonValue(Writer, UserChallengeActivatedAt.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_challenge_activated_at")); WriteJsonValue(Writer, UserChallengeActivatedAt.GetValue());
 	}
 	if (UserChallengeIsClaimed.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_challenge_is_claimed")); WriteJsonValue(Writer, UserChallengeIsClaimed.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_challenge_is_claimed")); WriteJsonValue(Writer, UserChallengeIsClaimed.GetValue());
 	}
 	if (UserChallengeStatus.IsSet())
 	{
-		Writer->WriteIdentifierPrefix(TEXT("user_challenge_status")); WriteJsonValue(Writer, UserChallengeStatus.GetValue());	
+		Writer->WriteIdentifierPrefix(TEXT("user_challenge_status")); WriteJsonValue(Writer, UserChallengeStatus.GetValue());
 	}
 	Writer->WriteObjectEnd();
 }

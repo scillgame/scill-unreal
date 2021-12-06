@@ -23,6 +23,15 @@
 #include "ScillApiWrapper/ScillApiLeaderboardInfo.h"
 #include "ScillApiWrapper/ScillApiLeaderboardScore.h"
 #include "ScillApiWrapper/ScillApiLeaderboardUpdatePayload.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2Changed.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2Info.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2Member.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2MemberMetadata.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2MemberRanking.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2MemberTypeRanking.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2Results.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2ResultsLeaderboardResultsByMemberType.h"
+#include "ScillApiWrapper/ScillApiLeaderboardV2UpdatePayload.h"
 #include "ScillStructs.generated.h"
 
 /*
@@ -843,7 +852,7 @@ public:
 
 /*The ranking for the user or team in the leaderboard
 */
-USTRUCT(BlueprintType, Category = "ScillSDK")
+USTRUCT(BlueprintType, Category = "ScillSDK", meta = (DeprecatedNode, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions."))
 struct SCILLSDK_API FLeaderboardRanking
 {
 	GENERATED_USTRUCT_BODY()
@@ -873,7 +882,7 @@ public:
 
 /*You get these object if you query the leaderboard ranking for a specific user. Only the requested user will be returned.
 */
-USTRUCT(BlueprintType, Category = "ScillSDK")
+USTRUCT(BlueprintType, Category = "ScillSDK", meta = (DeprecatedNode, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions."))
 struct SCILLSDK_API FLeaderboardMemberRanking
 {
 	GENERATED_USTRUCT_BODY()
@@ -895,7 +904,7 @@ public:
 
 /*The Leaderboard object contains information about the leaderboard itself like the name and the id, but also contains actual rankings for users and teams.
 */
-USTRUCT(BlueprintType, Category = "ScillSDK")
+USTRUCT(BlueprintType, Category = "ScillSDK", meta = (DeprecatedNode, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions."))
 struct SCILLSDK_API FLeaderboard
 {
 	GENERATED_USTRUCT_BODY()
@@ -939,7 +948,7 @@ public:
 
 /* The Leaderboard object contains information about the leaderboard itself like the name and the id
 */
-USTRUCT(BlueprintType, Category = "ScillSDK")
+USTRUCT(BlueprintType, Category = "ScillSDK", meta = (DeprecatedNode, DeprecationMessage = "The Leaderboard V1 endpoints have been deprecated. Please use the new Leaderboard functions."))
 struct SCILLSDK_API FLeaderboardInfo
 {
 	GENERATED_USTRUCT_BODY()
@@ -987,4 +996,234 @@ public:
 	FLeaderboardScore NewLeaderboardRanking;
 
 	static FLeaderboardUpdatePayload FromScillApiLeaderboardUpdatePayload(const ScillSDK::ScillApiLeaderboardUpdatePayload o);
+};
+
+/* The object containing secondary metadata ranking information, useful for tied scores on the main tracking parameter
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2MemberMetadata
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The event type key used for ranking */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString Key;
+
+	/* Determines if the user is ranked for that event type key. If false, no score and rank will be provided */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool Ranked;
+
+	/* The score achieved as an integer value. If you want to store floats, for example laptimes you need to convert them into an int before (i.e. multiply by 100 to get hundreds of seconds and format back to float in UI) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Score;
+
+	/* The position within the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Rank;
+
+	static FLeaderboardV2MemberMetadata FromScillApiLeaderboardV2MemberMetadata(const ScillSDK::ScillApiLeaderboardV2MemberMetadata o);
+};
+
+/* The ranking for the user or team in the leaderboard
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2Member
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The id of the user - its the same user id you used to create the access token and the same user id you used to send the events */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString MemberId;
+
+	/* Indicates what type this entry is, it's either user or team */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString MemberType;
+
+	/* The score achieved as an integer value. If you want to store floats, for example laptimes you need to convert them into an int before (i.e. multiply by 100 to get hundreds of seconds and format back to float in UI) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Score;
+
+	/* The position within the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Rank;
+
+	/* Returns an array of the LeaderboardMemberMetadata objects containing user ranking metadata information */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FLeaderboardV2MemberMetadata> MetadataResults;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FUserInfo AdditionalInfo;
+
+	static FLeaderboardV2Member FromScillApiLeaderboardV2Member(const ScillSDK::ScillApiLeaderboardV2Member o);
+	static FLeaderboardV2Member FromScillApiLeaderboardRanking(const ScillSDK::ScillApiLeaderboardRanking o);
+};
+
+/* The payload used for realtime updates and webhooks if a leaderboard is updated.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2MemberTypeRanking
+{
+	GENERATED_USTRUCT_BODY()
+public:
+
+	/* The total number of members included in the results */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Count;
+
+	/* An array of LeaderboardMember objects */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FLeaderboardV2Member> Members;
+
+	static FLeaderboardV2MemberTypeRanking FromScillApiLeaderboardV2MemberTypeRanking(const ScillSDK::ScillApiLeaderboardV2MemberTypeRanking o);
+};
+
+/* The payload used for realtime updates and webhooks if a leaderboard is updated.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2MemberRanking
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	/* The id of the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString LeaderboardId;
+
+	/* The name of the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString LeaderboardName;
+
+	/* Determines the results sort order. If true, the order is ascending, otherwise, it's descending. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool LeaderboardSortOrderAscending;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardV2Member LeaderboardMember;
+
+	static FLeaderboardV2MemberRanking FromScillApiLeaderboardV2MemberRanking(const ScillSDK::ScillApiLeaderboardV2MemberRanking o);
+	static FLeaderboardV2MemberRanking FromScillApiLeaderboardMemberRanking(const ScillSDK::ScillApiLeaderboardMemberRanking o);
+};
+
+/* This object uses two keys - "user" and "team", both of which contain ranking info
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2ResultsLeaderboardResultsByMemberType
+{
+	GENERATED_USTRUCT_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardV2MemberTypeRanking Team;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardV2MemberTypeRanking User;
+
+	static FLeaderboardV2ResultsLeaderboardResultsByMemberType FromScillApiLeaderboardV2ResultsLeaderboardResultsByMemberType(const ScillSDK::ScillApiLeaderboardV2ResultsLeaderboardResultsByMemberType o);
+};
+
+/* The Leaderboard object contains information about the leaderboard itself like the name and the id, but also contains actual rankings for users and teams.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2Results
+{
+	GENERATED_USTRUCT_BODY()
+public:
+
+	/* The id of the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString LeaderboardId;
+
+	/* The name of the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString LeaderboardName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardV2ResultsLeaderboardResultsByMemberType LeaderboardResultsByMemberType;
+
+	/* Determines the results sort order. If true, the order is ascending, otherwise, it's descending. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool LeaderboardSortOrderAscending;
+
+	static FLeaderboardV2Results FromScillApiLeaderboardV2Results(const ScillSDK::ScillApiLeaderboardV2Results o);
+	static FLeaderboardV2Results FromScillApiLeaderboard(const ScillSDK::ScillApiLeaderboard o);
+};
+
+/* The Leaderboard object contains information about the leaderboard itself like the name and the id
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2Info
+{
+	GENERATED_USTRUCT_BODY()
+public:
+
+	/* The id of the app */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString AppId;
+
+	/* The id of the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString LeaderboardId;
+
+	/* The name of the leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString LeaderboardName;
+
+	/* The event type that triggers this leaderboard */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString EventType;
+
+	/* True if this leaderboard sorts the score ascending or false if the ranking is defined by a descending score. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool SortOrderAscending;
+
+	static FLeaderboardV2Info FromScillApiLeaderboardV2Info(const ScillSDK::ScillApiLeaderboardV2Info o);
+	static FLeaderboardV2Info FromScillApiLeaderboardInfo(const ScillSDK::ScillApiLeaderboardInfo o);
+};
+
+/* This object is sent via Webhook or notifications of type leaderboard-changed.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2Changed
+{
+	GENERATED_USTRUCT_BODY()
+public:
+
+	/* The type of the notification. If you receive this payload, it's most likely leaderboard-changed. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardV2Info OldLeaderboard;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardV2Info NewLeaderboard;
+
+	static FLeaderboardV2Changed FromScillApiLeaderboardV2Changed(const ScillSDK::ScillApiLeaderboardV2Changed o);
+};
+
+/* The payload used for realtime updates and webhooks if a leaderboard is updated.
+*/
+USTRUCT(BlueprintType, Category = "ScillSDK")
+struct SCILLSDK_API FLeaderboardV2UpdatePayload
+{
+	GENERATED_USTRUCT_BODY()
+public:
+
+	/* The type of the webhook, in this case it is leaderboard-ranking-changed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString WebhookType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardV2Info LeaderboardData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardV2Member MemberData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardScore OldLeaderboardRanking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FLeaderboardScore NewLeaderboardRanking;
+
+	static FLeaderboardV2UpdatePayload FromScillApiLeaderboardV2UpdatePayload(const ScillSDK::ScillApiLeaderboardV2UpdatePayload o);
+	static FLeaderboardV2UpdatePayload FromScillApiLeaderboardUpdatePayload(const ScillSDK::ScillApiLeaderboardUpdatePayload o);
 };
