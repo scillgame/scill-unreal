@@ -129,6 +129,11 @@ void UScillClientBackend::SendEvent(FScillEventPayload payload, FResponseReceive
 	eventsApi.SendEvent(request, delegate);
 }
 
+void UScillClientBackend::SendScillEvent(UEventMetaDataBase* payload, FResponseReceived responseReceived)
+{
+	this->SendEvent(FScillEventPayload::FromScillEventPayloadBase(payload), responseReceived);
+}
+
 void UScillClientBackend::ReceiveSendEventResponse(const ScillSDK::ScillApiEventsApi::SendEventResponse& Response, FGuid guid) const
 {
 	auto callback = callbackMapResponseReceived.FindRef(guid);

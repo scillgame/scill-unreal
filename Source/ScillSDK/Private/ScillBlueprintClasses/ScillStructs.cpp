@@ -1,7 +1,678 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "ObjectEditorUtils.h"
 #include "ScillBlueprintClasses/ScillStructs.h"
+
+FScillEventPayload FScillEventPayload::FromScillEventPayloadBase(const UEventMetaDataBase* meta)
+{
+	auto n = FScillEventPayload();
+
+	n.UserId = meta->UserId;
+	n.SessionId = meta->SessionId;
+	n.EventName = meta->EventName();
+	n.EventType = meta->BaseEventType;
+
+	n.MetaData = FEventMetaData();
+
+	if (auto o = Cast<UAchieveScoreMetaData>(meta))
+	{
+		n.MetaData.Score = o->Score;
+		n.MetaData.SendScore = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UBuildRoadMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.MapName = o->MapName;
+		n.MetaData.Realm = o->Realm;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UCaptureFlagMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+	}
+	if (auto o = Cast<UCatchAnimalMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.AnimalName = o->AnimalName;
+	}
+	if (auto o = Cast<UCharacterFlyMetaData>(meta))
+	{
+		n.MetaData.Distance = o->Distance;
+		n.MetaData.SendDistance = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.Realm = o->Realm;
+	}
+	if (auto o = Cast<UCharacterRespawnMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.Realm = o->Realm;
+	}
+
+	if (auto o = Cast<UCharacterRunMetaData>(meta))
+	{
+		n.MetaData.Distance = o->Distance;
+		n.MetaData.SendDistance = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.Realm = o->Realm;
+	}
+
+	if (auto o = Cast<UCharacterSpawnedMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+	}
+
+	if (auto o = Cast<UCharacterSurviveMetaData>(meta))
+	{
+		n.MetaData.Duration = o->Duration;
+		n.MetaData.SendDuration = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.Realm = o->Realm;
+	}
+
+	if (auto o = Cast<UCharacterWalkMetaData>(meta))
+	{
+		n.MetaData.Distance = o->Distance;
+		n.MetaData.SendDistance = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.Realm = o->Realm;
+	}
+
+	if (auto o = Cast<UCollectItemMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.ItemType = o->ItemType;
+	}
+
+	if (auto o = Cast<UConsumeContentMetaData>(meta))
+	{
+		n.MetaData.ContentType = o->ContentType;
+		n.MetaData.ItemId = o->ItemId;
+		n.MetaData.ItemType = o->ItemType;
+	}
+
+	if (auto o = Cast<UCraftItemMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.ItemType = o->ItemType;
+	}
+
+	if (auto o = Cast<UDealDamageMetaData>(meta))
+	{
+		n.MetaData.DamageAmount = o->DamageAmount;
+		n.MetaData.SendDamageAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.WeaponUsed = o->WeaponUsed;
+	}
+
+	if (auto o = Cast<UDefeatBossMetaData>(meta))
+	{
+		n.MetaData.EnemyCharacter = o->EnemyCharacter;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.HitType = o->HitType;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+	}
+
+	if (auto o = Cast<UDestroyItemMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.ItemId = o->ItemId;
+	}
+
+	if (auto o = Cast<UEarnExperienceMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.Type = o->Type;
+	}
+
+	if (auto o = Cast<UEarnPointsMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.Type = o->Type;
+	}
+
+	if (auto o = Cast<UEventCompletedMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.ActionType = o->ActionType;
+		n.MetaData.ActionObject = o->ActionObject;
+		n.MetaData.ActionSubject = o->ActionSubject;
+	}
+
+	if (auto o = Cast<UFinishBuildingMetaData>(meta))
+	{
+		n.MetaData.BuildingId = o->BuildingId;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.SendBuildingLevel = o->SendBuildingLevel;
+		n.MetaData.BuildingLevel = o->BuildingLevel;
+	}
+
+	if (auto o = Cast<UFinishFightMetaData>(meta))
+	{
+		n.MetaData.SendBattleStatus = o->SendBattleStatus;
+		n.MetaData.BattleStatus = o->BattleStatus;
+		n.MetaData.EnemyCharacter = o->EnemyCharacter;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.HitType = o->HitType;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+	}
+
+	if (auto o = Cast<UFinishLapsMetaData>(meta))
+	{
+		n.MetaData.LapPosition = o->LapPosition;
+		n.MetaData.SendLapPosition = true;
+		n.MetaData.SendRequiredTime = true;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+
+	if (auto o = Cast<UFinishRoundMetaData>(meta))
+	{
+		n.MetaData.RoundId = o->RoundId;
+		n.MetaData.SendBattleStatus = o->SendBattleStatus;
+		n.MetaData.BattleStatus = o->BattleStatus;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.RoundType = o->RoundType;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+
+	if (auto o = Cast<UFinishTransportMetaData>(meta))
+	{
+		n.MetaData.TransportId = o->TransportId;
+		n.MetaData.SendDistance = o->SendDistance;
+		n.MetaData.Distance = o->Distance;
+		n.MetaData.SendFuelConsumed = o->SendFuelConsumed;
+		n.MetaData.FuelConsumed = o->FuelConsumed;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+
+	if (auto o = Cast<UFireRateMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+
+	if (auto o = Cast<UGainResourceMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.ResourceName = o->ResourceName;
+	}
+
+	if (auto o = Cast<UHealUnitMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.UnitType = o->UnitType;
+	}
+
+	if (auto o = Cast<UHireCrewMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.CrewName = o->CrewName;
+	}
+
+	if (auto o = Cast<UInstantDeathMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.CharacterName = o->CharacterName;
+	}
+
+	if (auto o = Cast<UInstantKillMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.CharacterName = o->CharacterName;
+	}
+
+	if (auto o = Cast<UKillAmmoMetaData>(meta))
+	{
+		n.MetaData.AmmoUsed = o->AmmoUsed;
+		n.MetaData.SendAmmoUsed = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.EnemyType = o->EnemyType;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.WeaponUsed = o->WeaponUsed;
+	}
+
+	if (auto o = Cast<UKillEnemyMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.EnemyType = o->EnemyType;
+		n.MetaData.KillType = o->KillType;
+		n.MetaData.MapName = o->MapName;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.Realm = o->Realm;
+		n.MetaData.WeaponUsed = o->WeaponUsed;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+	}
+
+	if (auto o = Cast<ULapPositionMetaData>(meta))
+	{
+		n.MetaData.LapPosition = o->LapPosition;
+		n.MetaData.SendLapPosition = true;
+		n.MetaData.SendRequiredTime = true;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+
+	if (auto o = Cast<UMatchStartMetaData>(meta))
+	{
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UMatchFinishMetaData>(meta))
+	{
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UObtainItemMetaData>(meta))
+	{
+		n.MetaData.ItemId = o->ItemId;
+		n.MetaData.SendArmor = o->SendArmor;
+		n.MetaData.Armor = o->Armor;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UPassLevelMetaData>(meta))
+	{
+		n.MetaData.LevelId = o->LevelId;
+		n.MetaData.SendArmor = o->SendArmor;
+		n.MetaData.Armor = o->Armor;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UPassMissionMetaData>(meta))
+	{
+		n.MetaData.MissionId = o->MissionId;
+		n.MetaData.SendArmor = o->SendArmor;
+		n.MetaData.Armor = o->Armor;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UPerformJumpMetaData>(meta))
+	{
+		n.MetaData.Distance = o->Distance;
+		n.MetaData.SendDistance = true;
+		n.MetaData.SendScore = o->SendScore;
+		n.MetaData.Score = o->Score;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UPlayCardMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.CardType = o->CardType;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UPlayEffectMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.EffectType = o->EffectType;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<URacePositionMetaData>(meta))
+	{
+		n.MetaData.LapPosition = o->LapPosition;
+		n.MetaData.SendLapPosition = true;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReachCheckpointMetaData>(meta))
+	{
+		n.MetaData.CheckpointId = o->CheckpointId;
+		n.MetaData.SendArmor = o->SendArmor;
+		n.MetaData.Armor = o->Armor;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReachCoordinatesMetaData>(meta))
+	{
+		n.MetaData.CoordinateX = o->CoordinateX;
+		n.MetaData.SendCoordinateX = true;
+		n.MetaData.CoordinateY = o->CoordinateY;
+		n.MetaData.SendCoordinateY = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReachDistanceMetaData>(meta))
+	{
+		n.MetaData.Distance = o->Distance;
+		n.MetaData.SendDistance = true;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReachHeighteMetaData>(meta))
+	{
+		n.MetaData.Distance = o->Distance;
+		n.MetaData.SendDistance = true;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReachMapSectionMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.MapSectionName = o->MapSectionName;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReachProgressMetaData>(meta))
+	{
+		n.MetaData.LevelId = o->LevelId;
+		n.MetaData.SendArmor = o->SendArmor;
+		n.MetaData.Armor = o->Armor;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReachSpeedMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.SendHealth = o->SendHealth;
+		n.MetaData.Health = o->Health;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReceiveDamageMetaData>(meta))
+	{
+		n.MetaData.DamageAmount = o->DamageAmount;
+		n.MetaData.SendDamageAmount = true;
+		n.MetaData.EnemyCharacter = o->EnemyCharacter;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.WeaponUsed = o->WeaponUsed;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UReplenishStatMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.StatType = o->StatType;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<USecureZoneMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.MapName = o->MapName;
+		n.MetaData.ZoneName = o->ZoneName;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<USolvePuzzleMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.PuzzleId = o->PuzzleId;
+		n.MetaData.SendPuzzleId = true;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<USpawnItemMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.ItemType = o->ItemType;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+	}
+	if (auto o = Cast<USprayGraffitiMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.MapName = o->MapName;
+		n.MetaData.Realm = o->Realm;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UTradeResourceMetaData>(meta))
+	{
+		n.MetaData.AmountGained = o->AmountGained;
+		n.MetaData.SendAmountGained = true;
+		n.MetaData.AmountGiven = o->AmountGiven;
+		n.MetaData.SendAmountGiven = true;
+		n.MetaData.ResourceGained = o->ResourceGained;
+		n.MetaData.ResourceGiven = o->ResourceGiven;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UTriggerEventMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.EventType = o->EventType;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+	}
+	if (auto o = Cast<UUpgradeItemMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.ItemName = o->ItemName;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UUpgradeWeaponMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.WeaponId = o->WeaponId;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+		n.MetaData.UpgradeType = o->UpgradeType;
+		n.MetaData.WeaponUsed = o->WeaponUsed;
+	}
+	if (auto o = Cast<UUseItemMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.ItemName = o->ItemName;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UUserInviteMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+	}
+	if (auto o = Cast<UWeaponActionMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.WeaponId = o->WeaponId;
+		n.MetaData.WeaponUsed = o->WeaponUsed;
+		n.MetaData.PlayerCharacter = o->PlayerCharacter;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UWeaponActivatedMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.WeaponType = o->WeaponType;
+		n.MetaData.SendDuration = o->SendDuration;
+		n.MetaData.Duration = o->Duration;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UWinBountyMetaData>(meta))
+	{
+		n.MetaData.Amount = o->Amount;
+		n.MetaData.SendAmount = true;
+		n.MetaData.BountyName = o->BountyName;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UWinMatchMetaData>(meta))
+	{
+		n.MetaData.AwayScore = o->AwayScore;
+		n.MetaData.SendAwayScore = true;
+		n.MetaData.AwayTeamId = o->AwayTeamId;
+		n.MetaData.HomeScore = o->HomeScore;
+		n.MetaData.SendHomeScore = true;
+		n.MetaData.HomeTeamId = o->HomeTeamId;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+	if (auto o = Cast<UWinRoundMetaData>(meta))
+	{
+		n.MetaData.MapName = o->MapName;
+		n.MetaData.RoundId = o->RoundId;
+		n.MetaData.RoundType = o->RoundType;
+		n.MetaData.SendRequiredTime = o->SendRequiredTime;
+		n.MetaData.RequiredTime = o->RequiredTime;
+		n.MetaData.TimeCondition = o->TimeCondition;
+	}
+
+	return n;
+}
 
 ScillSDK::ScillApiEventPayload FScillEventPayload::ToScillApiEventPayload(const FScillEventPayload o)
 {

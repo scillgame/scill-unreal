@@ -34,6 +34,1838 @@
 #include "ScillApiWrapper/ScillApiLeaderboardV2UpdatePayload.h"
 #include "ScillStructs.generated.h"
 
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UEventMetaDataBase : public UObject
+{
+	GENERATED_BODY()
+public:
+	/* This is your user id. You can set this to whatever you like, either your real user id or an obfuscated user id. However you need to be consistent here. Events linked to this user id only track if challenges or battle passes are unlocked with the same user id. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"), Category="Event Payload")
+		FString UserId;
+	/* This is required if event_type is single and identifies a session. This can be anything used to group events together. For example this can be a level or a match id. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"), Category = "Event Payload")
+		FString SessionId;
+
+	virtual FString EventName() const {
+		return "none";
+	}
+	/* This is either single or group. You can send multiple events in one request (group) or send events in sequence. Please note, that depending on your tier you might run into rate limits. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"), Category = "Event Payload")
+		FString BaseEventType = "single";
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UAchieveScoreMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Score;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+	
+	FString EventName() const override {
+		return "achieve-score";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UBuildRoadMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString MapName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Realm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "build-road";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCaptureFlagMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "capture-flag";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCatchAnimalMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString AnimalName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "catch-animal";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCharacterFlyMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Distance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Realm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "character-fly";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCharacterRespawnMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Realm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "character-respawn";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCharacterRunMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Distance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Realm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "character-run";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCharacterSpawnedMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "character-spawned";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCharacterSurviveMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Duration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Realm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "character-survive";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCharacterWalkMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Distance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Realm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "character-walk";
+	}
+
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCollectItemMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemType;
+
+	FString EventName() const override {
+		return "collect-item";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UConsumeContentMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ContentType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemType;
+
+	FString EventName() const override {
+		return "consume-content";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UCraftItemMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "craft-item";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UDealDamageMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int DamageAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponUsed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "deal-damage";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UDefeatBossMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString EnemyCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString HitType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "defeat-boss";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UDestroyItemMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "destroy-item";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UEarnExperienceMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "earn-experience";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UEarnPointsMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "earn-points";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UEventCompletedMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ActionType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ActionObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ActionSubject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "event-completed";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UFinishBuildingMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString BuildingId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendBuildingLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int BuildingLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "finish-building";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UFinishFightMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendBattleStatus;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int BattleStatus;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString EnemyCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString HitType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	FString EventName() const override {
+		return "finish-fight";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UFinishLapsMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int LapPosition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "finish-laps";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UFinishRoundMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RoundId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendBattleStatus;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int BattleStatus;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString RoundType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "finish-round";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UFinishTransportMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TransportId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Distance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendFuelConsumed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int FuelConsumed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "finish-transport";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UFireRateMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "fire-rate";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UGainResourceMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ResourceName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "gain-resource";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UHealUnitMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString UnitType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "heal-unit";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UHireCrewMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString CrewName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "hire-crew";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UInstantDeathMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString CharacterName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "instant-death";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UInstantKillMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString CharacterName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "instant-kill";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UKillAmmoMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int AmmoUsed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString EnemyType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponUsed;
+
+	FString EventName() const override {
+		return "kill-ammo";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UKillEnemyMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString EnemyType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString KillType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString MapName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Realm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponUsed;
+
+	FString EventName() const override {
+		return "kill-enemy";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API ULapPositionMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int LapPosition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "lap-position";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UMatchStartMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "match-start";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UMatchFinishMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "match-finish";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UObtainItemMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendArmor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Armor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "obtain-item";
+	}
+
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UPassLevelMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString LevelId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendArmor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Armor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "pass-level";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UPassMissionMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString MissionId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendArmor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Armor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "pass-mission";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UPerformJumpMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Distance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendScore;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Score;
+
+	FString EventName() const override {
+		return "perform-jump";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UPlayCardMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString CardType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "play-card";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UPlayEffectMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString EffectType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "play-effect";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API URacePositionMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int LapPosition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "race-position";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReachCheckpointMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString CheckpointId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendArmor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Armor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "reach-checkpoint";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReachCoordinatesMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int CoordinateX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int CoordinateY;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "reach-coordinates";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReachDistanceMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Distance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "reach-distance";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReachHeighteMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Distance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "reach-height";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReachMapSectionMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString MapSectionName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "reach-map-section";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReachProgressMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString LevelId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendArmor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Armor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "reach-progress";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReachSpeedMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "creach-speedatch";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReceiveDamageMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int DamageAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString EnemyCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponUsed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "receive-damage";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UReplenishStatMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString StatType;
+
+	FString EventName() const override {
+		return "replenish-stat";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API USecureZoneMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString MapName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ZoneName;
+
+	FString EventName() const override {
+		return "secure-zone";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API USolvePuzzleMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int PuzzleId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "solve-puzzle";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API USpawnItemMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	FString EventName() const override {
+		return "spawn-item";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API USprayGraffitiMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString MapName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString Realm;
+
+	FString EventName() const override {
+		return "spray-graffiti";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UTradeResourceMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int AmountGained;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int AmountGiven;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ResourceGained;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ResourceGiven;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "trade-resource";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UTriggerEventMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString EventType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	FString EventName() const override {
+		return "trigger-event";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UUpgradeItemMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "upgrade-item";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UUpgradeWeaponMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString UpgradeType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponUsed;
+
+	FString EventName() const override {
+		return "upgrade-weapon";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UUseItemMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString ItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "use-item";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UUserInviteMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	FString EventName() const override {
+		return "user-invite";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UWeaponActionMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponUsed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "weapon-action";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UWeaponActivatedMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString WeaponType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendDuration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Duration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "weapon-activated";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UWinBountyMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString BountyName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "win-bounty";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UWinMatchMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int AwayScore;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString AwayTeamId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int HomeScore;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString HomeTeamId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "win-match";
+	}
+};
+
+UCLASS(BlueprintType, Category = "ScillSDK")
+class SCILLSDK_API UWinRoundMetaData : public UEventMetaDataBase
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString MapName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RoundId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString PlayerCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString RoundType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		bool SendRequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		int RequiredTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+		FString TimeCondition;
+
+	FString EventName() const override {
+		return "win-round";
+	}
+};
+
 /*
 *  This is the metadata of an event. Make sure to send the correct metadata for the correct event name.
 */
@@ -115,6 +1947,13 @@ struct SCILLSDK_API FEventMetaData
 	/* The id/name of a checkpint */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString CheckpointId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString ContentType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString EffectType;
+
 	/* The x coordinate in your coordinate system, used for example to store position on a map */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool SendCoordinateX;
@@ -293,6 +2132,8 @@ USTRUCT(BlueprintType, Category = "ScillSDK")
 	GENERATED_USTRUCT_BODY();
 
 	static ScillSDK::ScillApiEventPayload ToScillApiEventPayload(FScillEventPayload o);
+
+	static FScillEventPayload FromScillEventPayloadBase(const UEventMetaDataBase* meta);
 
 	/* This is your user id. You can set this to whatever you like, either your real user id or an obfuscated user id. However you need to be consistent here. Events linked to this user id only track if challenges or battle passes are unlocked with the same user id. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

@@ -52,6 +52,9 @@ public:
 		void StartMonitorBattlePassUpdates(FString accessToken, FString battlePassId, const FReceiveBattlePassUpdate& callback);*/
 
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+		void SendScillEvent(UEventMetaDataBase* payload, FResponseReceived responseReceived);
+
+	UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (DeprecatedFunction, DeprecationMessage = "You can still use this Function, but it is recommended to use Send Scill Event instead."))
 		void SendEvent(FScillEventPayload payload, FResponseReceived responseReceived);
 
 	UFUNCTION(BlueprintCallable, Category = "ScillSDK")
