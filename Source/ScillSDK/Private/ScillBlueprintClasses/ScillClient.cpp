@@ -684,6 +684,17 @@ void UScillClient::SendEvent(FScillEventPayload payload, FHttpResponseReceived r
 	eventsApi.SendEvent(request, delegate);
 }
 
+void UScillClient::SendScillEvent(UEventMetaDataBase* payload, FHttpResponseReceived responseReceived)
+{
+	if (!payload)
+	{
+		UE_LOG(LogScillSDK, Error, TEXT("Payload must be set! Use the Construct Object From Class Node to create an event payload."));
+		return;
+	}
+
+	this->SendEvent(FScillEventPayload::FromScillEventPayloadBase(payload), responseReceived);
+}
+
 // ----------------------------------------------------------------------------------------------------------------------------
 // Realtime Updates
 // ----------------------------------------------------------------------------------------------------------------------------

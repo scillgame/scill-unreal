@@ -250,8 +250,13 @@ public:
 	// ----------------------------------------------------
 	// Events
 
-		UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "ScillSDK")
+		/* WARNING: It is not recommended to send events from the client, because players could find out how to send events with their user's access token manually. Instead consider sending events from your Game's Server Executable using the Scill Client Backend Component on a Game Mode. */
+		UFUNCTION(BlueprintCallable, Category = "ScillSDK", meta = (DeprecatedFunction, DeprecationMessage = "You can still use this Function, but it is recommended to use Send Scill Event instead."))
 		void SendEvent(FScillEventPayload payload, FHttpResponseReceived responseReceived);
+
+		/* WARNING: It is not recommended to send events from the client, because players could find out how to send events with their user's access token manually. Instead consider sending events from your Game's Server Executable using the Scill Client Backend Component on a Game Mode. */
+		UFUNCTION(BlueprintCallable, Category = "ScillSDK")
+			void SendScillEvent(UEventMetaDataBase* payload, FHttpResponseReceived responseReceived);
 
 	// ----------------------------------------------------
 	// Realtime Updates
