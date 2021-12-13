@@ -1008,7 +1008,7 @@ _WARNING: It is not recommended to send scill events from the game client. If yo
 
 This can be used to send an event to the SCILL Api that will process the corresponding active challenges and battle passes.
 
-![Event.png](/Documentation/attachments/SendEvent.png)
+![Event.png](/Documentation/attachments/Event.png)
 
 **Inputs:**
 
