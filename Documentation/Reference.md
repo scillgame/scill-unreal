@@ -1026,7 +1026,7 @@ This component should be added to your game's custom `GameMode`. It has authorit
 
 This can be used to send an event to the SCILL Api that will process the corresponding active challenges and battle passes.
 
-![Event.png](/Documentation/attachments/SendEvent.png)
+![Event.png](/Documentation/attachments/Event.png)
 
 **Inputs:**
 
