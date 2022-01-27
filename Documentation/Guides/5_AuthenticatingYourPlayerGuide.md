@@ -1,5 +1,10 @@
 # Authenticating your Player
 
+- Part 1: [Getting Started with SCILL and Unreal](/Documentation/Guides/1_GettingStartedGuide.md)
+- Part 2: [SCILL API and Unreal SDK Overview](/Documentation/Guides/2_ScillApiOverviewGuide.md)
+- Part 3: [Implementing the Unreal SDK on your Game Client](/Documentation/Guides/3_GameClientGuide.md)
+- Part 4: [Implementing the Unreal SDK on your Game Server](/Documentation/Guides/4_GameServerGuide.md)
+
 Lastly we want to discuss a proper authentication mechanism of your players. SCILL is not providing an authentication mechanism itself. It expects every request from your users to come with an access token as parameter. That means that you need to implement user authentication yourself and provide every connected user with a token. But this also means that you have the freedom to integrate any authentication with SCILL so that you can build on your current mechanisms.
 
 First, we will have a look at how to authenticate as a user in general with SCILL. Based on this we will take an existing authentication with Valve’s Steamworks SDK and use it to generate an authentication token for your user in a proper way.
