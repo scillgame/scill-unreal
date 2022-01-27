@@ -32,7 +32,13 @@ Besides these basic concepts in the Unreal Engine also make yourself familiar wi
 
 This section gives you an overview of the steps to start integrating this plugin into your Unreal Project after it has been installed.
 
-You can also find a more detailed guide on the integration in your project [here](/Documentation/GettingStarted.md).
+You can also find a more detailed guide on the integration in your project in our Getting Started Guides:
+
+- Part 1: [Getting Started with SCILL and Unreal](/Documentation/Guides/1_GettingStartedGuide.md)
+- Part 2: [SCILL API and Unreal SDK Overview](/Documentation/Guides/2_ScillApiOverviewGuide.md)
+- Part 3: [Implementing the Unreal SDK on your Game Client](/Documentation/Guides/3_GameClientGuide.md)
+- Part 4: [Implementing the Unreal SDK on your Game Server](/Documentation/Guides/4_GameServerGuide.md)
+- Part 5: [Authenticating your Player](/Documentation/Guides/5_AuthenticatingYourPlayerGuide.md)
 
 ### C++
 
