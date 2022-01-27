@@ -389,7 +389,7 @@ Some of the integer inputs of an Event Meta Data are optional - since blueprints
 
 - **Event Type**: String. This is either single or group. You can send multiple events in one request (group) or send events in sequence. Please note, that depending on your tier you might run into rate limits.
 
-- A list of Strings and Integers
+- A number of **Strings** and **Integer Numbers** that are specific to each kind of event.
 
 #### Scill Event Payload (deprecated)
 
@@ -1002,31 +1002,15 @@ Waits for the Realtime Update Connection to open and then executes the callback 
 
 This function has no input arguments and the callback signature has no arguments as well.
 
-#### Send Scill Event
-
-_WARNING: It is not recommended to send scill events from the game client. If you do not have a game server that can evaluate gameplay events and send corresponding payloads to the SCILL Api you can consider using this function in order to send events together with the user's access token. While this is better practice than shipping the API Key to your game client, it is still insecure due to the possibility of your players cheating by altering your scill events or sending completely new ones._
-
-This can be used to send an event to the SCILL Api that will process the corresponding active challenges and battle passes.
-
-![Event.png](/Documentation/attachments/Event.png)
-
-**Inputs:**
-
-- **Payload**: [Scill Event Payload](#scill-event-payload). This provides all information of the sent event.
-
-**Callback Signature:**
-
-- Success: boolean. whether the request was processed successfully
-
 ### ScillClientBackend Component
 
 This component should be added to your game's custom `GameMode`. It has authority to send events, generate access tokens and the like. Also, it holds the API Key, so this should not live on your game's client executable. Since the `GameMode` is defined to only reside on the server this is the perfect place. Also make sure to load your API Key during Runtime from a configuration file and do not store it directly in your source code or blueprint assets. Although deployed encrypted to your players, it is not impossible for a user to decrypt your game's assets and thus API Key.
 
-#### Send Scill Event
+#### Send Event
 
 This can be used to send an event to the SCILL Api that will process the corresponding active challenges and battle passes.
 
-![Event.png](/Documentation/attachments/Event.png)
+![SendEvent.png](/Documentation/attachments/SendEvent.png)
 
 **Inputs:**
 
