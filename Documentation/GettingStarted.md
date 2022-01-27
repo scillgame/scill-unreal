@@ -70,8 +70,6 @@ You can test your changes to your application in the [SCILL Playground App](http
 
 Here you can communicate with the SCILL API on behalf of a defined user. Explore the challenges, leaderboards and battle passes you just created and send according events to see if everything is configured correctly. 
 
-
-
 This is a rough overview of the Scill API - again, if you need more detailed information look at their extensive documentation and getting started guide. Now we want to have a deeper look at the Unreal SDK and how that works.
 
 ## Unreal SDK Overview
@@ -137,7 +135,6 @@ In order to properly handle the response we need to also pass a reference to a f
 Now to understand the Scill Player Controller a little better, you need to remember that both the Game Server and the Owning Game Client have an instance of that class. This is in contrast to the Game Mode, which only exists on the server and not on any of the connected clients. Owning Client also means that the Player Controller only exists on that Game Client that is owning this specific player controller - all player controllers of any other player character only exist on the respective clients.
 
 Now let us start to generate access tokens. Add a Scill Client Component to the Scill Player Controller. Again - for testing purposes - you can add a User Id and your App Id to the properties of the component. Contrary to the API Key, the App ID is safe to share, since it alone will not enable anyone to make changes to your application in any way and can be left as a default value for the component’s property. 
-
 
 ![ScillClientProperties.png](/Documentation/attachments/ScillClientProperties.png)
 
@@ -327,11 +324,11 @@ Generally, there are two ways to authenticate a user for a game: use your own se
 
 In self-hosted authentication you can simply let your player send his credentials to your server to check them against your own authentication database. If it matches, the player is authenticated. The check would be done by any trusted source, in most cases your Client Backend. The Client App in return gets a user access token that it can use to authenticate itself at your Client Backend in this session. Only if that token is valid the Client Backend shall send the call  generateAccessToken and receive the accessToken needed to make requests on the SCILL API.
 
-![CustomAuthorization.png](https://developers.4players.io/images/scill/CustomAuthorization.png)
+![CustomAuthorization.png](/Documentation/attachments/CustomAuthorization.png)
 
 While this works very well if you own the credentials of your users, this cannot be done if you use an external authentication service like Steam. Steam will need to check three things: if the user can be trusted, but also if your application can be trusted - and if the user has given your application all the permissions that your application requests. So to act on behalf of a Steam User, you will have to also provide an App Id and an API Key for most calls.
 
-![ExternalAuthorization.png](https://developers.4players.io/images/scill/ExternalAuthorization.png)
+![ExternalAuthorization.png](/Documentation/attachments/ExternalAuthorization.png)
 
 ### Authenticating a Steam User and Unreal Client
 
@@ -390,13 +387,13 @@ Header File:
 UCLASS()
 class USimpleOnlineSubsystemBlueprintsBPLibrary : public UBlueprintFunctionLibrary
 {
-	GENERATED_UCLASS_BODY()
+    GENERATED_UCLASS_BODY()
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get OSSUser Id", Keywords = "SimpleOnlineSubsystemBlueprints"), Category = "SimpleOnlineSubsystemBlueprints")
-	static FString GetOssUserId(int id);
+    UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get OSSUser Id", Keywords = "SimpleOnlineSubsystemBlueprints"), Category = "SimpleOnlineSubsystemBlueprints")
+    static FString GetOssUserId(int id);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Is User Logged In", Keywords = "SimpleOnlineSubsystemBlueprints"), Category = "SimpleOnlineSubsystemBlueprints")
-		static bool IsUserLoggedIn(int id);
+    UFUNCTION(BlueprintCallable, meta = (DisplayName = "Is User Logged In", Keywords = "SimpleOnlineSubsystemBlueprints"), Category = "SimpleOnlineSubsystemBlueprints")
+        static bool IsUserLoggedIn(int id);
 };
 ```
 
@@ -420,12 +417,12 @@ USimpleOnlineSubsystemBlueprintsBPLibrary::USimpleOnlineSubsystemBlueprintsBPLib
 
 FString USimpleOnlineSubsystemBlueprintsBPLibrary::GetOssUserId(int id)
 {
-	return IOnlineSubsystem::Get()->GetIdentityInterface()->GetUniquePlayerId(id)->ToString();
+    return IOnlineSubsystem::Get()->GetIdentityInterface()->GetUniquePlayerId(id)->ToString();
 }
 
 bool USimpleOnlineSubsystemBlueprintsBPLibrary::IsUserLoggedIn(int id)
 {
-	return IOnlineSubsystem::Get()->GetIdentityInterface()->GetLoginStatus(id);
+    return IOnlineSubsystem::Get()->GetIdentityInterface()->GetLoginStatus(id);
 }
 ```
 
@@ -437,7 +434,7 @@ Open your SCILL Player Controller and navigate to the event in the event graph t
 
 Here we will add a call to **Is User Logged In** and provide it with the index of the current Player Controller. If this returns true we use the Steam ID of that player to generate the accessToken for SCILL.
 
-![AuthenticationInBlueprints.png](https://developers.4players.io/images/scill/AuthenticationInBlueprints.png)
+![AuthenticationInBlueprints.png](/Documentation/attachments/AuthenticationInBlueprints.png)
 
 ### Testing the Authentication
 
