@@ -4,7 +4,7 @@
 #include "ScillApiWrapper/ScillApiLeaderboardsV2ApiOperations.h"
 
 UScillClientBackend::UScillClientBackend()
-	: RealtimeUpdatesWebsocketURL(TEXT("wss://mqtt.scillgame.com:8083/mqtt"))
+	: RealtimeUpdatesWebsocketURL(TEXT("wss://scillnotify.com:8083/mqtt"))
 {
 	mqtt = NewObject<UScillMqtt>();
 }
