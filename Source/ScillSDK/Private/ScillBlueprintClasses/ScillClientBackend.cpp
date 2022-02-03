@@ -1,5 +1,7 @@
 #include "ScillBlueprintClasses/ScillClientBackend.h"
 #include "JsonObjectConverter.h"
+#include "ScillApiWrapper/ScillApiEventsApiOperations.h"
+#include "ScillApiWrapper/ScillApiLeaderboardsV2ApiOperations.h"
 
 UScillClientBackend::UScillClientBackend()
 	: RealtimeUpdatesWebsocketURL(TEXT("wss://mqtt.scillgame.com:8083/mqtt"))
@@ -55,10 +57,10 @@ void UScillClientBackend::BeginPlay()
 	Super::BeginPlay();
 
 	this->authApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
-	this->authApi.SetURL(TEXT("https://us.scillgame.com"));
+	this->authApi.SetURL(TEXT("https://us.scill.4players.io"));
 
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
-	this->eventsApi.SetURL(TEXT("https://ep.scillgame.com"));
+	this->eventsApi.SetURL(TEXT("https://ep.scill.4players.io"));
 
 	//UE_LOG(LogScillSDK, Log, TEXT("API Key Created: %s"), *this->ApiKey);
 }

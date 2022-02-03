@@ -11,6 +11,7 @@
 #include "Misc/Guid.h"
 #include "WebSocketsModule.h"
 #include "IWebSocket.h"
+#include "ScillApiWrapper/ScillApiEventsApi.h"
 #include "ScillClientBackend.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FReceiveAccessToken, FString, Token, bool, Success);

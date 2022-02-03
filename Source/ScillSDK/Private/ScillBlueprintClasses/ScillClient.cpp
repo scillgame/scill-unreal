@@ -6,6 +6,8 @@
 #include "ScillApiWrapper/ScillApiAuthApiOperations.h"
 #include "ScillApiWrapper/ScillApiEventsApiOperations.h"
 #include "ScillApiWrapper/ScillApiLeaderboardsApiOperations.h"
+#include "ScillApiWrapper/ScillApiLeaderboardsV2ApiOperations.h"
+#include "ScillSDK.h"
 
 // Sets default values for this component's properties
 UScillClient::UScillClient()
