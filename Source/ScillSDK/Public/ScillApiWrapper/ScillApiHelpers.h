@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
+#include "ScillApiBaseModel.h"
 
 #include "Serialization/JsonSerializer.h"
 #include "Dom/JsonObject.h"
@@ -452,10 +452,10 @@ inline bool TryGetJsonValue(const TSharedPtr<FJsonObject>& JsonObject, const FSt
 		if (TryGetJsonValue(JsonObject, Key, Value))
 		{
 			OptionalValue = Value;
-			//return true;
+			return true;
 		}
-		//else
-			//return false;
+		else
+			return false;
 	}
 	return true; // Absence of optional value is not a parsing error
 }

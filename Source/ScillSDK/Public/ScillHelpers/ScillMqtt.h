@@ -18,7 +18,7 @@ enum BattlePassPayloadType
 	Expired = 2
 };
 
-DECLARE_DYNAMIC_DELEGATE_FourParams(FBattlePassChangeReceived, BattlePassPayloadType, Type, FBattlePassChanged, BattlePassChanged, FBattlePassLevelClaimed, BattlePassLevelClaimed, FBattlePassExpired, BattlePassExpired);
+DECLARE_DYNAMIC_DELEGATE_ThreeParams(FBattlePassChangeReceived, BattlePassPayloadType, Type, FBattlePassChanged, BattlePassChanged, FBattlePassLevelClaimed, BattlePassLevelClaimed);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FChallengeChangeReceived, FChallengeChanged, Payload);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FLeaderboardChangeReceived, FLeaderboardV2UpdatePayload, UpdatePayload, FLeaderboardV2Changed, ChangedPayload);
 DECLARE_MULTICAST_DELEGATE(FMqttConnectionEstablished);

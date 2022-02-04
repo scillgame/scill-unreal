@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiUserInfo.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiUserInfo.h"
 
 namespace ScillSDK
 {

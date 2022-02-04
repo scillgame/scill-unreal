@@ -24,7 +24,7 @@ UScillMqtt::UScillMqtt()
 void UScillMqtt::Destroy()
 {
 	Destroyed = true;
-	if (mqttWs.IsValid() && mqttWs->IsConnected())
+	if (nullptr != mqttWs && mqttWs.IsValid() && mqttWs->IsConnected())
 	{
 		if (MqttConnected)
 		{
@@ -77,7 +77,7 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 					auto battlePass = ScillSDK::ScillApiBattlePassChallengeChangedPayload();
 					battlePass.FromJson(ValueObject);
 
-					callback.ExecuteIfBound(BattlePassPayloadType::ChallengeChanged, FBattlePassChanged::FromScillApiBattlePassChallengeChangedPayload(battlePass), FBattlePassLevelClaimed(), FBattlePassExpired());
+					callback.ExecuteIfBound(BattlePassPayloadType::ChallengeChanged, FBattlePassChanged::FromScillApiBattlePassChallengeChangedPayload(battlePass), FBattlePassLevelClaimed());
 				}
 				// Battle Pass Reward Claimed
 				if (webhookType == TEXT("battlepass-level-reward-claimed"))
@@ -85,16 +85,9 @@ void UScillMqtt::OnRawMessage(const void* data, SIZE_T Size, SIZE_T BytesRemaini
 					auto battlePassRewardClaimed = ScillSDK::ScillApiBattlePassLevelClaimedPayload();
 					battlePassRewardClaimed.FromJson(ValueObject);
 
-					callback.ExecuteIfBound(BattlePassPayloadType::RewardClaimed, FBattlePassChanged(), FBattlePassLevelClaimed::FromScillApiBattlePassLevelClaimedPayload(battlePassRewardClaimed), FBattlePassExpired());
+					callback.ExecuteIfBound(BattlePassPayloadType::RewardClaimed, FBattlePassChanged(), FBattlePassLevelClaimed::FromScillApiBattlePassLevelClaimedPayload(battlePassRewardClaimed));
 				}
-				// Battle Pass Expired
-				if (webhookType == TEXT("battlepass-expired"))
-				{
-					auto battlePassExpired = ScillSDK::ScillApiBattlePassExpiredPayload();
-					battlePassExpired.FromJson(ValueObject);
-
-					callback.ExecuteIfBound(BattlePassPayloadType::Expired, FBattlePassChanged(), FBattlePassLevelClaimed(), FBattlePassExpired::FromScillApiBattlePassExpiredPayload(battlePassExpired));
-				}
+				
 			}
 			if (callbacksChallengeChanges.Contains(pubPacket->TopicName))
 			{
@@ -221,8 +214,9 @@ void UScillMqtt::Ping()
 	{
 		buffer[i] = pk->Buffer[i];
 	}
-	
-	this->mqttWs->Send(buffer, pk->Length, true);
+
+	if(nullptr != mqttWs && mqttWs.IsValid())
+		this->mqttWs->Send(buffer, pk->Length, true);
 
 	delete buffer;
 }

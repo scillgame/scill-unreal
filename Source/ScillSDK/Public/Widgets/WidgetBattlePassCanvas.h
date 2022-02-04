@@ -97,5 +97,5 @@ protected:
 		void SubscribeToBattlePassChanges();
 
 	UFUNCTION()
-		void ReceiveBattlePassUpdate(BattlePassPayloadType Type, FBattlePassChanged BattlePassChanged, FBattlePassLevelClaimed BattlePassLevelClaimed, FBattlePassExpired BattlePassExpired);
+		void ReceiveBattlePassUpdate(BattlePassPayloadType Type, FBattlePassChanged BattlePassChanged, FBattlePassLevelClaimed BattlePassLevelClaimed);
 };

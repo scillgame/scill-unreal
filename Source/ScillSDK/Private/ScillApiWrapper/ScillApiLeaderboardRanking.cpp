@@ -12,7 +12,7 @@
 
 #include "ScillApiWrapper/ScillApiLeaderboardRanking.h"
 
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 #include "ScillApiWrapper/ScillApiHelpers.h"
 
 #include "Templates/SharedPointer.h"

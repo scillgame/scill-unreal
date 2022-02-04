@@ -962,17 +962,6 @@ FBattlePassState FBattlePassState::FromScillApiBattlePassState(const ScillSDK::S
 	return n;
 }
 
-FBattlePassExpired FBattlePassExpired::FromScillApiBattlePassExpiredPayload(const ScillSDK::ScillApiBattlePassExpiredPayload o)
-{
-	auto n = FBattlePassExpired();
-
-	n.WebhookType = o.WebhookType.Get("");
-
-	n.OldBattlePass = FBattlePassState::FromScillApiBattlePassState(o.OldBattlePass.Get(ScillSDK::ScillApiBattlePassState()));
-	n.NewBattlePass = FBattlePassState::FromScillApiBattlePassState(o.NewBattlePass.Get(ScillSDK::ScillApiBattlePassState()));
-
-	return n;
-}
 
 FBattlePassLevelReward FBattlePassLevelReward::FromScillApiBattlePassLevelReward(const ScillSDK::ScillApiBattlePassLevelReward o)
 {

@@ -11,7 +11,6 @@
 #include "ScillApiWrapper/ScillApiBattlePassChallengeChangedPayload.h"
 #include "ScillApiWrapper/ScillApiChallengeWebhookPayload.h"
 #include "ScillApiWrapper/ScillApiBattlePassState.h"
-#include "ScillApiWrapper/ScillApiBattlePassExpiredPayload.h"
 #include "ScillApiWrapper/ScillApiBattlePassLevelClaimedPayload.h"
 #include "ScillApiWrapper/ScillApiBattlePassLevelReward.h"
 #include "ScillApiWrapper/ScillApiEventMetaData.h"
@@ -2141,7 +2140,7 @@ USTRUCT(BlueprintType, Category = "ScillSDK")
 	/* This is required if event_type is single and identifies a session. This can be anything used to group events together. For example this can be a level or a match id. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString SessionId;
-	/* This is the event type as a string. These have predefined event names for many games and applications. It’s wise to use those as this allows us to analyse data and help you balancing your application or game. */
+	/* This is the event type as a string. These have predefined event names for many games and applications. Itï¿½s wise to use those as this allows us to analyse data and help you balancing your application or game. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString EventName;
 	/* This is either single or group. You can send multiple events in one request (group) or send events in sequence. Please note, that depending on your tier you might run into rate limits. */
@@ -2174,7 +2173,7 @@ struct SCILLSDK_API FChallenge
 	/* The date this challenge should start. Use that field to create challenges that start in the future. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString LiveDate;
-	/* Indicates how many “tasks” must be completed or done to complete this challenge. */
+	/* Indicates how many ï¿½tasksï¿½ must be completed or done to complete this challenge. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 ChallengeGoal;
 	/* Indicates how many tasks the user already has completed. Use this in combination with challenge_goal to render a nice progress bar. */
@@ -2248,7 +2247,7 @@ struct SCILLSDK_API FChallengeCategory
 	/* The name of the category in the local language set as the query parameter. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString CategoryName;
-	/* Indicates how many “tasks” must be completed or done to complete this challenge. */
+	/* Indicates how many ï¿½tasksï¿½ must be completed or done to complete this challenge. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString CategoryId;
 	/* An array of Challenge objects. */
@@ -2308,7 +2307,7 @@ struct SCILLSDK_API FBattlePassTranslation
 	/* The description of the Battle Pass in the local language set in the request (see Setting Language). In the admin panel you can either create HTML content or plain text. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString Description;
-	/* A short description in the local language you can use to teaser battle passes or implement “expand for more” functionality. */
+	/* A short description in the local language you can use to teaser battle passes or implement ï¿½expand for moreï¿½ functionality. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString ShortDescription;
 	/* Use this to provide some terms and conditions following along this battle passes purchase. */
@@ -2396,7 +2395,7 @@ struct SCILLSDK_API FBattlePassLevelChallenge
 	/* The name of the challenge in the language set by the language parameter. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString ChallengeName;
-	/* Indicates how many “tasks” must be completed or done to complete this challenge. */
+	/* Indicates how many ï¿½tasksï¿½ must be completed or done to complete this challenge. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 ChallengeGoal;
 	/* With this you can set the way how the SCILL system approaches the challenges state. 0 means, that the counter of the challenge must be brought above the goal. If this is 1, then the counter must be kept below the goal. This is often useful for challenges that include times, like: Manage the level in under 50 seconds. */
@@ -2492,7 +2491,7 @@ struct SCILLSDK_API FBattlePassChallengeState
 	/* Same as level_position_index. Use this index to identify the challenge that changed within the levels challenges array. Typical usage pattern is to update the previously stored score and type. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 ChallengePositionIndex;
-	/* Indicates how many “tasks” must be completed or done to complete this challenge. */
+	/* Indicates how many ï¿½tasksï¿½ must be completed or done to complete this challenge. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 ChallengeGoal;
 	/* Indicates how many tasks the user already has completed. Use this in combination with challenge_goal to render a nice progress bar. */
@@ -2561,7 +2560,7 @@ struct SCILLSDK_API FBattlePass
 	/* The date (in iso format) when the Battle Pass ends. Tracking stops once the end is reached and users will not be able to progress further than what they have achieved up to that point. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString EndDate;
-	/* If the Battle Pass costs “money” you may want to route the user to a web site/page, where they can learn more about this battle pass. You can also use this field to route the user inside your application by providing a path or whatever works for you. */
+	/* If the Battle Pass costs ï¿½moneyï¿½ you may want to route the user to a web site/page, where they can learn more about this battle pass. You can also use this field to route the user inside your application by providing a path or whatever works for you. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString ReadMoreLink;
 	/* Indicates if one level after the other must be activated or if users can activate whichever level they want. Typically battle passes are unlocked level by level, but if battle passes are used for other applications (like user referal programs) it can be useful to set this to false. */
@@ -2602,27 +2601,6 @@ public:
 	FBattlePassChallengeState NewBattlePassChallenge;
 
 	static FBattlePassChanged FromScillApiBattlePassChallengeChangedPayload(const ScillSDK::ScillApiBattlePassChallengeChangedPayload o);
-};
-
-/*
-* Is returned if a monitored battle pass has expired.
-*/
-USTRUCT(BlueprintType, Category = "ScillSDK")
-struct SCILLSDK_API FBattlePassExpired
-{
-	GENERATED_USTRUCT_BODY()
-public:
-	/* The type of the notification. If you receive this payload, it's most likely battlepass-expired */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FString WebhookType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FBattlePassState OldBattlePass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FBattlePassState NewBattlePass;
-
-	static FBattlePassExpired FromScillApiBattlePassExpiredPayload(const ScillSDK::ScillApiBattlePassExpiredPayload o);
 };
 
 /*

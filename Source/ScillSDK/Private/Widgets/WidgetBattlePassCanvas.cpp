@@ -150,7 +150,7 @@ void UWidgetBattlePassCanvas::SubscribeToBattlePassChanges()
     ScillClient->ReceiveBattlePassUpdates(BattlePass.BattlePassId, Delegate);
 }
 
-void UWidgetBattlePassCanvas::ReceiveBattlePassUpdate(BattlePassPayloadType Type, FBattlePassChanged BattlePassChanged, FBattlePassLevelClaimed BattlePassLevelClaimed, FBattlePassExpired BattlePassExpired)
+void UWidgetBattlePassCanvas::ReceiveBattlePassUpdate(BattlePassPayloadType Type, FBattlePassChanged BattlePassChanged, FBattlePassLevelClaimed BattlePassLevelClaimed)
 {
     if(Type == BattlePassPayloadType::ChallengeChanged)
     {

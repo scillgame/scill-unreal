@@ -12,7 +12,7 @@
 
 #include "ScillApiWrapper/ScillApiBattlePassState.h"
 
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 #include "ScillApiWrapper/ScillApiHelpers.h"
 
 #include "Templates/SharedPointer.h"

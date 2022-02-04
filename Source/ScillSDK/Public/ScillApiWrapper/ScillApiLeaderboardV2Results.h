@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiLeaderboardV2ResultsLeaderboardResultsByMemberType.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiLeaderboardV2ResultsLeaderboardResultsByMemberType.h"
 
 namespace ScillSDK
 {
