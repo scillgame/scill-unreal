@@ -12,13 +12,13 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiLeaderboardsApi.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiLeaderboardsApi.h"
 
-#include "ScillApiWrapper/ScillApiActionResponse.h"
-#include "ScillApiWrapper/ScillApiError.h"
-#include "ScillApiWrapper/ScillApiLeaderboard.h"
-#include "ScillApiWrapper/ScillApiLeaderboardMemberRanking.h"
+#include "ScillApiActionResponse.h"
+#include "ScillApiError.h"
+#include "ScillApiLeaderboard.h"
+#include "ScillApiLeaderboardMemberRanking.h"
 
 namespace ScillSDK
 {
@@ -159,7 +159,7 @@ public:
     TArray<ScillApiLeaderboard> Content;
 };
 
-/* Delete all leaderboard data, i.e. reset the leaderboard for the specified member.
+/* Reset user leaderboard data
  *
  * Delete all leaderboard data, i.e. reset the leaderboard for the specified member.
 */

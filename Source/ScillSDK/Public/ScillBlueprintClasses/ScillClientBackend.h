@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Containers/Map.h"
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 #include "ScillApiWrapper/ScillApiAuthApi.h"
 #include "ScillApiWrapper/ScillApiLeaderboardsV2Api.h"
 #include "ScillApiWrapper/ScillApiAuthApiOperations.h"

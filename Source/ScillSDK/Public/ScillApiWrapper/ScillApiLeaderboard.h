@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiLeaderboardRanking.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiLeaderboardRanking.h"
 
 namespace ScillSDK
 {

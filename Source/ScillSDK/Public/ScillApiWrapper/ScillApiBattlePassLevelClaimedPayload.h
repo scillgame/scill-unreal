@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiBattlePassLevelReward.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiBattlePassLevelReward.h"
 
 namespace ScillSDK
 {

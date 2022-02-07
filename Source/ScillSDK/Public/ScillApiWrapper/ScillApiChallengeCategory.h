@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiChallenge.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiChallenge.h"
 
 namespace ScillSDK
 {

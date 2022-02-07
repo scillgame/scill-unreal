@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 #include "WebSocketsModule.h"
 
 #define LOCTEXT_NAMESPACE "SCILLSDK_API"

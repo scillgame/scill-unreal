@@ -13,7 +13,7 @@
 #include "ScillApiWrapper/ScillApiBattlePassesApi.h"
 
 #include "ScillApiWrapper/ScillApiBattlePassesApiOperations.h"
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 
 #include "HttpModule.h"
 #include "Serialization/JsonSerializer.h"
