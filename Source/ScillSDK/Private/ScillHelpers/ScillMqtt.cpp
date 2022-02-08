@@ -7,12 +7,14 @@ UScillMqtt::UScillMqtt()
 {
 	callbacksBattlePassChanges.Empty();
 
+
 	if (!FModuleManager::Get().IsModuleLoaded("WebSockets"))
 	{
 		FModuleManager::Get().LoadModule("WebSockets");
 	}
 
-	mqttWs = FWebSocketsModule::Get().CreateWebSocket(TEXT("wss://mqtt.scillgame.com:8083/mqtt"), TEXT("mqtt"));
+	mqttWs = FWebSocketsModule::Get().CreateWebSocket(TEXT("wss://scillnotify.com:8083/mqtt"), TEXT("mqtt"));
+
 
 	mqttWs->OnConnected().AddUObject(this, &UScillMqtt::OnConnect);
 	mqttWs->OnConnectionError().AddUObject(this, &UScillMqtt::OnConnectionError);
@@ -29,7 +31,7 @@ UScillMqtt::UScillMqtt()
 void UScillMqtt::Destroy()
 {
 	Destroyed = true;
-	if (mqttWs && mqttWs->IsConnected())
+	if (mqttWs.IsValid() && mqttWs->IsConnected())
 	{
 		if (MqttConnected)
 		{
@@ -226,7 +228,7 @@ void UScillMqtt::Ping()
 	{
 		buffer[i] = pk->Buffer[i];
 	}
-
+	
 	this->mqttWs->Send(buffer, pk->Length, true);
 
 	delete[] buffer;
@@ -242,7 +244,9 @@ void UScillMqtt::Disconnect()
 		buffer[i] = pk->Buffer[i];
 	}
 
-	this->mqttWs->Send(buffer, pk->Length, true);
+    if(mqttWs.IsValid()){
+        this->mqttWs->Send(buffer, pk->Length, true);
+    }
 
 	delete[] buffer;
 }

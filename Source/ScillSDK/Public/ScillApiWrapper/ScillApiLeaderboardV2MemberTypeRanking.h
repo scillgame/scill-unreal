@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiLeaderboardV2Member.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiLeaderboardV2Member.h"
 
 namespace ScillSDK
 {

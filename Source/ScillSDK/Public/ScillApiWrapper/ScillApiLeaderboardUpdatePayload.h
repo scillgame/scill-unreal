@@ -12,10 +12,10 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiLeaderboardInfo.h"
-#include "ScillApiWrapper/ScillApiLeaderboardRanking.h"
-#include "ScillApiWrapper/ScillApiLeaderboardScore.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiLeaderboardInfo.h"
+#include "ScillApiLeaderboardRanking.h"
+#include "ScillApiLeaderboardScore.h"
 
 namespace ScillSDK
 {

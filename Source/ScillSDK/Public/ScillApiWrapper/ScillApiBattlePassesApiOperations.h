@@ -12,15 +12,15 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiBattlePassesApi.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiBattlePassesApi.h"
 
-#include "ScillApiWrapper/ScillApiActionResponse.h"
-#include "ScillApiWrapper/ScillApiBattlePass.h"
-#include "ScillApiWrapper/ScillApiBattlePassLevel.h"
-#include "ScillApiWrapper/ScillApiBattlePassUnlockInfo.h"
-#include "ScillApiWrapper/ScillApiBattlePassUnlockPayload.h"
-#include "ScillApiWrapper/ScillApiError.h"
+#include "ScillApiActionResponse.h"
+#include "ScillApiBattlePass.h"
+#include "ScillApiBattlePassLevel.h"
+#include "ScillApiBattlePassUnlockInfo.h"
+#include "ScillApiBattlePassUnlockPayload.h"
+#include "ScillApiError.h"
 
 namespace ScillSDK
 {
