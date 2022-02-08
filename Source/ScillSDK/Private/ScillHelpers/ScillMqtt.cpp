@@ -7,7 +7,14 @@ UScillMqtt::UScillMqtt()
 {
 	callbacksBattlePassChanges.Empty();
 
+
+	if (!FModuleManager::Get().IsModuleLoaded("WebSockets"))
+	{
+		FModuleManager::Get().LoadModule("WebSockets");
+	}
+
 	mqttWs = FWebSocketsModule::Get().CreateWebSocket(TEXT("wss://scillnotify.com:8083/mqtt"), TEXT("mqtt"));
+
 
 	mqttWs->OnConnected().AddUObject(this, &UScillMqtt::OnConnect);
 	mqttWs->OnConnectionError().AddUObject(this, &UScillMqtt::OnConnectionError);
@@ -161,7 +168,7 @@ void UScillMqtt::SubscribeToTopic(FString Topic)
 
 	mqttWs->Send(pkBuffer, pk->Length, true);
 
-	delete pkBuffer;
+	delete[] pkBuffer;
 }
 
 void UScillMqtt::SubscribeToTopicBP(FString Topic, FBattlePassChangeReceived callback)
@@ -224,7 +231,7 @@ void UScillMqtt::Ping()
 	
 	this->mqttWs->Send(buffer, pk->Length, true);
 
-	delete buffer;
+	delete[] buffer;
 }
 
 void UScillMqtt::Disconnect()
@@ -241,7 +248,7 @@ void UScillMqtt::Disconnect()
         this->mqttWs->Send(buffer, pk->Length, true);
     }
 
-	delete buffer;
+	delete[] buffer;
 }
 
 TArray<uint8> UScillMqttPacketConnect::ToBuffer()
