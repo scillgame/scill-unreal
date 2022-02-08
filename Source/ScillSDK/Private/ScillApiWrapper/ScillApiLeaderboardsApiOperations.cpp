@@ -12,7 +12,7 @@
 
 #include "ScillApiWrapper/ScillApiLeaderboardsApiOperations.h"
 
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 #include "ScillApiWrapper/ScillApiHelpers.h"
 
 #include "Dom/JsonObject.h"
@@ -67,14 +67,6 @@ void ScillApiLeaderboardsApi::GetLeaderboardRequest::SetupHttpRequest(const FHtt
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -148,14 +140,6 @@ void ScillApiLeaderboardsApi::GetLeaderboardRankingRequest::SetupHttpRequest(con
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -228,14 +212,6 @@ void ScillApiLeaderboardsApi::GetLeaderboardRankingsRequest::SetupHttpRequest(co
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -311,14 +287,6 @@ void ScillApiLeaderboardsApi::GetLeaderboardsRequest::SetupHttpRequest(const FHt
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -376,14 +344,6 @@ void ScillApiLeaderboardsApi::ResetLeaderboardRankingsRequest::SetupHttpRequest(
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{

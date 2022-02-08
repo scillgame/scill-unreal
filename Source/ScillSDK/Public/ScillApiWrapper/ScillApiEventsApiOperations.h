@@ -12,13 +12,13 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiEventsApi.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiEventsApi.h"
 
-#include "ScillApiWrapper/ScillApiActionResponse.h"
-#include "ScillApiWrapper/ScillApiEventDescription.h"
-#include "ScillApiWrapper/ScillApiEventPayload.h"
-#include "ScillApiWrapper/ScillApiUnknownChallengeError.h"
+#include "ScillApiActionResponse.h"
+#include "ScillApiEventDescription.h"
+#include "ScillApiEventPayload.h"
+#include "ScillApiUnknownChallengeError.h"
 
 namespace ScillSDK
 {

@@ -12,7 +12,7 @@
 
 #include "ScillApiWrapper/ScillApiChallengesApiOperations.h"
 
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 #include "ScillApiWrapper/ScillApiHelpers.h"
 
 #include "Dom/JsonObject.h"
@@ -52,14 +52,6 @@ void ScillApiChallengesApi::ActivatePersonalChallengeRequest::SetupHttpRequest(c
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -124,14 +116,6 @@ void ScillApiChallengesApi::CancelPersonalChallengeRequest::SetupHttpRequest(con
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -196,14 +180,6 @@ void ScillApiChallengesApi::ClaimPersonalChallengeRewardRequest::SetupHttpReques
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -255,14 +231,6 @@ void ScillApiChallengesApi::GenerateWebsocketAccessTokenRequest::SetupHttpReques
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -326,14 +294,6 @@ void ScillApiChallengesApi::GetActivePersonalChallengesRequest::SetupHttpRequest
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -405,14 +365,6 @@ void ScillApiChallengesApi::GetAllPersonalChallengesRequest::SetupHttpRequest(co
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -477,14 +429,6 @@ void ScillApiChallengesApi::GetPersonalChallengeByIdRequest::SetupHttpRequest(co
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -556,14 +500,6 @@ void ScillApiChallengesApi::GetPersonalChallengesRequest::SetupHttpRequest(const
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -635,14 +571,6 @@ void ScillApiChallengesApi::GetUnresolvedPersonalChallengesRequest::SetupHttpReq
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -699,14 +627,6 @@ void ScillApiChallengesApi::ResetUserAppChallengesRequest::SetupHttpRequest(cons
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{
@@ -771,14 +691,6 @@ void ScillApiChallengesApi::UnlockPersonalChallengeRequest::SetupHttpRequest(con
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{

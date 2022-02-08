@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiLeaderboardV2Member.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiLeaderboardV2Member.h"
 
 namespace ScillSDK
 {
@@ -36,7 +36,6 @@ public:
 	TOptional<FString> LeaderboardName;
 	/* Determines the results sort order. If true, the order is ascending, otherwise, it's descending. */
 	TOptional<bool> LeaderboardSortOrderAscending;
-	/* Returns the LeaderboardMember object containing user ranking information */
 	TOptional<ScillApiLeaderboardV2Member> LeaderboardMember;
 };
 

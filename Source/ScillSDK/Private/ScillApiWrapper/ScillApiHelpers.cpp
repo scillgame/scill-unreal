@@ -12,7 +12,7 @@
 
 #include "ScillApiWrapper/ScillApiHelpers.h"
 
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 
 #include "Interfaces/IHttpRequest.h"
 #include "PlatformHttp.h"

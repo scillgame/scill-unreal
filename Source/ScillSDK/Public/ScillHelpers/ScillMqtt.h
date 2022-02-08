@@ -40,7 +40,7 @@ public:
 	void SubscribeToTopic(FString Topic);
 
 	bool MqttConnected;
-	bool Destroyed;
+	bool Destroyed = false;
 	void Ping();
 	void Destroy();
 
@@ -59,6 +59,7 @@ private:
 	mutable TMap<FString, FLeaderboardChangeReceived> callbacksLeaderboardChanges;
 
 	uint16 CurrentPacketIdentifier = 0;
+
 
 	TSharedPtr<IWebSocket> mqttWs;
 };

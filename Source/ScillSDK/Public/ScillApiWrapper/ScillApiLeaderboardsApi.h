@@ -13,7 +13,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ScillApiWrapper/ScillApiBaseModel.h"
+#include "ScillApiBaseModel.h"
 
 namespace ScillSDK
 {

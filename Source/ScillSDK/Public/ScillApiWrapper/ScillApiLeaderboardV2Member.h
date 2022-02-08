@@ -12,9 +12,9 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiLeaderboardV2MemberMetadata.h"
-#include "ScillApiWrapper/ScillApiUserInfo.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiLeaderboardV2MemberMetadata.h"
+#include "ScillApiUserInfo.h"
 
 namespace ScillSDK
 {

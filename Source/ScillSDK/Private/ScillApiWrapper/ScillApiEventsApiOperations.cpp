@@ -12,7 +12,7 @@
 
 #include "ScillApiWrapper/ScillApiEventsApiOperations.h"
 
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 #include "ScillApiWrapper/ScillApiHelpers.h"
 
 #include "Dom/JsonObject.h"
@@ -39,14 +39,6 @@ void ScillApiEventsApi::GetAvailableEventsRequest::SetupHttpRequest(const FHttpR
 	// Default to Json Body request
 	if (Consumes.Num() == 0 || Consumes.Contains(TEXT("application/json")))
 	{
-		// Form parameters
-		FString JsonBody;
-		JsonWriter Writer = TJsonWriterFactory<>::Create(&JsonBody);
-		Writer->WriteObjectStart();
-		Writer->WriteObjectEnd();
-		Writer->Close();
-		HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
-		HttpRequest->SetContentAsString(JsonBody);
 	}
 	else if (Consumes.Contains(TEXT("multipart/form-data")))
 	{

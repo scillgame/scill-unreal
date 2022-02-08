@@ -12,14 +12,14 @@
 
 #pragma once
 
-#include "ScillApiWrapper/ScillApiBaseModel.h"
-#include "ScillApiWrapper/ScillApiAuthApi.h"
+#include "ScillApiBaseModel.h"
+#include "ScillApiAuthApi.h"
 
-#include "ScillApiWrapper/ScillApiAccessToken.h"
-#include "ScillApiWrapper/ScillApiError.h"
-#include "ScillApiWrapper/ScillApiForeignUserIdentifier.h"
-#include "ScillApiWrapper/ScillApiNotificationTopic.h"
-#include "ScillApiWrapper/ScillApiUserInfo.h"
+#include "ScillApiAccessToken.h"
+#include "ScillApiError.h"
+#include "ScillApiForeignUserIdentifier.h"
+#include "ScillApiNotificationTopic.h"
+#include "ScillApiUserInfo.h"
 
 namespace ScillSDK
 {

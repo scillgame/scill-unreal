@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Containers/Map.h"
-#include "ScillSDK.h"
+#include "ScillSDKModule.h"
 #include "ScillApiWrapper/ScillApiAuthApi.h"
 #include "ScillApiWrapper/ScillApiLeaderboardsV2Api.h"
 #include "ScillApiWrapper/ScillApiAuthApiOperations.h"
@@ -11,6 +11,7 @@
 #include "Misc/Guid.h"
 #include "WebSocketsModule.h"
 #include "IWebSocket.h"
+#include "ScillApiWrapper/ScillApiEventsApi.h"
 #include "ScillClientBackend.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FReceiveAccessToken, FString, Token, bool, Success);
