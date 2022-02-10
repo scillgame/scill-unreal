@@ -62,6 +62,9 @@ void UScillClientBackend::BeginPlay()
 	this->eventsApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
 	this->eventsApi.SetURL(TEXT("https://ep.scill.4players.io"));
 
+	this->leaderboardsApi.AddHeaderParam("Authorization", "Bearer " + this->ApiKey);
+	this->leaderboardsApi.SetURL(TEXT("https://ls.scill.4players.io"));
+
 	//UE_LOG(LogScillSDK, Log, TEXT("API Key Created: %s"), *this->ApiKey);
 }
 
