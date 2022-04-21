@@ -251,7 +251,7 @@ namespace StringHelper
 		
 		FString result = BytesToStringFixed(buffer, Count);
 
-		delete buffer;
+		delete[] buffer;
 
 		return result;
 	}
@@ -267,7 +267,7 @@ namespace StringHelper
 			OutArray[i + Start] = buffer[i];
 		}
 
-		delete buffer;
+		delete[] buffer;
 
 		return count;
 	}
