@@ -2,7 +2,7 @@
 
 
 #include "Widgets/WidgetPersonalChallenge.h"
-#include "..\..\Public\Widgets\WidgetPersonalChallenge.h"
+//#include "..\..\Public\Widgets\WidgetPersonalChallenge.h"
 
 #include "Components/Button.h"
 #include "Components/TextBlock.h"

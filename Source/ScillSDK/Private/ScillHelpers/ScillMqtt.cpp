@@ -216,7 +216,7 @@ void UScillMqtt::OnConnect()
 
 	mqttWs->Send(buffer, pk->Length, true);
 
-	delete buffer;
+	delete[] buffer;
 }
 
 void UScillMqtt::Ping()
